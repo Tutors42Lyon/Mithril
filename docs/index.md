@@ -1,3 +1,11 @@
+---
+layout: home
+title: Home
+nav_order: 1
+description: "Your description"
+permalink: /
+---
+
 # Mithril 🚀
 
 > Modern practice platform for 42 students
@@ -30,10 +38,11 @@ make install
 
 ## 📚 Documentation
 
-- [Architecture Overview](/architecture/overview.md) - System design and technical decisions
-- [Development Guide](/development/setup.md) - Get started with development
-- [API Documentation](/api/endpoints.md) - Backend API reference
-- [Contributing](/development/contributing.md) - How to contribute
+- [Getting Started](getting-started.html) - Quick start guide
+- [Architecture](architecture/) - System design and technical decisions
+- [Development](development/) - Contributing and development guides
+- [Planning](planning/) - Roadmap and project planning
+- [Reference](reference/) - Technical reference documentation
 
 ## 🤝 Contributing
 
