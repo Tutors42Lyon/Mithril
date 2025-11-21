@@ -7,9 +7,9 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 
-  <link rel="stylesheet" href="/mithril/assets/css/just-the-docs-default.css">
+  <link rel="stylesheet" href="/Mithril/assets/css/just-the-docs-default.css">
 
-  <link rel="stylesheet" href="/mithril/assets/css/just-the-docs-head-nav.css" id="jtd-head-nav-stylesheet">
+  <link rel="stylesheet" href="/Mithril/assets/css/just-the-docs-head-nav.css" id="jtd-head-nav-stylesheet">
 
   <style id="jtd-nav-activation">
   
@@ -22,10 +22,10 @@
   
 
   
-    <script src="/mithril/assets/js/vendor/lunr.min.js"></script>
+    <script src="/Mithril/assets/js/vendor/lunr.min.js"></script>
   
 
-  <script src="/mithril/assets/js/just-the-docs.js"></script>
+  <script src="/Mithril/assets/js/just-the-docs.js"></script>
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -40,18 +40,39 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Modern exam practice platform for 42 students" />
 <meta property="og:description" content="Modern exam practice platform for 42 students" />
-<link rel="canonical" href="http://localhost:4000/mithril/assets/js/search-data.json" />
-<meta property="og:url" content="http://localhost:4000/mithril/assets/js/search-data.json" />
+<link rel="canonical" href="http://localhost:4000/Mithril/assets/js/search-data.json" />
+<meta property="og:url" content="http://localhost:4000/Mithril/assets/js/search-data.json" />
 <meta property="og:site_name" content="Mithril" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Mithril" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","description":"Modern exam practice platform for 42 students","headline":"Mithril","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/mithril/assets/images/logo.png"}},"url":"http://localhost:4000/mithril/assets/js/search-data.json"}</script>
+{"@context":"https://schema.org","@type":"WebPage","description":"Modern exam practice platform for 42 students","headline":"Mithril","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/Mithril/assets/images/logo.png"}},"url":"http://localhost:4000/Mithril/assets/js/search-data.json"}</script>
 <!-- End Jekyll SEO tag -->
 
 
-  
+  <!-- Mermaid.js support -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Find all code blocks with language-mermaid class
+    const mermaidBlocks = document.querySelectorAll('code.language-mermaid');
+    mermaidBlocks.forEach((block, index) => {
+      const pre = block.parentElement;
+      const div = document.createElement('div');
+      div.className = 'mermaid';
+      div.textContent = block.textContent;
+      pre.replaceWith(div);
+    });
+
+    // Initialize mermaid
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default'
+    });
+  });
+</script>
+
 
 </head>
 
@@ -123,7 +144,7 @@
 
   <div class="side-bar">
   <div class="site-header" role="banner">
-    <a href="/mithril/" class="site-title lh-tight">
+    <a href="/Mithril/" class="site-title lh-tight">
   <div class="site-logo" role="img" aria-label="Mithril"></div>
 
 </a>
@@ -135,19 +156,19 @@
   <nav aria-label="Main" id="site-nav" class="site-nav">
   
   
-    <ul class="nav-list"><li class="nav-list-item"><a href="/mithril/" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/mithril/getting-started.html" class="nav-list-link">Getting Started</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Architecture category" aria-pressed="false">
+    <ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/Mithril/getting-started.html" class="nav-list-link">Getting Started</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Architecture category" aria-pressed="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
-    </button><a href="/mithril/architecture.html" class="nav-list-link">Architecture</a><ul class="nav-list"><li class="nav-list-item"><a href="/mithril/architecture/overview.html" class="nav-list-link">Overview</a></li><li class="nav-list-item"><a href="/mithril/architecture/system-design.html" class="nav-list-link">System Design</a></li><li class="nav-list-item"><a href="/mithril/architecture/data-model.html" class="nav-list-link">Data Model</a></li><li class="nav-list-item"><a href="/mithril/architecture/tech-stack.html" class="nav-list-link">Technology Stack</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Decisions category" aria-pressed="false">
+    </button><a href="/Mithril/architecture.html" class="nav-list-link">Architecture</a><ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/architecture/overview.html" class="nav-list-link">Overview</a></li><li class="nav-list-item"><a href="/Mithril/architecture/system-design.html" class="nav-list-link">System Design</a></li><li class="nav-list-item"><a href="/Mithril/architecture/data-model.html" class="nav-list-link">Data Model</a></li><li class="nav-list-item"><a href="/Mithril/architecture/tech-stack.html" class="nav-list-link">Technology Stack</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Decisions category" aria-pressed="false">
             <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
-          </button><a href="/mithril/architecture/decisions.html" class="nav-list-link">Decisions</a><ul class="nav-list"><li class="nav-list-item">
-                <a href="/mithril/architecture/decisions/0001-example-adr.html" class="nav-list-link">ADR-0001: Example Decision</a>
+          </button><a href="/Mithril/architecture/decisions.html" class="nav-list-link">Decisions</a><ul class="nav-list"><li class="nav-list-item">
+                <a href="/Mithril/architecture/decisions/0001-example-adr.html" class="nav-list-link">ADR-0001: Example Decision</a>
               </li></ul></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Development category" aria-pressed="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
-    </button><a href="/mithril/development.html" class="nav-list-link">Development</a><ul class="nav-list"><li class="nav-list-item"><a href="/mithril/development/setup.html" class="nav-list-link">Setup Guide</a></li><li class="nav-list-item"><a href="/mithril/development/contributing.html" class="nav-list-link">Contributing</a></li><li class="nav-list-item"><a href="/mithril/development/project-structure.html" class="nav-list-link">Project Structure</a></li><li class="nav-list-item"><a href="/mithril/development/conventions.html" class="nav-list-link">Conventions</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Planning category" aria-pressed="false">
+    </button><a href="/Mithril/development.html" class="nav-list-link">Development</a><ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/development/setup.html" class="nav-list-link">Setup Guide</a></li><li class="nav-list-item"><a href="/Mithril/development/contributing.html" class="nav-list-link">Contributing</a></li><li class="nav-list-item"><a href="/Mithril/development/project-structure.html" class="nav-list-link">Project Structure</a></li><li class="nav-list-item"><a href="/Mithril/development/conventions.html" class="nav-list-link">Conventions</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Planning category" aria-pressed="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
-    </button><a href="/mithril/planning.html" class="nav-list-link">Planning</a><ul class="nav-list"><li class="nav-list-item"><a href="/mithril/planning/roadmap.html" class="nav-list-link">Roadmap</a></li><li class="nav-list-item"><a href="/mithril/planning/features.html" class="nav-list-link">Features</a></li><li class="nav-list-item"><a href="/mithril/planning/milestones.html" class="nav-list-link">Milestones</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Reference category" aria-pressed="false">
+    </button><a href="/Mithril/planning.html" class="nav-list-link">Planning</a><ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/planning/roadmap.html" class="nav-list-link">Roadmap</a></li><li class="nav-list-item"><a href="/Mithril/planning/features.html" class="nav-list-link">Features</a></li><li class="nav-list-item"><a href="/Mithril/planning/milestones.html" class="nav-list-link">Milestones</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Reference category" aria-pressed="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
-    </button><a href="/mithril/reference.html" class="nav-list-link">Reference</a><ul class="nav-list"><li class="nav-list-item"><a href="/mithril/reference/configuration.html" class="nav-list-link">Configuration</a></li><li class="nav-list-item"><a href="/mithril/reference/exercise-format.html" class="nav-list-link">Exercise Format</a></li></ul></li></ul>
+    </button><a href="/Mithril/reference.html" class="nav-list-link">Reference</a><ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/reference/configuration.html" class="nav-list-link">Configuration</a></li><li class="nav-list-item"><a href="/Mithril/reference/exercise-format.html" class="nav-list-link">Exercise Format</a></li></ul></li></ul>
 
   
 </nav>
@@ -203,483 +224,483 @@
     "doc": "ADR-0001: Example Decision",
     "title": "ADR-0001: Example Architecture Decision",
     "content": " ",
-    "url": "/mithril/architecture/decisions/0001-example-adr.html#adr-0001-example-architecture-decision",
+    "url": "/Mithril/architecture/decisions/0001-example-adr.html#adr-0001-example-architecture-decision",
     
     "relUrl": "/architecture/decisions/0001-example-adr.html#adr-0001-example-architecture-decision"
   },"1": {
     "doc": "ADR-0001: Example Decision",
     "title": "Status",
     "content": "Proposed . ",
-    "url": "/mithril/architecture/decisions/0001-example-adr.html#status",
+    "url": "/Mithril/architecture/decisions/0001-example-adr.html#status",
     
     "relUrl": "/architecture/decisions/0001-example-adr.html#status"
   },"2": {
     "doc": "ADR-0001: Example Decision",
     "title": "Context",
     "content": "Description of the problem or situation that requires a decision. ",
-    "url": "/mithril/architecture/decisions/0001-example-adr.html#context",
+    "url": "/Mithril/architecture/decisions/0001-example-adr.html#context",
     
     "relUrl": "/architecture/decisions/0001-example-adr.html#context"
   },"3": {
     "doc": "ADR-0001: Example Decision",
     "title": "Decision",
     "content": "The decision that was made. ",
-    "url": "/mithril/architecture/decisions/0001-example-adr.html#decision",
+    "url": "/Mithril/architecture/decisions/0001-example-adr.html#decision",
     
     "relUrl": "/architecture/decisions/0001-example-adr.html#decision"
   },"4": {
     "doc": "ADR-0001: Example Decision",
     "title": "Consequences",
     "content": "What becomes easier or more difficult as a result of this decision. ",
-    "url": "/mithril/architecture/decisions/0001-example-adr.html#consequences",
+    "url": "/Mithril/architecture/decisions/0001-example-adr.html#consequences",
     
     "relUrl": "/architecture/decisions/0001-example-adr.html#consequences"
   },"5": {
     "doc": "ADR-0001: Example Decision",
     "title": "ADR-0001: Example Decision",
     "content": " ",
-    "url": "/mithril/architecture/decisions/0001-example-adr.html",
+    "url": "/Mithril/architecture/decisions/0001-example-adr.html",
     
     "relUrl": "/architecture/decisions/0001-example-adr.html"
   },"6": {
     "doc": "Architecture",
     "title": "Architecture",
     "content": "Overview of Mithril’s architecture and design decisions. ",
-    "url": "/mithril/architecture.html",
+    "url": "/Mithril/architecture.html",
     
     "relUrl": "/architecture.html"
   },"7": {
     "doc": "Configuration",
     "title": "Configuration",
     "content": "Configuration options for Mithril. ",
-    "url": "/mithril/reference/configuration.html",
+    "url": "/Mithril/reference/configuration.html",
     
     "relUrl": "/reference/configuration.html"
   },"8": {
     "doc": "Configuration",
     "title": "Environment Variables",
     "content": " ",
-    "url": "/mithril/reference/configuration.html#environment-variables",
+    "url": "/Mithril/reference/configuration.html#environment-variables",
     
     "relUrl": "/reference/configuration.html#environment-variables"
   },"9": {
     "doc": "Configuration",
     "title": "Configuration File",
     "content": " ",
-    "url": "/mithril/reference/configuration.html#configuration-file",
+    "url": "/Mithril/reference/configuration.html#configuration-file",
     
     "relUrl": "/reference/configuration.html#configuration-file"
   },"10": {
     "doc": "Configuration",
     "title": "Runtime Configuration",
     "content": " ",
-    "url": "/mithril/reference/configuration.html#runtime-configuration",
+    "url": "/Mithril/reference/configuration.html#runtime-configuration",
     
     "relUrl": "/reference/configuration.html#runtime-configuration"
   },"11": {
     "doc": "Contributing",
     "title": "Contributing",
     "content": "How to contribute to Mithril. ",
-    "url": "/mithril/development/contributing.html",
+    "url": "/Mithril/development/contributing.html",
     
     "relUrl": "/development/contributing.html"
   },"12": {
     "doc": "Contributing",
     "title": "Getting Started",
     "content": " ",
-    "url": "/mithril/development/contributing.html#getting-started",
+    "url": "/Mithril/development/contributing.html#getting-started",
     
     "relUrl": "/development/contributing.html#getting-started"
   },"13": {
     "doc": "Contributing",
     "title": "Code Style",
     "content": " ",
-    "url": "/mithril/development/contributing.html#code-style",
+    "url": "/Mithril/development/contributing.html#code-style",
     
     "relUrl": "/development/contributing.html#code-style"
   },"14": {
     "doc": "Contributing",
     "title": "Pull Request Process",
     "content": " ",
-    "url": "/mithril/development/contributing.html#pull-request-process",
+    "url": "/Mithril/development/contributing.html#pull-request-process",
     
     "relUrl": "/development/contributing.html#pull-request-process"
   },"15": {
     "doc": "Contributing",
     "title": "Code Review",
     "content": " ",
-    "url": "/mithril/development/contributing.html#code-review",
+    "url": "/Mithril/development/contributing.html#code-review",
     
     "relUrl": "/development/contributing.html#code-review"
   },"16": {
     "doc": "Conventions",
     "title": "Conventions",
     "content": "Coding conventions and best practices for Mithril development. ",
-    "url": "/mithril/development/conventions.html",
+    "url": "/Mithril/development/conventions.html",
     
     "relUrl": "/development/conventions.html"
   },"17": {
     "doc": "Conventions",
     "title": "Code Style",
     "content": " ",
-    "url": "/mithril/development/conventions.html#code-style",
+    "url": "/Mithril/development/conventions.html#code-style",
     
     "relUrl": "/development/conventions.html#code-style"
   },"18": {
     "doc": "Conventions",
     "title": "Naming Conventions",
     "content": " ",
-    "url": "/mithril/development/conventions.html#naming-conventions",
+    "url": "/Mithril/development/conventions.html#naming-conventions",
     
     "relUrl": "/development/conventions.html#naming-conventions"
   },"19": {
     "doc": "Conventions",
     "title": "Git Workflow",
     "content": " ",
-    "url": "/mithril/development/conventions.html#git-workflow",
+    "url": "/Mithril/development/conventions.html#git-workflow",
     
     "relUrl": "/development/conventions.html#git-workflow"
   },"20": {
     "doc": "Conventions",
     "title": "Documentation Standards",
     "content": " ",
-    "url": "/mithril/development/conventions.html#documentation-standards",
+    "url": "/Mithril/development/conventions.html#documentation-standards",
     
     "relUrl": "/development/conventions.html#documentation-standards"
   },"21": {
     "doc": "Data Model",
     "title": "Data Model",
     "content": "Description of Mithril’s data models and relationships. ",
-    "url": "/mithril/architecture/data-model.html",
+    "url": "/Mithril/architecture/data-model.html",
     
     "relUrl": "/architecture/data-model.html"
   },"22": {
     "doc": "Data Model",
     "title": "Entity Relationship",
     "content": " ",
-    "url": "/mithril/architecture/data-model.html#entity-relationship",
+    "url": "/Mithril/architecture/data-model.html#entity-relationship",
     
     "relUrl": "/architecture/data-model.html#entity-relationship"
   },"23": {
     "doc": "Data Model",
     "title": "Core Entities",
     "content": " ",
-    "url": "/mithril/architecture/data-model.html#core-entities",
+    "url": "/Mithril/architecture/data-model.html#core-entities",
     
     "relUrl": "/architecture/data-model.html#core-entities"
   },"24": {
     "doc": "Data Model",
     "title": "Relationships",
     "content": " ",
-    "url": "/mithril/architecture/data-model.html#relationships",
+    "url": "/Mithril/architecture/data-model.html#relationships",
     
     "relUrl": "/architecture/data-model.html#relationships"
   },"25": {
     "doc": "Decisions",
     "title": "Architecture Decision Records",
     "content": "Documentation of key architectural decisions made during the development of Mithril. ",
-    "url": "/mithril/architecture/decisions.html#architecture-decision-records",
+    "url": "/Mithril/architecture/decisions.html#architecture-decision-records",
     
     "relUrl": "/architecture/decisions.html#architecture-decision-records"
   },"26": {
     "doc": "Decisions",
     "title": "About ADRs",
     "content": "Architecture Decision Records (ADRs) capture important architectural decisions along with their context and consequences. ",
-    "url": "/mithril/architecture/decisions.html#about-adrs",
+    "url": "/Mithril/architecture/decisions.html#about-adrs",
     
     "relUrl": "/architecture/decisions.html#about-adrs"
   },"27": {
     "doc": "Decisions",
     "title": "Decisions",
     "content": " ",
-    "url": "/mithril/architecture/decisions.html",
+    "url": "/Mithril/architecture/decisions.html",
     
     "relUrl": "/architecture/decisions.html"
   },"28": {
     "doc": "Development",
     "title": "Development",
     "content": "Guides and resources for contributing to Mithril. ",
-    "url": "/mithril/development.html",
+    "url": "/Mithril/development.html",
     
     "relUrl": "/development.html"
   },"29": {
     "doc": "Exercise Format",
     "title": "Exercise Format",
     "content": "Specification for exercise files and structure. ",
-    "url": "/mithril/reference/exercise-format.html",
+    "url": "/Mithril/reference/exercise-format.html",
     
     "relUrl": "/reference/exercise-format.html"
   },"30": {
     "doc": "Exercise Format",
     "title": "File Structure",
     "content": " ",
-    "url": "/mithril/reference/exercise-format.html#file-structure",
+    "url": "/Mithril/reference/exercise-format.html#file-structure",
     
     "relUrl": "/reference/exercise-format.html#file-structure"
   },"31": {
     "doc": "Exercise Format",
     "title": "Metadata",
     "content": " ",
-    "url": "/mithril/reference/exercise-format.html#metadata",
+    "url": "/Mithril/reference/exercise-format.html#metadata",
     
     "relUrl": "/reference/exercise-format.html#metadata"
   },"32": {
     "doc": "Exercise Format",
     "title": "Test Cases",
     "content": " ",
-    "url": "/mithril/reference/exercise-format.html#test-cases",
+    "url": "/Mithril/reference/exercise-format.html#test-cases",
     
     "relUrl": "/reference/exercise-format.html#test-cases"
   },"33": {
     "doc": "Exercise Format",
     "title": "Example Exercise",
     "content": " ",
-    "url": "/mithril/reference/exercise-format.html#example-exercise",
+    "url": "/Mithril/reference/exercise-format.html#example-exercise",
     
     "relUrl": "/reference/exercise-format.html#example-exercise"
   },"34": {
     "doc": "Features",
     "title": "Features",
     "content": "Planned and implemented features for Mithril. ",
-    "url": "/mithril/planning/features.html",
+    "url": "/Mithril/planning/features.html",
     
     "relUrl": "/planning/features.html"
   },"35": {
     "doc": "Features",
     "title": "Core Features",
     "content": " ",
-    "url": "/mithril/planning/features.html#core-features",
+    "url": "/Mithril/planning/features.html#core-features",
     
     "relUrl": "/planning/features.html#core-features"
   },"36": {
     "doc": "Features",
     "title": "Future Features",
     "content": " ",
-    "url": "/mithril/planning/features.html#future-features",
+    "url": "/Mithril/planning/features.html#future-features",
     
     "relUrl": "/planning/features.html#future-features"
   },"37": {
     "doc": "Features",
     "title": "Feature Requests",
     "content": " ",
-    "url": "/mithril/planning/features.html#feature-requests",
+    "url": "/Mithril/planning/features.html#feature-requests",
     
     "relUrl": "/planning/features.html#feature-requests"
   },"38": {
     "doc": "Getting Started",
     "title": "Getting Started",
     "content": "Quick guide to get you up and running with Mithril. ",
-    "url": "/mithril/getting-started.html",
+    "url": "/Mithril/getting-started.html",
     
     "relUrl": "/getting-started.html"
   },"39": {
     "doc": "Getting Started",
     "title": "Prerequisites",
     "content": " ",
-    "url": "/mithril/getting-started.html#prerequisites",
+    "url": "/Mithril/getting-started.html#prerequisites",
     
     "relUrl": "/getting-started.html#prerequisites"
   },"40": {
     "doc": "Getting Started",
     "title": "Installation",
     "content": " ",
-    "url": "/mithril/getting-started.html#installation",
+    "url": "/Mithril/getting-started.html#installation",
     
     "relUrl": "/getting-started.html#installation"
   },"41": {
     "doc": "Getting Started",
     "title": "First Steps",
     "content": " ",
-    "url": "/mithril/getting-started.html#first-steps",
+    "url": "/Mithril/getting-started.html#first-steps",
     
     "relUrl": "/getting-started.html#first-steps"
   },"42": {
     "doc": "Getting Started",
     "title": "Next Steps",
     "content": " ",
-    "url": "/mithril/getting-started.html#next-steps",
+    "url": "/Mithril/getting-started.html#next-steps",
     
     "relUrl": "/getting-started.html#next-steps"
   },"43": {
     "doc": "Home",
     "title": "Mithril 🚀",
     "content": "Modern practice platform for 42 students . ",
-    "url": "/mithril/#mithril-",
+    "url": "/Mithril/#mithril-",
     
     "relUrl": "/#mithril-"
   },"44": {
     "doc": "Home",
     "title": "What is Mithril?",
     "content": "Mithril is a next-generation terminal-based practice environment designed specifically for 42 school students. ",
-    "url": "/mithril/#what-is-mithril",
+    "url": "/Mithril/#what-is-mithril",
     
     "relUrl": "/#what-is-mithril"
   },"45": {
     "doc": "Home",
     "title": "✨ Key Features",
     "content": ". | todo | . ",
-    "url": "/mithril/#-key-features",
+    "url": "/Mithril/#-key-features",
     
     "relUrl": "/#-key-features"
   },"46": {
     "doc": "Home",
     "title": "🚀 Quick Start",
     "content": "# Clone the repository git clone https://github.com/yourusername/mithril.git # Navigate to project cd mithril # Install dependencies make install # Run the application ./mithril . ",
-    "url": "/mithril/#-quick-start",
+    "url": "/Mithril/#-quick-start",
     
     "relUrl": "/#-quick-start"
   },"47": {
     "doc": "Home",
     "title": "👥 Team",
     "content": " ",
-    "url": "/mithril/#-team",
+    "url": "/Mithril/#-team",
     
     "relUrl": "/#-team"
   },"48": {
     "doc": "Home",
     "title": "📚 Documentation",
     "content": ". | Getting Started - Quick start guide | Architecture - System design and technical decisions | Development - Contributing and development guides | Planning - Roadmap and project planning | Reference - Technical reference documentation | . ",
-    "url": "/mithril/#-documentation",
+    "url": "/Mithril/#-documentation",
     
     "relUrl": "/#-documentation"
   },"49": {
     "doc": "Home",
     "title": "🤝 Contributing",
     "content": "We welcome contributions! Please see our Contributing Guide for details. ",
-    "url": "/mithril/#-contributing",
+    "url": "/Mithril/#-contributing",
     
     "relUrl": "/#-contributing"
   },"50": {
     "doc": "Home",
     "title": "📄 License",
     "content": "This project is open source and available under the MIT License. Built with ❤️ by 42 students, for 42 students . ",
-    "url": "/mithril/#-license",
+    "url": "/Mithril/#-license",
     
     "relUrl": "/#-license"
   },"51": {
     "doc": "Home",
     "title": "Home",
     "content": " ",
-    "url": "/mithril/",
+    "url": "/Mithril/",
     
     "relUrl": "/"
   },"52": {
     "doc": "Milestones",
     "title": "Milestones",
     "content": " ",
-    "url": "/mithril/planning/milestones.html",
+    "url": "/Mithril/planning/milestones.html",
     
     "relUrl": "/planning/milestones.html"
   },"53": {
     "doc": "Overview",
     "title": "Architecture Overview",
     "content": " ",
-    "url": "/mithril/architecture/overview.html#architecture-overview",
+    "url": "/Mithril/architecture/overview.html#architecture-overview",
     
     "relUrl": "/architecture/overview.html#architecture-overview"
   },"54": {
     "doc": "Overview",
     "title": "System Architecture",
-    "content": "graph TB subgraph \"Client Layer\" TUI[Terminal UI&lt;br/&gt;Rust/Go] WEB[Web Dashboard&lt;br/&gt;React - Optional] end subgraph \"API Gateway\" GW[REST API&lt;br/&gt;Node.js/Express] WS[WebSocket Server&lt;br/&gt;Real-time feedback] end subgraph \"Core Services\" AUTH[Authentication&lt;br/&gt;JWT + 42 OAuth] EXAM[Exam Engine&lt;br/&gt;Exercise management] COMPILE[Compilation Service&lt;br/&gt;Docker containers] GRADE[Grading Service&lt;br/&gt;Test validation] end subgraph \"Data Layer\" DB[(PostgreSQL&lt;br/&gt;Users, Progress, Stats)] REDIS[(Redis&lt;br/&gt;Sessions, Cache)] EXERCISES[(Exercise Storage&lt;br/&gt;JSON/Markdown files)] end TUI --&gt; GW WEB --&gt; GW GW --&gt; AUTH GW --&gt; EXAM GW --&gt; GRADE EXAM --&gt; COMPILE EXAM --&gt; EXERCISES AUTH --&gt; DB EXAM --&gt; DB GRADE --&gt; DB GW --&gt; REDIS COMPILE --&gt; Docker[Docker Pool&lt;br/&gt;C, Python, Rust] . ",
-    "url": "/mithril/architecture/overview.html#system-architecture",
+    "content": "graph TB %% Styling classDef client fill:#e1f5ff,stroke:#01579b,stroke-width:2px classDef gateway fill:#f3e5f5,stroke:#4a148c,stroke-width:2px classDef broker fill:#fff9c4,stroke:#f57f17,stroke-width:3px classDef service fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px classDef worker fill:#ffe0b2,stroke:#e65100,stroke-width:2px classDef storage fill:#fce4ec,stroke:#880e4f,stroke-width:2px subgraph CLIENT[\"Client Layer\"] TUI[Terminal UI&lt;br/&gt;Go + Bubbletea]:::client WEB[Web Dashboard&lt;br/&gt;Mithril.js]:::client end subgraph GATEWAY[\"API Gateway\"] GW[REST API&lt;br/&gt;Node.js]:::gateway WS[WebSocket]:::gateway end subgraph BROKER[\"Message Broker\"] NATS[NATS Server]:::broker end subgraph SERVICES[\"Core Services\"] direction LR AUTH[Auth]:::service USER[User]:::service EXERCISE[Exercise]:::service GRADING[Grading]:::service STATS[Stats]:::service end subgraph POOL[\"Grading Pool\"] direction LR W1[Worker]:::worker W2[Worker]:::worker W3[Worker]:::worker W4[Worker]:::worker end subgraph DATA[\"Data Layer\"] DB[(PostgreSQL)]:::storage REDIS[(Redis)]:::storage FILES[(YAML Files)]:::storage end %% Connections TUI --&gt; GATEWAY WEB --&gt; GATEWAY GW --&gt; NATS WS --&gt; NATS NATS &lt;--&gt; SERVICES GRADING --&gt; POOL SERVICES --&gt; DB EXERCISE --&gt; FILES SERVICES --&gt; REDIS . ",
+    "url": "/Mithril/architecture/overview.html#system-architecture",
     
     "relUrl": "/architecture/overview.html#system-architecture"
   },"55": {
     "doc": "Overview",
     "title": "User Flow",
     "content": "flowchart LR Start([Student starts Mithril]) Login[Login with 42 credentials] Menu[Main Menu] Select[Select Exercise Level] Exercise[Get Random Exercise] Code[Write Code in Editor] Test[Run Tests Locally] Submit[Submit 'grademe'] Result{Pass?} Next[Next Exercise] Stats[Update Statistics] End([Session Complete]) Start --&gt; Login Login --&gt; Menu Menu --&gt; Select Select --&gt; Exercise Exercise --&gt; Code Code --&gt; Test Test --&gt; Submit Submit --&gt; Result Result --&gt;|Yes| Stats Result --&gt;|No| Code Stats --&gt; Next Next --&gt; Exercise Menu --&gt;|Quit| End . ",
-    "url": "/mithril/architecture/overview.html#user-flow",
+    "url": "/Mithril/architecture/overview.html#user-flow",
     
     "relUrl": "/architecture/overview.html#user-flow"
   },"56": {
     "doc": "Overview",
     "title": "Data Flow",
     "content": "sequenceDiagram participant U as User/TUI participant API as API Gateway participant EX as Exam Engine participant C as Compilation Service participant D as Docker participant DB as Database U-&gt;&gt;API: Submit code (grademe) API-&gt;&gt;EX: Process submission EX-&gt;&gt;C: Queue compilation job C-&gt;&gt;D: Create container D-&gt;&gt;D: Compile code D-&gt;&gt;D: Run test cases D--&gt;&gt;C: Return results C--&gt;&gt;EX: Test results EX-&gt;&gt;DB: Save attempt EX--&gt;&gt;API: Format response API--&gt;&gt;U: Display results + hints Note over U: Real-time via WebSocket . ",
-    "url": "/mithril/architecture/overview.html#data-flow",
+    "url": "/Mithril/architecture/overview.html#data-flow",
     
     "relUrl": "/architecture/overview.html#data-flow"
   },"57": {
     "doc": "Overview",
     "title": "Overview",
     "content": " ",
-    "url": "/mithril/architecture/overview.html",
+    "url": "/Mithril/architecture/overview.html",
     
     "relUrl": "/architecture/overview.html"
   },"58": {
     "doc": "Planning",
     "title": "Planning",
     "content": "Project planning, roadmap, and milestones. ",
-    "url": "/mithril/planning.html",
+    "url": "/Mithril/planning.html",
     
     "relUrl": "/planning.html"
   },"59": {
     "doc": "Project Structure",
     "title": "Project Structure",
     "content": "Overview of the Mithril project structure. ",
-    "url": "/mithril/development/project-structure.html",
+    "url": "/Mithril/development/project-structure.html",
     
     "relUrl": "/development/project-structure.html"
   },"60": {
     "doc": "Project Structure",
     "title": "Directory Layout",
     "content": " ",
-    "url": "/mithril/development/project-structure.html#directory-layout",
+    "url": "/Mithril/development/project-structure.html#directory-layout",
     
     "relUrl": "/development/project-structure.html#directory-layout"
   },"61": {
     "doc": "Project Structure",
     "title": "Backend Structure",
     "content": " ",
-    "url": "/mithril/development/project-structure.html#backend-structure",
+    "url": "/Mithril/development/project-structure.html#backend-structure",
     
     "relUrl": "/development/project-structure.html#backend-structure"
   },"62": {
     "doc": "Project Structure",
     "title": "Frontend Structure",
     "content": " ",
-    "url": "/mithril/development/project-structure.html#frontend-structure",
+    "url": "/Mithril/development/project-structure.html#frontend-structure",
     
     "relUrl": "/development/project-structure.html#frontend-structure"
   },"63": {
     "doc": "Project Structure",
     "title": "Documentation",
     "content": " ",
-    "url": "/mithril/development/project-structure.html#documentation",
+    "url": "/Mithril/development/project-structure.html#documentation",
     
     "relUrl": "/development/project-structure.html#documentation"
   },"64": {
     "doc": "Reference",
     "title": "Reference",
     "content": "Technical reference documentation. ",
-    "url": "/mithril/reference.html",
+    "url": "/Mithril/reference.html",
     
     "relUrl": "/reference.html"
   },"65": {
     "doc": "Roadmap",
     "title": "Roadmap",
     "content": " ",
-    "url": "/mithril/planning/roadmap.html",
+    "url": "/Mithril/planning/roadmap.html",
     
     "relUrl": "/planning/roadmap.html"
   },"66": {
     "doc": "Setup Guide",
     "title": "Setup Guide",
     "content": " ",
-    "url": "/mithril/development/setup.html",
+    "url": "/Mithril/development/setup.html",
     
     "relUrl": "/development/setup.html"
   },"67": {
     "doc": "System Design",
     "title": "System Design",
     "content": " ",
-    "url": "/mithril/architecture/system-design.html",
+    "url": "/Mithril/architecture/system-design.html",
     
     "relUrl": "/architecture/system-design.html"
   },"68": {
     "doc": "Technology Stack",
     "title": "Technology Stack",
     "content": " ",
-    "url": "/mithril/architecture/tech-stack.html",
+    "url": "/Mithril/architecture/tech-stack.html",
     
     "relUrl": "/architecture/tech-stack.html"
   }
@@ -704,7 +725,7 @@
         
         
           <p class="text-small text-grey-dk-000 mb-0">
-            <a href="https://github.com/yourusername/mithril/tree/main/assets/js/zzzz-search-data.json" id="edit-this-page">Edit this page on GitHub</a>
+            <a href="https://github.com/Tutors42Lyon/Mithril/tree/main/assets/js/zzzz-search-data.json" id="edit-this-page">Edit this page on GitHub</a>
           </p>
         
       </div>

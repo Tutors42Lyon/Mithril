@@ -9,41 +9,64 @@ nav_order: 1
 ## System Architecture
 ```mermaid
 graph TB
-    subgraph "Client Layer"
-        TUI[Terminal UI<br/>Rust/Go]
-        WEB[Web Dashboard<br/>React - Optional]
+    %% Styling
+    classDef client fill:#e1f5ff,stroke:#01579b,stroke-width:2px
+    classDef gateway fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef broker fill:#fff9c4,stroke:#f57f17,stroke-width:3px
+    classDef service fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+    classDef worker fill:#ffe0b2,stroke:#e65100,stroke-width:2px
+    classDef storage fill:#fce4ec,stroke:#880e4f,stroke-width:2px
+
+    subgraph CLIENT["Client Layer"]
+        TUI[Terminal UI<br/>Go + Bubbletea]:::client
+        WEB[Web Dashboard<br/>Mithril.js]:::client
     end
     
-    subgraph "API Gateway"
-        GW[REST API<br/>Node.js/Express]
-        WS[WebSocket Server<br/>Real-time feedback]
+    subgraph GATEWAY["API Gateway"]
+        GW[REST API<br/>Node.js]:::gateway
+        WS[WebSocket]:::gateway
     end
     
-    subgraph "Core Services"
-        AUTH[Authentication<br/>JWT + 42 OAuth]
-        EXAM[Exam Engine<br/>Exercise management]
-        COMPILE[Compilation Service<br/>Docker containers]
-        GRADE[Grading Service<br/>Test validation]
+    subgraph BROKER["Message Broker"]
+        NATS[NATS Server]:::broker
     end
     
-    subgraph "Data Layer"
-        DB[(PostgreSQL<br/>Users, Progress, Stats)]
-        REDIS[(Redis<br/>Sessions, Cache)]
-        EXERCISES[(Exercise Storage<br/>JSON/Markdown files)]
+    subgraph SERVICES["Core Services"]
+        direction LR
+        AUTH[Auth]:::service
+        USER[User]:::service
+        EXERCISE[Exercise]:::service
+        GRADING[Grading]:::service
+        STATS[Stats]:::service
     end
     
-    TUI --> GW
-    WEB --> GW
-    GW --> AUTH
-    GW --> EXAM
-    GW --> GRADE
-    EXAM --> COMPILE
-    EXAM --> EXERCISES
-    AUTH --> DB
-    EXAM --> DB
-    GRADE --> DB
-    GW --> REDIS
-    COMPILE --> Docker[Docker Pool<br/>C, Python, Rust]
+    subgraph POOL["Grading Pool"]
+        direction LR
+        W1[Worker]:::worker
+        W2[Worker]:::worker
+        W3[Worker]:::worker
+        W4[Worker]:::worker
+    end
+    
+    subgraph DATA["Data Layer"]
+        DB[(PostgreSQL)]:::storage
+        REDIS[(Redis)]:::storage
+        FILES[(YAML Files)]:::storage
+    end
+    
+    %% Connections
+    TUI --> GATEWAY
+    WEB --> GATEWAY
+    GW --> NATS
+    WS --> NATS
+    
+    NATS <--> SERVICES
+    
+    GRADING --> POOL
+    
+    SERVICES --> DB
+    EXERCISE --> FILES
+    SERVICES --> REDIS
 ```
 
 ## User Flow
