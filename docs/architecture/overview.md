@@ -23,8 +23,8 @@ graph TB
     end
     
     subgraph GATEWAY["API Gateway"]
-        GW[REST API<br/>Node.js]:::gateway
-        WS[WebSocket]:::gateway
+        GW[REST API<br/>Go + gin]:::gateway
+        WS[WebSocket<br/>Gorilla]:::gateway
     end
     
     subgraph BROKER["Message Broker"]
@@ -36,6 +36,7 @@ graph TB
         AUTH[Auth]:::service
         USER[User]:::service
         EXERCISE[Exercise]:::service
+        EVENT[Event]:::service
         GRADING[Grading]:::service
         STATS[Stats]:::service
     end
@@ -50,7 +51,7 @@ graph TB
     
     subgraph DATA["Data Layer"]
         DB[(PostgreSQL)]:::storage
-        REDIS[(Redis)]:::storage
+        REDIS[(Redis user session)]:::storage
         FILES[(YAML Files)]:::storage
     end
     
