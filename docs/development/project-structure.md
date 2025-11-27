@@ -17,6 +17,8 @@ Overview of the Mithril project structure.
 
 ## Documentation
 
+
+```
 mithril-backend/
 │
 ├── cmd/                          # Service entry points
@@ -124,3 +126,5 @@ mithril-backend/
 │       ├── basic_commands.yaml
 │       └── branching.yaml
 │
+```
+
