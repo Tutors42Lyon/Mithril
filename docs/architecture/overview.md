@@ -19,7 +19,7 @@ graph TB
 
     subgraph CLIENT["Client Layer"]
         TUI[Terminal UI<br/>Go + Bubbletea]:::client
-        WEB[Web Dashboard<br/>Mithril.js]:::client
+        WEB[Web Dashboard<br/>]:::client
     end
     
     subgraph GATEWAY["API Gateway"]
@@ -68,37 +68,6 @@ graph TB
     SERVICES --> DB
     EXERCISE --> FILES
     SERVICES --> REDIS
-```
-
-## User Flow
-```mermaid
-flowchart LR
-    Start([Student starts Mithril])
-    Login[Login with 42 credentials]
-    Menu[Main Menu]
-    Select[Select Exercise Level]
-    Exercise[Get Random Exercise]
-    Code[Write Code in Editor]
-    Test[Run Tests Locally]
-    Submit[Submit 'grademe']
-    Result{Pass?}
-    Next[Next Exercise]
-    Stats[Update Statistics]
-    End([Session Complete])
-    
-    Start --> Login
-    Login --> Menu
-    Menu --> Select
-    Select --> Exercise
-    Exercise --> Code
-    Code --> Test
-    Test --> Submit
-    Submit --> Result
-    Result -->|Yes| Stats
-    Result -->|No| Code
-    Stats --> Next
-    Next --> Exercise
-    Menu -->|Quit| End
 ```
 
 ## Data Flow

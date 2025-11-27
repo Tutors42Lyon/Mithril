@@ -51,8 +51,7 @@ CREATE TABLE exercises (
     pool_id INT REFERENCES exercise_pools(id) ON DELETE CASCADE,
     yaml_file_path VARCHAR(255) NOT NULL,
     title VARCHAR(255) NOT NULL,
-    difficulty_level VARCHAR(50),  -- 'easy', 'medium', 'hard'
-    points INT DEFAULT 10,
+    points INT DEFAULT 0,
     order_index INT,  -- Position within pool (1, 2, 3...)
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
