@@ -53,6 +53,7 @@ CREATE TABLE exercises (
     title VARCHAR(255) NOT NULL,
     points INT DEFAULT 0,
     order_index INT,  -- Position within pool (1, 2, 3...)
+    chapter TEXT, -- a voir
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
