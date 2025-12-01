@@ -39,10 +39,10 @@ make install
 ## 📚 Documentation
 
 - [Getting Started](getting-started.html) - Quick start guide
-- [Architecture](architecture/) - System design and technical decisions
-- [Development](development/) - Contributing and development guides
-- [Planning](planning/) - Roadmap and project planning
-- [Reference](reference/) - Technical reference documentation
+- [Architecture](architecture.html) - System design and technical decisions
+- [Development](development.html) - Contributing and development guides
+- [Planning](planning.html) - Roadmap and project planning
+- [Reference](reference.html) - Technical reference documentation
 
 ## 🤝 Contributing
 

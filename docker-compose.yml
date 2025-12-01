@@ -1,0 +1,112 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: mithril-postgres
+    environment:
+      POSTGRES_USER: mithril
+      POSTGRES_PASSWORD: dev_password
+      POSTGRES_DB: mithril
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mithril"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mithril-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: mithril-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mithril-network
+
+  nats:
+    image: nats:latest
+    container_name: mithril-nats
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8222/varz"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mithril-network
+
+  migrations:
+    build:
+      context: .
+      dockerfile: docker/migrations.Dockerfile
+    container_name: mithril-migrations
+    environment:
+      DATABASE_URL: "postgres://mithril:dev_password@postgres:5432/mithril"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - mithril-network
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    container_name: mithril-api
+    environment:
+      DATABASE_URL: "postgres://mithril:dev_password@postgres:5432/mithril"
+      REDIS_URL: "redis://redis:6379"
+      NATS_URL: "nats://nats:4222"
+      42_CLIENT_ID: ${42_CLIENT_ID:-your_client_id}
+      42_CLIENT_SECRET: ${42_CLIENT_SECRET:-your_client_secret}
+      42_REDIRECT_URI: "http://localhost:3000/api/auth/callback"
+      LOG_LEVEL: "debug"
+      PORT: "3000"
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      nats:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+    networks:
+      - mithril-network
+    restart: unless-stopped
+
+  grading:
+    build:
+      context: .
+      dockerfile: docker/grading.Dockerfile
+    container_name: mithril-grading
+    environment:
+      NATS_URL: "nats://nats:4222"
+      LOG_LEVEL: "debug"
+    depends_on:
+      nats:
+        condition: service_healthy
+    networks:
+      - mithril-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  mithril-network:
+    driver: bridge

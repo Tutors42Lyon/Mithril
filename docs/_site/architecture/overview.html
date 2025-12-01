@@ -176,7 +176,7 @@
   
     <ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/Mithril/getting-started.html" class="nav-list-link">Getting Started</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Architecture category" aria-pressed="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
-    </button><a href="/Mithril/architecture.html" class="nav-list-link">Architecture</a><ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/architecture/overview.html" class="nav-list-link">Overview</a></li><li class="nav-list-item"><a href="/Mithril/architecture/system-design.html" class="nav-list-link">System Design</a></li><li class="nav-list-item"><a href="/Mithril/architecture/data-model.html" class="nav-list-link">Data Model</a></li><li class="nav-list-item"><a href="/Mithril/architecture/tech-stack.html" class="nav-list-link">Technology Stack</a></li><li class="nav-list-item"><a href="/Mithril/architecture/database.html" class="nav-list-link">Database</a></li><li class="nav-list-item"><a href="/Mithril/architecture/api-specification.html" class="nav-list-link">Api Specification</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Development category" aria-pressed="false">
+    </button><a href="/Mithril/architecture.html" class="nav-list-link">Architecture</a><ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/architecture/overview.html" class="nav-list-link">Overview</a></li><li class="nav-list-item"><a href="/Mithril/architecture/system-design.html" class="nav-list-link">System Design</a></li><li class="nav-list-item"><a href="/Mithril/architecture/data-model.html" class="nav-list-link">Data Model</a></li><li class="nav-list-item"><a href="/Mithril/architecture/tech-stack.html" class="nav-list-link">Technology Stack</a></li><li class="nav-list-item"><a href="/Mithril/architecture/database.html" class="nav-list-link">Database</a></li><li class="nav-list-item"><a href="/Mithril/architecture/api-specification.html" class="nav-list-link">Api Specification</a></li><li class="nav-list-item"><a href="/Mithril/architecture/use-cases.html" class="nav-list-link">Use case</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Development category" aria-pressed="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
     </button><a href="/Mithril/development.html" class="nav-list-link">Development</a><ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/development/setup.html" class="nav-list-link">Setup Guide</a></li><li class="nav-list-item"><a href="/Mithril/development/contributing.html" class="nav-list-link">Contributing</a></li><li class="nav-list-item"><a href="/Mithril/development/project-structure.html" class="nav-list-link">Project Structure</a></li><li class="nav-list-item"><a href="/Mithril/development/conventions.html" class="nav-list-link">Conventions</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Planning category" aria-pressed="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
@@ -267,7 +267,7 @@
 
     subgraph CLIENT["Client Layer"]
         TUI[Terminal UI&lt;br/&gt;Go + Bubbletea]:::client
-        WEB[Web Dashboard&lt;br/&gt;Mithril.js]:::client
+        WEB[Web Dashboard&lt;br/&gt;]:::client
     end
     
     subgraph GATEWAY["API Gateway"]
@@ -316,42 +316,6 @@
     SERVICES --&gt; DB
     EXERCISE --&gt; FILES
     SERVICES --&gt; REDIS
-</code></pre>
-<h2 id="user-flow">
-  
-  
-    <a href="#user-flow" class="anchor-heading" aria-labelledby="user-flow"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> User Flow
-  
-  
-</h2>
-    
-<pre><code class="language-mermaid">flowchart LR
-    Start([Student starts Mithril])
-    Login[Login with 42 credentials]
-    Menu[Main Menu]
-    Select[Select Exercise Level]
-    Exercise[Get Random Exercise]
-    Code[Write Code in Editor]
-    Test[Run Tests Locally]
-    Submit[Submit 'grademe']
-    Result{Pass?}
-    Next[Next Exercise]
-    Stats[Update Statistics]
-    End([Session Complete])
-    
-    Start --&gt; Login
-    Login --&gt; Menu
-    Menu --&gt; Select
-    Select --&gt; Exercise
-    Exercise --&gt; Code
-    Code --&gt; Test
-    Test --&gt; Submit
-    Submit --&gt; Result
-    Result --&gt;|Yes| Stats
-    Result --&gt;|No| Code
-    Stats --&gt; Next
-    Next --&gt; Exercise
-    Menu --&gt;|Quit| End
 </code></pre>
 <h2 id="data-flow">
   

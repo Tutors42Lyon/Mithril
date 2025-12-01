@@ -176,7 +176,7 @@
   
     <ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/Mithril/getting-started.html" class="nav-list-link">Getting Started</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Architecture category" aria-pressed="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
-    </button><a href="/Mithril/architecture.html" class="nav-list-link">Architecture</a><ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/architecture/overview.html" class="nav-list-link">Overview</a></li><li class="nav-list-item"><a href="/Mithril/architecture/system-design.html" class="nav-list-link">System Design</a></li><li class="nav-list-item"><a href="/Mithril/architecture/data-model.html" class="nav-list-link">Data Model</a></li><li class="nav-list-item"><a href="/Mithril/architecture/tech-stack.html" class="nav-list-link">Technology Stack</a></li><li class="nav-list-item"><a href="/Mithril/architecture/database.html" class="nav-list-link">Database</a></li><li class="nav-list-item"><a href="/Mithril/architecture/api-specification.html" class="nav-list-link">Api Specification</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Development category" aria-pressed="false">
+    </button><a href="/Mithril/architecture.html" class="nav-list-link">Architecture</a><ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/architecture/overview.html" class="nav-list-link">Overview</a></li><li class="nav-list-item"><a href="/Mithril/architecture/system-design.html" class="nav-list-link">System Design</a></li><li class="nav-list-item"><a href="/Mithril/architecture/data-model.html" class="nav-list-link">Data Model</a></li><li class="nav-list-item"><a href="/Mithril/architecture/tech-stack.html" class="nav-list-link">Technology Stack</a></li><li class="nav-list-item"><a href="/Mithril/architecture/database.html" class="nav-list-link">Database</a></li><li class="nav-list-item"><a href="/Mithril/architecture/api-specification.html" class="nav-list-link">Api Specification</a></li><li class="nav-list-item"><a href="/Mithril/architecture/use-cases.html" class="nav-list-link">Use case</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Development category" aria-pressed="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
     </button><a href="/Mithril/development.html" class="nav-list-link">Development</a><ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/development/setup.html" class="nav-list-link">Setup Guide</a></li><li class="nav-list-item"><a href="/Mithril/development/contributing.html" class="nav-list-link">Contributing</a></li><li class="nav-list-item"><a href="/Mithril/development/project-structure.html" class="nav-list-link">Project Structure</a></li><li class="nav-list-item"><a href="/Mithril/development/conventions.html" class="nav-list-link">Conventions</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Planning category" aria-pressed="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
@@ -240,13 +240,89 @@
       <div id="main-content" class="main-content">
         <main>
           
-            <h1 id="technology-stack">
+            <h1 id="mithril-tech-stack">
   
   
-    <a href="#technology-stack" class="anchor-heading" aria-labelledby="technology-stack"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Technology Stack
+    <a href="#mithril-tech-stack" class="anchor-heading" aria-labelledby="mithril-tech-stack"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Mithril Tech Stack
   
   
 </h1>
+    
+<h2 id="summary-table">
+  
+  
+    <a href="#summary-table" class="anchor-heading" aria-labelledby="summary-table"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Summary Table
+  
+  
+</h2>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Technology</th>
+      <th>Version</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Backend API</td>
+      <td>Go + Gin</td>
+      <td>1.21+</td>
+      <td>REST API, microservices</td>
+    </tr>
+    <tr>
+      <td>Database</td>
+      <td>PostgreSQL</td>
+      <td>15</td>
+      <td>Persistent data storage</td>
+    </tr>
+    <tr>
+      <td>Cache</td>
+      <td>Redis</td>
+      <td>7</td>
+      <td>Fast caching, sessions</td>
+    </tr>
+    <tr>
+      <td>Message Queue</td>
+      <td>NATS</td>
+      <td>latest</td>
+      <td>Async job processing</td>
+    </tr>
+    <tr>
+      <td>TUI Client</td>
+      <td>Go + Bubbletea</td>
+      <td>latest</td>
+      <td>Terminal user interface</td>
+    </tr>
+    <tr>
+      <td>Exercise Definitions</td>
+      <td>YAML</td>
+      <td>-</td>
+      <td>Exercise content</td>
+    </tr>
+    <tr>
+      <td>Authentication</td>
+      <td>42 Intra OAuth 2.0</td>
+      <td>-</td>
+      <td>User login</td>
+    </tr>
+    <tr>
+      <td>Container Runtime</td>
+      <td>Docker</td>
+      <td>latest</td>
+      <td>Local dev &amp; production</td>
+    </tr>
+    <tr>
+      <td>Container Orchestration</td>
+      <td>Docker Compose</td>
+      <td>latest</td>
+      <td>Local dev environment</td>
+    </tr>
+  </tbody>
+</table></div><hr />
 
           
 

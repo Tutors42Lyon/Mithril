@@ -158,7 +158,7 @@
   
     <ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/Mithril/getting-started.html" class="nav-list-link">Getting Started</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Architecture category" aria-pressed="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
-    </button><a href="/Mithril/architecture.html" class="nav-list-link">Architecture</a><ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/architecture/overview.html" class="nav-list-link">Overview</a></li><li class="nav-list-item"><a href="/Mithril/architecture/system-design.html" class="nav-list-link">System Design</a></li><li class="nav-list-item"><a href="/Mithril/architecture/data-model.html" class="nav-list-link">Data Model</a></li><li class="nav-list-item"><a href="/Mithril/architecture/tech-stack.html" class="nav-list-link">Technology Stack</a></li><li class="nav-list-item"><a href="/Mithril/architecture/database.html" class="nav-list-link">Database</a></li><li class="nav-list-item"><a href="/Mithril/architecture/api-specification.html" class="nav-list-link">Api Specification</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Development category" aria-pressed="false">
+    </button><a href="/Mithril/architecture.html" class="nav-list-link">Architecture</a><ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/architecture/overview.html" class="nav-list-link">Overview</a></li><li class="nav-list-item"><a href="/Mithril/architecture/system-design.html" class="nav-list-link">System Design</a></li><li class="nav-list-item"><a href="/Mithril/architecture/data-model.html" class="nav-list-link">Data Model</a></li><li class="nav-list-item"><a href="/Mithril/architecture/tech-stack.html" class="nav-list-link">Technology Stack</a></li><li class="nav-list-item"><a href="/Mithril/architecture/database.html" class="nav-list-link">Database</a></li><li class="nav-list-item"><a href="/Mithril/architecture/api-specification.html" class="nav-list-link">Api Specification</a></li><li class="nav-list-item"><a href="/Mithril/architecture/use-cases.html" class="nav-list-link">Use case</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Development category" aria-pressed="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
     </button><a href="/Mithril/development.html" class="nav-list-link">Development</a><ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/development/setup.html" class="nav-list-link">Setup Guide</a></li><li class="nav-list-item"><a href="/Mithril/development/contributing.html" class="nav-list-link">Contributing</a></li><li class="nav-list-item"><a href="/Mithril/development/project-structure.html" class="nav-list-link">Project Structure</a></li><li class="nav-list-item"><a href="/Mithril/development/conventions.html" class="nav-list-link">Conventions</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Planning category" aria-pressed="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
@@ -324,269 +324,269 @@
   },"15": {
     "doc": "Conventions",
     "title": "Code Style",
-    "content": " ",
+    "content": "All Go code must adhere to the following standards: . | Use gofmt for automatic code formatting: https://pkg.go.dev/cmd/gofmt | Follow the official Go guidelines: https://go.dev/doc/effective_go | Use Google’s Go style decisions: https://google.github.io/styleguide/go/decisions | Run go vet to catch common mistakes | Use golint or golangci-lint in CI/CD for code quality checks | . Pre-commit setup: Configure your editor to run gofmt on save to maintain consistency across the team. ",
     "url": "/Mithril/development/conventions.html#code-style",
     
     "relUrl": "/development/conventions.html#code-style"
   },"16": {
     "doc": "Conventions",
     "title": "Naming Conventions",
-    "content": " ",
+    "content": "Packages . | Use short, concise names in lowercase (no underscores) | Avoid generic names like util, helper, or common | Examples: parser, client, config, storage | . Functions and Methods . | Use CamelCase for exported functions (start with uppercase) | Use camelCase for unexported functions (start with lowercase) | Use descriptive names: ParseConfig() not Parse() | Boolean functions should start with Is, Has, or Can: IsValid(), HasPermission() | . Variables and Constants . | Use short, meaningful variable names within scope | Exported constants: CONSTANT_NAME or ConstantName depending on scope | Unexported constants: lowercase or lowerCamelCase | Avoid abbreviations unless widely understood (e.g., ctx for context is acceptable) | . Interfaces . | Single method interfaces should be named with -er suffix: Reader, Writer, Closer | Multi-method interfaces use descriptive names: RequestHandler, DataStore | . Errors . | Define error variables with Err prefix: var ErrNotFound = errors.New(\"not found\") | Wrap errors with context: fmt.Errorf(\"failed to process user: %w\", err) | . ",
     "url": "/Mithril/development/conventions.html#naming-conventions",
     
     "relUrl": "/development/conventions.html#naming-conventions"
   },"17": {
     "doc": "Conventions",
     "title": "Git Workflow",
-    "content": " ",
+    "content": "Branch Strategy . We follow a Git Flow model adapted for our team of 4: . Branch Types . | main: Production-ready code. All commits must be tagged with releases. | develop: Integration branch. This is the base for feature development. | feature/*: Feature branches for new functionality . | Naming: feature/brief-description (e.g., feature/add-user-auth) | Created from: develop | Merged back to: develop via pull request | . | bugfix/*: Bug fix branches . | Naming: bugfix/issue-number-brief-desc (e.g., bugfix/123-crash-on-startup) | Created from: develop | Merged back to: develop via pull request | . | hotfix/*: Critical fixes for production . | Naming: hotfix/issue-number-brief-desc | Created from: main | Merged back to: main AND develop | . | . Commit Messages . Follow Conventional Commits: . Format: &lt;type&gt;(&lt;scope&gt;): &lt;subject&gt; . Types: . | feat: New feature | fix: Bug fix | docs: Documentation changes | style: Code style changes (formatting, gofmt) | refactor: Code refactoring without functional changes | perf: Performance improvements | test: Adding or updating tests | ci: CI/CD configuration changes | chore: Build, dependency updates, tooling | . Examples: . feat(auth): add JWT token validation fix(parser): handle malformed JSON gracefully docs(readme): update installation instructions test(storage): add unit tests for cache layer . Commit Body (for significant commits): . | Explain why, not what (the what should be clear from the code) | Keep lines under 72 characters | Use imperative mood: “add feature” not “added feature” | Reference issues: Closes #123 or Fixes #456 | . Example full commit: . feat(storage): add redis cache support Implement Redis caching for frequently accessed objects to reduce database load. Includes configurable TTL and automatic cleanup. Closes #45 . Pull Request Workflow . | Create a feature branch from develop: git checkout develop git pull origin develop git checkout -b feature/your-feature-name . | Commit regularly with meaningful messages (follow Conventional Commits above) . | Push your branch and create a pull request: git push origin feature/your-feature-name . | PR Requirements before merging: . | ✅ All CI/CD checks pass (tests, linting, build) | ✅ At least 2 code reviews from team members | ✅ All conversations resolved | ✅ Branch is up to date with develop | ✅ Squash commits if history is messy (optional, team decides per PR) | . | Merge using “Squash and merge” or “Create a merge commit” (team consensus needed) | . Code Review Checklist . When reviewing PRs, check for: . | Code follows style guidelines (gofmt, naming conventions) | Changes are well-tested with unit/integration tests | Documentation updated if needed | No hardcoded values or credentials | Error handling is appropriate | Performance impact considered | Commit messages are clear and follow conventions | . Releasing . | Create a release branch from main: git checkout main git pull origin main git checkout -b release/v1.2.3 . | Update version numbers and changelog . | Create a PR to main, merge after approval . | Tag the commit: git tag -a v1.2.3 -m \"Release version 1.2.3\" git push origin v1.2.3 . | Merge back to develop to keep in sync | . ",
     "url": "/Mithril/development/conventions.html#git-workflow",
     
     "relUrl": "/development/conventions.html#git-workflow"
   },"18": {
     "doc": "Conventions",
     "title": "Documentation Standards",
-    "content": " ",
+    "content": "Code Documentation . | Every exported function and type must have a doc comment | Doc comments should start with the name of the entity: // ParseConfig parses... | Use proper grammar and complete sentences | Example: | . // User represents a system user with authentication credentials. // Fields are unexported except for ID which is used in APIs. type User struct { id string name string email string } // NewUser creates a new User with the given name and email. // It returns an error if email is invalid. func NewUser(name, email string) (*User, error) { // implementation } . README Requirements . Each package or module should have a README explaining: . | Purpose of the package | Key components and interfaces | Usage examples | Dependencies | Configuration options | . Architecture Documentation . | Maintain a high-level architecture document explaining component relationships | Update when major changes occur | Include diagrams where helpful (use Mermaid, ASCII art, or images) | . Changelog . | Maintain a CHANGELOG.md file following Keep a Changelog | Update with each release | Categorize entries: Added, Changed, Deprecated, Removed, Fixed, Security | . Inline Comments . | Comment the why, not the what | Avoid obvious comments: i = i + 1 // increment i is unnecessary | Useful comment: // Use regex to validate email early to fail fast | Keep comments up to date with code changes | . Issue and PR Templates . Use GitHub templates for consistency: . | Issues: Bug reports should include reproduction steps, expected vs actual behavior | PRs: Reference related issues, describe changes, highlight any breaking changes | . ",
     "url": "/Mithril/development/conventions.html#documentation-standards",
     
     "relUrl": "/development/conventions.html#documentation-standards"
   },"19": {
+    "doc": "Conventions",
+    "title": "Tools and Automation",
+    "content": "Required Tools . | Go 1.21+ (check go.mod) | gofmt (built-in with Go) | go vet (built-in with Go) | git with SSH keys configured | . Recommended Tools . | golangci-lint: Comprehensive linting (run locally before pushing) | pre-commit: Git hook framework to enforce checks before commits | Editor: VS Code with Go extension, GoLand, or vim with vim-go | . CI/CD . All pushes and PRs must pass: . | Go build (go build ./...) | Tests with coverage (go test -cover ./...) | Linting (golangci-lint run) | Go vet (go vet ./...) | . ",
+    "url": "/Mithril/development/conventions.html#tools-and-automation",
+    
+    "relUrl": "/development/conventions.html#tools-and-automation"
+  },"20": {
     "doc": "Data Model",
     "title": "Data Model",
     "content": "Description of Mithril’s data models and relationships. ",
     "url": "/Mithril/architecture/data-model.html",
     
     "relUrl": "/architecture/data-model.html"
-  },"20": {
+  },"21": {
     "doc": "Data Model",
     "title": "Entity Relationship",
     "content": " ",
     "url": "/Mithril/architecture/data-model.html#entity-relationship",
     
     "relUrl": "/architecture/data-model.html#entity-relationship"
-  },"21": {
+  },"22": {
     "doc": "Data Model",
     "title": "Core Entities",
     "content": " ",
     "url": "/Mithril/architecture/data-model.html#core-entities",
     
     "relUrl": "/architecture/data-model.html#core-entities"
-  },"22": {
+  },"23": {
     "doc": "Data Model",
     "title": "Relationships",
     "content": " ",
     "url": "/Mithril/architecture/data-model.html#relationships",
     
     "relUrl": "/architecture/data-model.html#relationships"
-  },"23": {
+  },"24": {
     "doc": "Database",
     "title": "Database",
     "content": " ",
     "url": "/Mithril/architecture/database.html",
     
     "relUrl": "/architecture/database.html"
-  },"24": {
+  },"25": {
     "doc": "Database",
     "title": "Users Table",
-    "content": "CREATE TABLE users ( id SERIAL PRIMARY KEY, username VARCHAR(255) UNIQUE NOT NULL, email VARCHAR(255) UNIQUE NOT NULL, role VARCHAR(50) NOT NULL, -- 'student', 'instructor', 'admin' intra_id INT UNIQUE, school_year INT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, is_active BOOLEAN DEFAULT true ); CREATE INDEX idx_users_username ON users(username); CREATE INDEX idx_users_email ON users(email); CREATE INDEX idx_users_role ON users(role); . CREATE TABLE exercise_pools ( id SERIAL PRIMARY KEY, name VARCHAR(255) NOT NULL, category VARCHAR(100) NOT NULL, -- 'c_basics', 'algorithms', 'regex', 'git' description TEXT, is_published BOOLEAN DEFAULT false, created_by INT REFERENCES users(id), created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ); CREATE INDEX idx_pools_category ON exercise_pools(category); CREATE INDEX idx_pools_is_published ON exercise_pools(is_published); . CREATE TABLE exercises ( id SERIAL PRIMARY KEY, pool_id INT REFERENCES exercise_pools(id) ON DELETE CASCADE, yaml_file_path VARCHAR(255) NOT NULL, title VARCHAR(255) NOT NULL, difficulty_level VARCHAR(50), -- 'easy', 'medium', 'hard' points INT DEFAULT 10, order_index INT, -- Position within pool (1, 2, 3...) created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ); CREATE INDEX idx_exercises_pool_id ON exercises(pool_id); CREATE INDEX idx_exercises_order ON exercises(pool_id, order_index); . CREATE TABLE events ( id SERIAL PRIMARY KEY, name VARCHAR(255) NOT NULL, description TEXT, type VARCHAR(50) NOT NULL, -- 'weekly_challenge', 'tournament', 'sprint', 'team_competition' status VARCHAR(50) DEFAULT 'upcoming', -- 'upcoming', 'active', 'ended' start_date TIMESTAMP NOT NULL, end_date TIMESTAMP NOT NULL, max_participants INT, is_team_based BOOLEAN DEFAULT false, created_by INT REFERENCES users(id), created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ); CREATE INDEX idx_events_status ON events(status); CREATE INDEX idx_events_type ON events(type); CREATE INDEX idx_events_start_date ON events(start_date); CREATE INDEX idx_events_created_by ON events(created_by); . CREATE TABLE event_exercises ( id SERIAL PRIMARY KEY, event_id INT REFERENCES events(id) ON DELETE CASCADE, exercise_id INT REFERENCES exercises(id) ON DELETE CASCADE, points INT NOT NULL, time_limit_minutes INT, UNIQUE(event_id, exercise_id) ); CREATE INDEX idx_event_exercises_event_id ON event_exercises(event_id); CREATE INDEX idx_event_exercises_exercise_id ON event_exercises(exercise_id); . CREATE TABLE event_participants ( id SERIAL PRIMARY KEY, event_id INT REFERENCES events(id) ON DELETE CASCADE, user_id INT REFERENCES users(id) ON DELETE CASCADE, team_id INT REFERENCES teams(id) ON DELETE SET NULL, score INT DEFAULT 0, rank INT, registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, last_submission TIMESTAMP, UNIQUE(event_id, user_id) ); CREATE INDEX idx_event_participants_event_id ON event_participants(event_id); CREATE INDEX idx_event_participants_user_id ON event_participants(user_id); CREATE INDEX idx_event_participants_score ON event_participants(score DESC); . ",
+    "content": "CREATE TABLE users ( id SERIAL PRIMARY KEY, username VARCHAR(255) UNIQUE NOT NULL, email VARCHAR(255) UNIQUE NOT NULL, role VARCHAR(50) NOT NULL, -- 'student', 'instructor', 'admin' intra_id INT UNIQUE, school_year INT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, is_active BOOLEAN DEFAULT true ); CREATE INDEX idx_users_username ON users(username); CREATE INDEX idx_users_email ON users(email); CREATE INDEX idx_users_role ON users(role); . CREATE TABLE exercise_pools ( id SERIAL PRIMARY KEY, name VARCHAR(255) NOT NULL, category VARCHAR(100) NOT NULL, -- 'c_basics', 'algorithms', 'regex', 'git' description TEXT, is_published BOOLEAN DEFAULT false, created_by INT REFERENCES users(id), created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ); CREATE INDEX idx_pools_category ON exercise_pools(category); CREATE INDEX idx_pools_is_published ON exercise_pools(is_published); . CREATE TABLE exercises ( id SERIAL PRIMARY KEY, pool_id INT REFERENCES exercise_pools(id) ON DELETE CASCADE, yaml_file_path VARCHAR(255) NOT NULL, title VARCHAR(255) NOT NULL, points INT DEFAULT 0, order_index INT, -- Position within pool (1, 2, 3...) chapter TEXT, -- a voir created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ); CREATE INDEX idx_exercises_pool_id ON exercises(pool_id); CREATE INDEX idx_exercises_order ON exercises(pool_id, order_index); . CREATE TABLE events ( id SERIAL PRIMARY KEY, name VARCHAR(255) NOT NULL, description TEXT, type VARCHAR(50) NOT NULL, -- 'weekly_challenge', 'tournament', 'sprint', 'team_competition' status VARCHAR(50) DEFAULT 'upcoming', -- 'upcoming', 'active', 'ended' start_date TIMESTAMP NOT NULL, end_date TIMESTAMP NOT NULL, max_participants INT, is_team_based BOOLEAN DEFAULT false, created_by INT REFERENCES users(id), created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ); CREATE INDEX idx_events_status ON events(status); CREATE INDEX idx_events_type ON events(type); CREATE INDEX idx_events_start_date ON events(start_date); CREATE INDEX idx_events_created_by ON events(created_by); . CREATE TABLE event_exercises ( id SERIAL PRIMARY KEY, event_id INT REFERENCES events(id) ON DELETE CASCADE, exercise_id INT REFERENCES exercises(id) ON DELETE CASCADE, points INT NOT NULL, time_limit_minutes INT, UNIQUE(event_id, exercise_id) ); CREATE INDEX idx_event_exercises_event_id ON event_exercises(event_id); CREATE INDEX idx_event_exercises_exercise_id ON event_exercises(exercise_id); . CREATE TABLE event_participants ( id SERIAL PRIMARY KEY, event_id INT REFERENCES events(id) ON DELETE CASCADE, user_id INT REFERENCES users(id) ON DELETE CASCADE, team_id INT REFERENCES teams(id) ON DELETE SET NULL, score INT DEFAULT 0, rank INT, registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, last_submission TIMESTAMP, UNIQUE(event_id, user_id) ); CREATE INDEX idx_event_participants_event_id ON event_participants(event_id); CREATE INDEX idx_event_participants_user_id ON event_participants(user_id); CREATE INDEX idx_event_participants_score ON event_participants(score DESC); . ",
     "url": "/Mithril/architecture/database.html#users-table",
     
     "relUrl": "/architecture/database.html#users-table"
-  },"25": {
+  },"26": {
     "doc": "Development",
     "title": "Development",
     "content": "Guides and resources for contributing to Mithril. ",
     "url": "/Mithril/development.html",
     
     "relUrl": "/development.html"
-  },"26": {
+  },"27": {
     "doc": "Exercise Format",
     "title": "Exercise Format",
     "content": "Specification for exercise files and structure. ",
     "url": "/Mithril/reference/exercise-format.html",
     
     "relUrl": "/reference/exercise-format.html"
-  },"27": {
+  },"28": {
     "doc": "Exercise Format",
     "title": "File Structure",
     "content": " ",
     "url": "/Mithril/reference/exercise-format.html#file-structure",
     
     "relUrl": "/reference/exercise-format.html#file-structure"
-  },"28": {
+  },"29": {
     "doc": "Exercise Format",
     "title": "Metadata",
     "content": " ",
     "url": "/Mithril/reference/exercise-format.html#metadata",
     
     "relUrl": "/reference/exercise-format.html#metadata"
-  },"29": {
+  },"30": {
     "doc": "Exercise Format",
     "title": "Test Cases",
     "content": " ",
     "url": "/Mithril/reference/exercise-format.html#test-cases",
     
     "relUrl": "/reference/exercise-format.html#test-cases"
-  },"30": {
+  },"31": {
     "doc": "Exercise Format",
     "title": "Example Exercise",
-    "content": " ",
+    "content": "id: \"ex01_hello_world\" title: \"Hello World\" type: \"code\" # or \"qcm\", \"text\" language: \"c\" # Compilation (if needed) build: command: \"gcc -Wall -Wextra -Werror {submission} -o {output}\" timeout: 30 # Test execution tests: - name: \"Basic test\" run: \"./{output}\" input: \"tests/test1_input.txt\" expected_output: \"tests/test1_expected.txt\" timeout: 5 - name: \"Edge case\" run: \"./{output}\" input: \"tests/test2_input.txt\" expected_output: \"tests/test2_expected.txt\" # Validation rules validation: check_valgrind: true allowed_functions: [\"write\", \"malloc\", \"free\"] forbidden_functions: [\"printf\"] # For 42 exercises # Scoring scoring: compilation: 10 per_test: 15 valgrind_clean: 10 . id: \"ex01_regex\" title: \"regex\" type: \"input\" # or \"qcm\", \"text\" language: \"none\" # Test execution tests: - name: \"Basic test\" run: \"./{output}\" input: \"tests/test1_input.txt\" expected_output: \"tests/test1_expected.txt\" timeout: 5 - name: \"Edge case\" run: \"./{output}\" input: \"tests/test2_input.txt\" expected_output: \"tests/test2_expected.txt\" # Scoring scoring: compilation: 10 per_test: 15 valgrind_clean: 10 . regex/ exo1.yaml test/ . ",
     "url": "/Mithril/reference/exercise-format.html#example-exercise",
     
     "relUrl": "/reference/exercise-format.html#example-exercise"
-  },"31": {
+  },"32": {
     "doc": "Features",
     "title": "Features",
     "content": "Planned and implemented features for Mithril. ",
     "url": "/Mithril/planning/features.html",
     
     "relUrl": "/planning/features.html"
-  },"32": {
+  },"33": {
     "doc": "Features",
     "title": "Core Features",
     "content": " ",
     "url": "/Mithril/planning/features.html#core-features",
     
     "relUrl": "/planning/features.html#core-features"
-  },"33": {
+  },"34": {
     "doc": "Features",
     "title": "Future Features",
     "content": " ",
     "url": "/Mithril/planning/features.html#future-features",
     
     "relUrl": "/planning/features.html#future-features"
-  },"34": {
+  },"35": {
     "doc": "Features",
     "title": "Feature Requests",
     "content": " ",
     "url": "/Mithril/planning/features.html#feature-requests",
     
     "relUrl": "/planning/features.html#feature-requests"
-  },"35": {
+  },"36": {
     "doc": "Getting Started",
     "title": "Getting Started",
     "content": "Quick guide to get you up and running with Mithril. ",
     "url": "/Mithril/getting-started.html",
     
     "relUrl": "/getting-started.html"
-  },"36": {
+  },"37": {
     "doc": "Getting Started",
     "title": "Prerequisites",
     "content": " ",
     "url": "/Mithril/getting-started.html#prerequisites",
     
     "relUrl": "/getting-started.html#prerequisites"
-  },"37": {
+  },"38": {
     "doc": "Getting Started",
     "title": "Installation",
     "content": " ",
     "url": "/Mithril/getting-started.html#installation",
     
     "relUrl": "/getting-started.html#installation"
-  },"38": {
+  },"39": {
     "doc": "Getting Started",
     "title": "First Steps",
     "content": " ",
     "url": "/Mithril/getting-started.html#first-steps",
     
     "relUrl": "/getting-started.html#first-steps"
-  },"39": {
+  },"40": {
     "doc": "Getting Started",
     "title": "Next Steps",
     "content": " ",
     "url": "/Mithril/getting-started.html#next-steps",
     
     "relUrl": "/getting-started.html#next-steps"
-  },"40": {
+  },"41": {
     "doc": "Home",
     "title": "Mithril 🚀",
     "content": "Modern practice platform for 42 students . ",
     "url": "/Mithril/#mithril-",
     
     "relUrl": "/#mithril-"
-  },"41": {
+  },"42": {
     "doc": "Home",
     "title": "What is Mithril?",
     "content": "Mithril is a next-generation terminal-based practice environment designed specifically for 42 school students. ",
     "url": "/Mithril/#what-is-mithril",
     
     "relUrl": "/#what-is-mithril"
-  },"42": {
+  },"43": {
     "doc": "Home",
     "title": "✨ Key Features",
     "content": ". | todo | . ",
     "url": "/Mithril/#-key-features",
     
     "relUrl": "/#-key-features"
-  },"43": {
+  },"44": {
     "doc": "Home",
     "title": "🚀 Quick Start",
     "content": "# Clone the repository git clone https://github.com/yourusername/mithril.git # Navigate to project cd mithril # Install dependencies make install # Run the application ./mithril . ",
     "url": "/Mithril/#-quick-start",
     
     "relUrl": "/#-quick-start"
-  },"44": {
+  },"45": {
     "doc": "Home",
     "title": "👥 Team",
     "content": " ",
     "url": "/Mithril/#-team",
     
     "relUrl": "/#-team"
-  },"45": {
+  },"46": {
     "doc": "Home",
     "title": "📚 Documentation",
     "content": ". | Getting Started - Quick start guide | Architecture - System design and technical decisions | Development - Contributing and development guides | Planning - Roadmap and project planning | Reference - Technical reference documentation | . ",
     "url": "/Mithril/#-documentation",
     
     "relUrl": "/#-documentation"
-  },"46": {
+  },"47": {
     "doc": "Home",
     "title": "🤝 Contributing",
     "content": "We welcome contributions! Please see our Contributing Guide for details. ",
     "url": "/Mithril/#-contributing",
     
     "relUrl": "/#-contributing"
-  },"47": {
+  },"48": {
     "doc": "Home",
     "title": "📄 License",
     "content": "This project is open source and available under the MIT License. Built with ❤️ by 42 students, for 42 students . ",
     "url": "/Mithril/#-license",
     
     "relUrl": "/#-license"
-  },"48": {
+  },"49": {
     "doc": "Home",
     "title": "Home",
     "content": " ",
     "url": "/Mithril/",
     
     "relUrl": "/"
-  },"49": {
+  },"50": {
     "doc": "Milestones",
     "title": "Milestones",
     "content": " ",
     "url": "/Mithril/planning/milestones.html",
     
     "relUrl": "/planning/milestones.html"
-  },"50": {
+  },"51": {
     "doc": "Overview",
     "title": "Architecture Overview",
     "content": " ",
     "url": "/Mithril/architecture/overview.html#architecture-overview",
     
     "relUrl": "/architecture/overview.html#architecture-overview"
-  },"51": {
+  },"52": {
     "doc": "Overview",
     "title": "System Architecture",
-    "content": "graph TB %% Styling classDef client fill:#e1f5ff,stroke:#01579b,stroke-width:2px classDef gateway fill:#f3e5f5,stroke:#4a148c,stroke-width:2px classDef broker fill:#fff9c4,stroke:#f57f17,stroke-width:3px classDef service fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px classDef worker fill:#ffe0b2,stroke:#e65100,stroke-width:2px classDef storage fill:#fce4ec,stroke:#880e4f,stroke-width:2px subgraph CLIENT[\"Client Layer\"] TUI[Terminal UI&lt;br/&gt;Go + Bubbletea]:::client WEB[Web Dashboard&lt;br/&gt;Mithril.js]:::client end subgraph GATEWAY[\"API Gateway\"] GW[REST API&lt;br/&gt;Go + gin]:::gateway WS[WebSocket&lt;br/&gt;Gorilla]:::gateway end subgraph BROKER[\"Message Broker\"] NATS[NATS Server]:::broker end subgraph SERVICES[\"Core Services\"] direction LR AUTH[Auth]:::service USER[User]:::service EXERCISE[Exercise]:::service EVENT[Event]:::service GRADING[Grading]:::service STATS[Stats]:::service end subgraph POOL[\"Grading Pool\"] direction LR W1[Worker]:::worker W2[Worker]:::worker W3[Worker]:::worker W4[Worker]:::worker end subgraph DATA[\"Data Layer\"] DB[(PostgreSQL)]:::storage REDIS[(Redis user session)]:::storage FILES[(YAML Files)]:::storage end %% Connections TUI --&gt; GATEWAY WEB --&gt; GATEWAY GW --&gt; NATS WS --&gt; NATS NATS &lt;--&gt; SERVICES GRADING --&gt; POOL SERVICES --&gt; DB EXERCISE --&gt; FILES SERVICES --&gt; REDIS . ",
+    "content": "graph TB %% Styling classDef client fill:#e1f5ff,stroke:#01579b,stroke-width:2px classDef gateway fill:#f3e5f5,stroke:#4a148c,stroke-width:2px classDef broker fill:#fff9c4,stroke:#f57f17,stroke-width:3px classDef service fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px classDef worker fill:#ffe0b2,stroke:#e65100,stroke-width:2px classDef storage fill:#fce4ec,stroke:#880e4f,stroke-width:2px subgraph CLIENT[\"Client Layer\"] TUI[Terminal UI&lt;br/&gt;Go + Bubbletea]:::client WEB[Web Dashboard&lt;br/&gt;]:::client end subgraph GATEWAY[\"API Gateway\"] GW[REST API&lt;br/&gt;Go + gin]:::gateway WS[WebSocket&lt;br/&gt;Gorilla]:::gateway end subgraph BROKER[\"Message Broker\"] NATS[NATS Server]:::broker end subgraph SERVICES[\"Core Services\"] direction LR AUTH[Auth]:::service USER[User]:::service EXERCISE[Exercise]:::service EVENT[Event]:::service GRADING[Grading]:::service STATS[Stats]:::service end subgraph POOL[\"Grading Pool\"] direction LR W1[Worker]:::worker W2[Worker]:::worker W3[Worker]:::worker W4[Worker]:::worker end subgraph DATA[\"Data Layer\"] DB[(PostgreSQL)]:::storage REDIS[(Redis user session)]:::storage FILES[(YAML Files)]:::storage end %% Connections TUI --&gt; GATEWAY WEB --&gt; GATEWAY GW --&gt; NATS WS --&gt; NATS NATS &lt;--&gt; SERVICES GRADING --&gt; POOL SERVICES --&gt; DB EXERCISE --&gt; FILES SERVICES --&gt; REDIS . ",
     "url": "/Mithril/architecture/overview.html#system-architecture",
     
     "relUrl": "/architecture/overview.html#system-architecture"
-  },"52": {
-    "doc": "Overview",
-    "title": "User Flow",
-    "content": "flowchart LR Start([Student starts Mithril]) Login[Login with 42 credentials] Menu[Main Menu] Select[Select Exercise Level] Exercise[Get Random Exercise] Code[Write Code in Editor] Test[Run Tests Locally] Submit[Submit 'grademe'] Result{Pass?} Next[Next Exercise] Stats[Update Statistics] End([Session Complete]) Start --&gt; Login Login --&gt; Menu Menu --&gt; Select Select --&gt; Exercise Exercise --&gt; Code Code --&gt; Test Test --&gt; Submit Submit --&gt; Result Result --&gt;|Yes| Stats Result --&gt;|No| Code Stats --&gt; Next Next --&gt; Exercise Menu --&gt;|Quit| End . ",
-    "url": "/Mithril/architecture/overview.html#user-flow",
-    
-    "relUrl": "/architecture/overview.html#user-flow"
   },"53": {
     "doc": "Overview",
     "title": "Data Flow",
@@ -639,7 +639,7 @@
   },"60": {
     "doc": "Project Structure",
     "title": "Documentation",
-    "content": " ",
+    "content": "mithril-backend/ │ ├── cmd/ # Service entry points │ ├── api/ │ │ └── main.go # API Gateway startup │ ├── grading/ │ │ └── main.go # Grading Service startup │ └── migrate/ │ └── main.go # Database migrations │ ├── internal/ # Private application code │ ├── services/ # Business logic │ │ ├── auth.go # Authentication (42 OAuth, sessions) │ │ ├── exercise.go # Exercise retrieval &amp; caching │ │ ├── submission.go # Submission handling │ │ └── pool.go # Exercise pool management │ │ │ ├── handlers/ # HTTP request handlers │ │ ├── auth.go # Login, logout, callback endpoints │ │ ├── exercises.go # Exercise list, detail endpoints │ │ ├── submissions.go # Submit, check status endpoints │ │ ├── pools.go # Pool listing endpoints │ │ └── middleware.go # Auth, logging, errors │ │ │ ├── models/ # Data structures (Go structs) │ │ ├── user.go # User struct │ │ ├── exercise.go # Exercise, ExerciseContent structs │ │ ├── pool.go # ExercisePool struct │ │ ├── attempt.go # ExerciseAttempt struct │ │ ├── session.go # Session struct │ │ └── grading.go # GradingJob, GradingResult structs │ │ │ ├── database/ # PostgreSQL interactions │ │ ├── db.go # Connection setup &amp; pooling │ │ ├── queries.go # Query builders (optional) │ │ ├── connection.go # Connection management │ │ └── migrations/ # SQL migration files │ │ ├── 001_init.sql # Create tables │ │ ├── 002_indexes.sql # Add indexes │ │ └── 003_seed.sql # Test data │ │ │ ├── cache/ # Redis interactions │ │ ├── redis.go # Redis client setup │ │ ├── session.go # Session caching │ │ ├── exercise.go # Exercise caching │ │ └── keys.go # Redis key constants │ │ │ ├── messaging/ # NATS message queue │ │ ├── nats.go # NATS client setup │ │ ├── publisher.go # Publish functions │ │ └── subscriber.go # Subscribe &amp; consume functions │ │ │ ├── grading/ # Grading logic │ │ ├── executor.go # Execute user code │ │ ├── tester.go # Run test cases │ │ ├── compiler.go # Compile C code │ │ └── errors.go # Error handling │ │ │ ├── yaml/ # YAML exercise loading │ │ ├── loader.go # Load YAML files │ │ ├── parser.go # Parse YAML structure │ │ └── validator.go # Validate YAML format │ │ │ ├── auth42/ # 42 Intra OAuth │ │ ├── client.go # 42 API HTTP client │ │ ├── oauth.go # OAuth flow │ │ └── user.go # Fetch user from 42 │ │ │ └── config/ # Configuration │ └── config.go # Load env &amp; config files │ ├── pkg/ # Public packages (reusable) │ └── (empty for MVP) │ ├── test/ # Integration tests │ ├── integration_test.go │ ├── fixtures/ │ │ └── test_data.json │ └── README.md │ ├── scripts/ # Utility scripts │ ├── setup.sh # Project setup │ ├── seed-db.sh # Seed test data │ └── test.sh # Run tests │ ├── config/ # Configuration files │ ├── .env.example # Env var template │ └── config.yaml # (Optional) │ ├── docker/ # Separate Dockerfiles for each service │ ├── api.Dockerfile # API Gateway image │ ├── grading.Dockerfile # Grading Service image │ └── migrations.Dockerfile # Migrations tool image │ ├── exercises/ # Exercise YAML files │ ├── pool_1_c_basics/ │ │ ├── hello_world.yaml │ │ ├── arrays.yaml │ │ └── loops.yaml │ ├── pool_2_algorithms/ │ │ ├── bubble_sort.yaml │ │ ├── binary_search.yaml │ │ └── quicksort.yaml │ └── pool_3_git/ │ ├── basic_commands.yaml │ └── branching.yaml │ . ",
     "url": "/Mithril/development/project-structure.html#documentation",
     
     "relUrl": "/development/project-structure.html#documentation"
@@ -673,11 +673,53 @@
     "relUrl": "/architecture/system-design.html"
   },"65": {
     "doc": "Technology Stack",
+    "title": "Mithril Tech Stack",
+    "content": " ",
+    "url": "/Mithril/architecture/tech-stack.html#mithril-tech-stack",
+    
+    "relUrl": "/architecture/tech-stack.html#mithril-tech-stack"
+  },"66": {
+    "doc": "Technology Stack",
+    "title": "Summary Table",
+    "content": "| Component | Technology | Version | Purpose | . | Backend API | Go + Gin | 1.21+ | REST API, microservices | . | Database | PostgreSQL | 15 | Persistent data storage | . | Cache | Redis | 7 | Fast caching, sessions | . | Message Queue | NATS | latest | Async job processing | . | TUI Client | Go + Bubbletea | latest | Terminal user interface | . | Exercise Definitions | YAML | - | Exercise content | . | Authentication | 42 Intra OAuth 2.0 | - | User login | . | Container Runtime | Docker | latest | Local dev &amp; production | . | Container Orchestration | Docker Compose | latest | Local dev environment | . ",
+    "url": "/Mithril/architecture/tech-stack.html#summary-table",
+    
+    "relUrl": "/architecture/tech-stack.html#summary-table"
+  },"67": {
+    "doc": "Technology Stack",
     "title": "Technology Stack",
     "content": " ",
     "url": "/Mithril/architecture/tech-stack.html",
     
     "relUrl": "/architecture/tech-stack.html"
+  },"68": {
+    "doc": "Use case",
+    "title": "MVP Feature 1: Login",
+    "content": "User opens Mithril ↓ Clicks \"Login with 42\" ↓ Redirected to 42 Intra ↓ User logs in ↓ Redirected back to Mithril ↓ Session created ↓ User sees menu . ",
+    "url": "/Mithril/architecture/use-cases.html#mvp-feature-1-login",
+    
+    "relUrl": "/architecture/use-cases.html#mvp-feature-1-login"
+  },"69": {
+    "doc": "Use case",
+    "title": "MVP Feature 2: Browse Exercises",
+    "content": "User clicks \"Exercises\" ↓ See list of exercise pools: - C Basics (5 exercises) - Algorithms (8 exercises) ↓ Click pool ↓ See exercises in order: 1. Hello World 2. Arrays 3. Loops . ",
+    "url": "/Mithril/architecture/use-cases.html#mvp-feature-2-browse-exercises",
+    
+    "relUrl": "/architecture/use-cases.html#mvp-feature-2-browse-exercises"
+  },"70": {
+    "doc": "Use case",
+    "title": "MVP Feature 3: Solve Exercise",
+    "content": "User clicks exercise ↓ See problem statement ↓ Option A (TUI): - Press \"Edit\" - Opens vim/nano with temp file - User codes - Saves and closes ↓ Click \"Submit\" ↓ Code goes to grading service ↓ Grading service tests code ↓ Results: PASS or FAIL ↓ User sees: Results + Feedback . ",
+    "url": "/Mithril/architecture/use-cases.html#mvp-feature-3-solve-exercise",
+    
+    "relUrl": "/architecture/use-cases.html#mvp-feature-3-solve-exercise"
+  },"71": {
+    "doc": "Use case",
+    "title": "Use case",
+    "content": " ",
+    "url": "/Mithril/architecture/use-cases.html",
+    
+    "relUrl": "/architecture/use-cases.html"
   }
 }
 

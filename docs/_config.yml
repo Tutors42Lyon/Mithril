@@ -51,7 +51,7 @@ aux_links:
 footer_content: "Copyright &copy; 2024 Mithril. Distributed under the MIT License."
 
 # Color scheme (options: light, dark, or custom)
-color_scheme: light
+color_scheme: dark 
 
 # Google Analytics (optional)
 # ga_tracking: UA-XXXXXXXX-X

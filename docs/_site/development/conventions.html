@@ -176,7 +176,7 @@
   
     <ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/Mithril/getting-started.html" class="nav-list-link">Getting Started</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Architecture category" aria-pressed="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
-    </button><a href="/Mithril/architecture.html" class="nav-list-link">Architecture</a><ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/architecture/overview.html" class="nav-list-link">Overview</a></li><li class="nav-list-item"><a href="/Mithril/architecture/system-design.html" class="nav-list-link">System Design</a></li><li class="nav-list-item"><a href="/Mithril/architecture/data-model.html" class="nav-list-link">Data Model</a></li><li class="nav-list-item"><a href="/Mithril/architecture/tech-stack.html" class="nav-list-link">Technology Stack</a></li><li class="nav-list-item"><a href="/Mithril/architecture/database.html" class="nav-list-link">Database</a></li><li class="nav-list-item"><a href="/Mithril/architecture/api-specification.html" class="nav-list-link">Api Specification</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Development category" aria-pressed="false">
+    </button><a href="/Mithril/architecture.html" class="nav-list-link">Architecture</a><ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/architecture/overview.html" class="nav-list-link">Overview</a></li><li class="nav-list-item"><a href="/Mithril/architecture/system-design.html" class="nav-list-link">System Design</a></li><li class="nav-list-item"><a href="/Mithril/architecture/data-model.html" class="nav-list-link">Data Model</a></li><li class="nav-list-item"><a href="/Mithril/architecture/tech-stack.html" class="nav-list-link">Technology Stack</a></li><li class="nav-list-item"><a href="/Mithril/architecture/database.html" class="nav-list-link">Database</a></li><li class="nav-list-item"><a href="/Mithril/architecture/api-specification.html" class="nav-list-link">Api Specification</a></li><li class="nav-list-item"><a href="/Mithril/architecture/use-cases.html" class="nav-list-link">Use case</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Development category" aria-pressed="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
     </button><a href="/Mithril/development.html" class="nav-list-link">Development</a><ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/development/setup.html" class="nav-list-link">Setup Guide</a></li><li class="nav-list-item"><a href="/Mithril/development/contributing.html" class="nav-list-link">Contributing</a></li><li class="nav-list-item"><a href="/Mithril/development/project-structure.html" class="nav-list-link">Project Structure</a></li><li class="nav-list-item"><a href="/Mithril/development/conventions.html" class="nav-list-link">Conventions</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Planning category" aria-pressed="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
@@ -248,7 +248,6 @@
   
 </h1>
     
-
 <p>Coding conventions and best practices for Mithril development.</p>
 <h2 id="code-style">
   
@@ -258,6 +257,17 @@
   
 </h2>
     
+<p>All Go code must adhere to the following standards:</p>
+
+<ul>
+  <li>Use <code class="language-plaintext highlighter-rouge">gofmt</code> for automatic code formatting: https://pkg.go.dev/cmd/gofmt</li>
+  <li>Follow the official Go guidelines: https://go.dev/doc/effective_go</li>
+  <li>Use Google’s Go style decisions: https://google.github.io/styleguide/go/decisions</li>
+  <li>Run <code class="language-plaintext highlighter-rouge">go vet</code> to catch common mistakes</li>
+  <li>Use <code class="language-plaintext highlighter-rouge">golint</code> or <code class="language-plaintext highlighter-rouge">golangci-lint</code> in CI/CD for code quality checks</li>
+</ul>
+
+<p><strong>Pre-commit setup:</strong> Configure your editor to run <code class="language-plaintext highlighter-rouge">gofmt</code> on save to maintain consistency across the team.</p>
 <h2 id="naming-conventions">
   
   
@@ -266,6 +276,71 @@
   
 </h2>
     
+<h3 id="packages">
+  
+  
+    <a href="#packages" class="anchor-heading" aria-labelledby="packages"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Packages
+  
+  
+</h3>
+    
+<ul>
+  <li>Use short, concise names in lowercase (no underscores)</li>
+  <li>Avoid generic names like <code class="language-plaintext highlighter-rouge">util</code>, <code class="language-plaintext highlighter-rouge">helper</code>, or <code class="language-plaintext highlighter-rouge">common</code></li>
+  <li>Examples: <code class="language-plaintext highlighter-rouge">parser</code>, <code class="language-plaintext highlighter-rouge">client</code>, <code class="language-plaintext highlighter-rouge">config</code>, <code class="language-plaintext highlighter-rouge">storage</code></li>
+</ul>
+<h3 id="functions-and-methods">
+  
+  
+    <a href="#functions-and-methods" class="anchor-heading" aria-labelledby="functions-and-methods"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Functions and Methods
+  
+  
+</h3>
+    
+<ul>
+  <li>Use <code class="language-plaintext highlighter-rouge">CamelCase</code> for exported functions (start with uppercase)</li>
+  <li>Use <code class="language-plaintext highlighter-rouge">camelCase</code> for unexported functions (start with lowercase)</li>
+  <li>Use descriptive names: <code class="language-plaintext highlighter-rouge">ParseConfig()</code> not <code class="language-plaintext highlighter-rouge">Parse()</code></li>
+  <li>Boolean functions should start with <code class="language-plaintext highlighter-rouge">Is</code>, <code class="language-plaintext highlighter-rouge">Has</code>, or <code class="language-plaintext highlighter-rouge">Can</code>: <code class="language-plaintext highlighter-rouge">IsValid()</code>, <code class="language-plaintext highlighter-rouge">HasPermission()</code></li>
+</ul>
+<h3 id="variables-and-constants">
+  
+  
+    <a href="#variables-and-constants" class="anchor-heading" aria-labelledby="variables-and-constants"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Variables and Constants
+  
+  
+</h3>
+    
+<ul>
+  <li>Use short, meaningful variable names within scope</li>
+  <li>Exported constants: <code class="language-plaintext highlighter-rouge">CONSTANT_NAME</code> or <code class="language-plaintext highlighter-rouge">ConstantName</code> depending on scope</li>
+  <li>Unexported constants: <code class="language-plaintext highlighter-rouge">lowercase</code> or <code class="language-plaintext highlighter-rouge">lowerCamelCase</code></li>
+  <li>Avoid abbreviations unless widely understood (e.g., <code class="language-plaintext highlighter-rouge">ctx</code> for context is acceptable)</li>
+</ul>
+<h3 id="interfaces">
+  
+  
+    <a href="#interfaces" class="anchor-heading" aria-labelledby="interfaces"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Interfaces
+  
+  
+</h3>
+    
+<ul>
+  <li>Single method interfaces should be named with <code class="language-plaintext highlighter-rouge">-er</code> suffix: <code class="language-plaintext highlighter-rouge">Reader</code>, <code class="language-plaintext highlighter-rouge">Writer</code>, <code class="language-plaintext highlighter-rouge">Closer</code></li>
+  <li>Multi-method interfaces use descriptive names: <code class="language-plaintext highlighter-rouge">RequestHandler</code>, <code class="language-plaintext highlighter-rouge">DataStore</code></li>
+</ul>
+<h3 id="errors">
+  
+  
+    <a href="#errors" class="anchor-heading" aria-labelledby="errors"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Errors
+  
+  
+</h3>
+    
+<ul>
+  <li>Define error variables with <code class="language-plaintext highlighter-rouge">Err</code> prefix: <code class="language-plaintext highlighter-rouge">var ErrNotFound = errors.New("not found")</code></li>
+  <li>Wrap errors with context: <code class="language-plaintext highlighter-rouge">fmt.Errorf("failed to process user: %w", err)</code></li>
+</ul>
 <h2 id="git-workflow">
   
   
@@ -274,6 +349,176 @@
   
 </h2>
     
+<h3 id="branch-strategy">
+  
+  
+    <a href="#branch-strategy" class="anchor-heading" aria-labelledby="branch-strategy"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Branch Strategy
+  
+  
+</h3>
+    
+<p>We follow a <strong>Git Flow</strong> model adapted for our team of 4:</p>
+<h4 id="branch-types">
+  
+  
+    <a href="#branch-types" class="anchor-heading" aria-labelledby="branch-types"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Branch Types
+  
+  
+</h4>
+    
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">main</code></strong>: Production-ready code. All commits must be tagged with releases.</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">develop</code></strong>: Integration branch. This is the base for feature development.</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">feature/*</code></strong>: Feature branches for new functionality
+    <ul>
+      <li>Naming: <code class="language-plaintext highlighter-rouge">feature/brief-description</code> (e.g., <code class="language-plaintext highlighter-rouge">feature/add-user-auth</code>)</li>
+      <li>Created from: <code class="language-plaintext highlighter-rouge">develop</code></li>
+      <li>Merged back to: <code class="language-plaintext highlighter-rouge">develop</code> via pull request</li>
+    </ul>
+  </li>
+  <li><strong><code class="language-plaintext highlighter-rouge">bugfix/*</code></strong>: Bug fix branches
+    <ul>
+      <li>Naming: <code class="language-plaintext highlighter-rouge">bugfix/issue-number-brief-desc</code> (e.g., <code class="language-plaintext highlighter-rouge">bugfix/123-crash-on-startup</code>)</li>
+      <li>Created from: <code class="language-plaintext highlighter-rouge">develop</code></li>
+      <li>Merged back to: <code class="language-plaintext highlighter-rouge">develop</code> via pull request</li>
+    </ul>
+  </li>
+  <li><strong><code class="language-plaintext highlighter-rouge">hotfix/*</code></strong>: Critical fixes for production
+    <ul>
+      <li>Naming: <code class="language-plaintext highlighter-rouge">hotfix/issue-number-brief-desc</code></li>
+      <li>Created from: <code class="language-plaintext highlighter-rouge">main</code></li>
+      <li>Merged back to: <code class="language-plaintext highlighter-rouge">main</code> AND <code class="language-plaintext highlighter-rouge">develop</code></li>
+    </ul>
+  </li>
+</ul>
+<h3 id="commit-messages">
+  
+  
+    <a href="#commit-messages" class="anchor-heading" aria-labelledby="commit-messages"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Commit Messages
+  
+  
+</h3>
+    
+<p>Follow <a href="https://www.conventionalcommits.org/en/v1.0.0/">Conventional Commits</a>:</p>
+
+<p><strong>Format:</strong> <code class="language-plaintext highlighter-rouge">&lt;type&gt;(&lt;scope&gt;): &lt;subject&gt;</code></p>
+
+<p><strong>Types:</strong></p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">feat</code>: New feature</li>
+  <li><code class="language-plaintext highlighter-rouge">fix</code>: Bug fix</li>
+  <li><code class="language-plaintext highlighter-rouge">docs</code>: Documentation changes</li>
+  <li><code class="language-plaintext highlighter-rouge">style</code>: Code style changes (formatting, gofmt)</li>
+  <li><code class="language-plaintext highlighter-rouge">refactor</code>: Code refactoring without functional changes</li>
+  <li><code class="language-plaintext highlighter-rouge">perf</code>: Performance improvements</li>
+  <li><code class="language-plaintext highlighter-rouge">test</code>: Adding or updating tests</li>
+  <li><code class="language-plaintext highlighter-rouge">ci</code>: CI/CD configuration changes</li>
+  <li><code class="language-plaintext highlighter-rouge">chore</code>: Build, dependency updates, tooling</li>
+</ul>
+
+<p><strong>Examples:</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>feat(auth): add JWT token validation
+fix(parser): handle malformed JSON gracefully
+docs(readme): update installation instructions
+test(storage): add unit tests for cache layer
+</code></pre></div></div>
+
+<p><strong>Commit Body (for significant commits):</strong></p>
+<ul>
+  <li>Explain <em>why</em>, not <em>what</em> (the what should be clear from the code)</li>
+  <li>Keep lines under 72 characters</li>
+  <li>Use imperative mood: “add feature” not “added feature”</li>
+  <li>Reference issues: <code class="language-plaintext highlighter-rouge">Closes #123</code> or <code class="language-plaintext highlighter-rouge">Fixes #456</code></li>
+</ul>
+
+<p><strong>Example full commit:</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>feat(storage): add redis cache support
+
+Implement Redis caching for frequently accessed objects to reduce
+database load. Includes configurable TTL and automatic cleanup.
+
+Closes #45
+</code></pre></div></div>
+<h3 id="pull-request-workflow">
+  
+  
+    <a href="#pull-request-workflow" class="anchor-heading" aria-labelledby="pull-request-workflow"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Pull Request Workflow
+  
+  
+</h3>
+    
+
+<ol>
+  <li><strong>Create a feature branch</strong> from <code class="language-plaintext highlighter-rouge">develop</code>:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout develop
+git pull origin develop
+git checkout <span class="nt">-b</span> feature/your-feature-name
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>Commit regularly</strong> with meaningful messages (follow Conventional Commits above)</p>
+  </li>
+  <li><strong>Push your branch</strong> and create a pull request:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git push origin feature/your-feature-name
+</code></pre></div>    </div>
+  </li>
+  <li><strong>PR Requirements</strong> before merging:
+    <ul>
+      <li>✅ All CI/CD checks pass (tests, linting, build)</li>
+      <li>✅ At least 2 code reviews from team members</li>
+      <li>✅ All conversations resolved</li>
+      <li>✅ Branch is up to date with <code class="language-plaintext highlighter-rouge">develop</code></li>
+      <li>✅ Squash commits if history is messy (optional, team decides per PR)</li>
+    </ul>
+  </li>
+  <li><strong>Merge</strong> using “Squash and merge” or “Create a merge commit” (team consensus needed)</li>
+</ol>
+<h3 id="code-review-checklist">
+  
+  
+    <a href="#code-review-checklist" class="anchor-heading" aria-labelledby="code-review-checklist"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Code Review Checklist
+  
+  
+</h3>
+    
+<p>When reviewing PRs, check for:</p>
+<ul>
+  <li>Code follows style guidelines (<code class="language-plaintext highlighter-rouge">gofmt</code>, naming conventions)</li>
+  <li>Changes are well-tested with unit/integration tests</li>
+  <li>Documentation updated if needed</li>
+  <li>No hardcoded values or credentials</li>
+  <li>Error handling is appropriate</li>
+  <li>Performance impact considered</li>
+  <li>Commit messages are clear and follow conventions</li>
+</ul>
+<h3 id="releasing">
+  
+  
+    <a href="#releasing" class="anchor-heading" aria-labelledby="releasing"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Releasing
+  
+  
+</h3>
+    
+<ol>
+  <li>Create a release branch from <code class="language-plaintext highlighter-rouge">main</code>:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout main
+git pull origin main
+git checkout <span class="nt">-b</span> release/v1.2.3
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Update version numbers and changelog</p>
+  </li>
+  <li>
+    <p>Create a PR to <code class="language-plaintext highlighter-rouge">main</code>, merge after approval</p>
+  </li>
+  <li>Tag the commit:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git tag <span class="nt">-a</span> v1.2.3 <span class="nt">-m</span> <span class="s2">"Release version 1.2.3"</span>
+git push origin v1.2.3
+</code></pre></div>    </div>
+  </li>
+  <li>Merge back to <code class="language-plaintext highlighter-rouge">develop</code> to keep in sync</li>
+</ol>
 <h2 id="documentation-standards">
   
   
@@ -281,6 +526,155 @@
   
   
 </h2>
+    
+<h3 id="code-documentation">
+  
+  
+    <a href="#code-documentation" class="anchor-heading" aria-labelledby="code-documentation"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Code Documentation
+  
+  
+</h3>
+    
+<ul>
+  <li>Every exported function and type must have a doc comment</li>
+  <li>Doc comments should start with the name of the entity: <code class="language-plaintext highlighter-rouge">// ParseConfig parses...</code></li>
+  <li>Use proper grammar and complete sentences</li>
+  <li>Example:</li>
+</ul>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">// User represents a system user with authentication credentials.</span>
+<span class="c">// Fields are unexported except for ID which is used in APIs.</span>
+<span class="k">type</span> <span class="n">User</span> <span class="k">struct</span> <span class="p">{</span>
+    <span class="n">id</span>    <span class="kt">string</span>
+    <span class="n">name</span>  <span class="kt">string</span>
+    <span class="n">email</span> <span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="c">// NewUser creates a new User with the given name and email.</span>
+<span class="c">// It returns an error if email is invalid.</span>
+<span class="k">func</span> <span class="n">NewUser</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">email</span> <span class="kt">string</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="n">User</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c">// implementation</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<h3 id="readme-requirements">
+  
+  
+    <a href="#readme-requirements" class="anchor-heading" aria-labelledby="readme-requirements"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> README Requirements
+  
+  
+</h3>
+    
+<p>Each package or module should have a README explaining:</p>
+<ul>
+  <li>Purpose of the package</li>
+  <li>Key components and interfaces</li>
+  <li>Usage examples</li>
+  <li>Dependencies</li>
+  <li>Configuration options</li>
+</ul>
+<h3 id="architecture-documentation">
+  
+  
+    <a href="#architecture-documentation" class="anchor-heading" aria-labelledby="architecture-documentation"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Architecture Documentation
+  
+  
+</h3>
+    
+<ul>
+  <li>Maintain a high-level architecture document explaining component relationships</li>
+  <li>Update when major changes occur</li>
+  <li>Include diagrams where helpful (use Mermaid, ASCII art, or images)</li>
+</ul>
+<h3 id="changelog">
+  
+  
+    <a href="#changelog" class="anchor-heading" aria-labelledby="changelog"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Changelog
+  
+  
+</h3>
+    
+<ul>
+  <li>Maintain a <code class="language-plaintext highlighter-rouge">CHANGELOG.md</code> file following <a href="https://keepachangelog.com/">Keep a Changelog</a></li>
+  <li>Update with each release</li>
+  <li>Categorize entries: Added, Changed, Deprecated, Removed, Fixed, Security</li>
+</ul>
+<h3 id="inline-comments">
+  
+  
+    <a href="#inline-comments" class="anchor-heading" aria-labelledby="inline-comments"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Inline Comments
+  
+  
+</h3>
+    
+<ul>
+  <li>Comment the <em>why</em>, not the <em>what</em></li>
+  <li>Avoid obvious comments: <code class="language-plaintext highlighter-rouge">i = i + 1  // increment i</code> is unnecessary</li>
+  <li>Useful comment: <code class="language-plaintext highlighter-rouge">// Use regex to validate email early to fail fast</code></li>
+  <li>Keep comments up to date with code changes</li>
+</ul>
+<h3 id="issue-and-pr-templates">
+  
+  
+    <a href="#issue-and-pr-templates" class="anchor-heading" aria-labelledby="issue-and-pr-templates"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Issue and PR Templates
+  
+  
+</h3>
+    
+<p>Use GitHub templates for consistency:</p>
+<ul>
+  <li><strong>Issues</strong>: Bug reports should include reproduction steps, expected vs actual behavior</li>
+  <li><strong>PRs</strong>: Reference related issues, describe changes, highlight any breaking changes</li>
+</ul>
+<h2 id="tools-and-automation">
+  
+  
+    <a href="#tools-and-automation" class="anchor-heading" aria-labelledby="tools-and-automation"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Tools and Automation
+  
+  
+</h2>
+    
+<h3 id="required-tools">
+  
+  
+    <a href="#required-tools" class="anchor-heading" aria-labelledby="required-tools"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Required Tools
+  
+  
+</h3>
+    
+<ul>
+  <li>Go 1.21+ (check <code class="language-plaintext highlighter-rouge">go.mod</code>)</li>
+  <li><code class="language-plaintext highlighter-rouge">gofmt</code> (built-in with Go)</li>
+  <li><code class="language-plaintext highlighter-rouge">go vet</code> (built-in with Go)</li>
+  <li><code class="language-plaintext highlighter-rouge">git</code> with SSH keys configured</li>
+</ul>
+<h3 id="recommended-tools">
+  
+  
+    <a href="#recommended-tools" class="anchor-heading" aria-labelledby="recommended-tools"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Recommended Tools
+  
+  
+</h3>
+    
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">golangci-lint</code>: Comprehensive linting (run locally before pushing)</li>
+  <li><code class="language-plaintext highlighter-rouge">pre-commit</code>: Git hook framework to enforce checks before commits</li>
+  <li>Editor: VS Code with Go extension, GoLand, or vim with vim-go</li>
+</ul>
+<h3 id="cicd">
+  
+  
+    <a href="#cicd" class="anchor-heading" aria-labelledby="cicd"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> CI/CD
+  
+  
+</h3>
+    
+<p>All pushes and PRs must pass:</p>
+<ul>
+  <li>Go build (<code class="language-plaintext highlighter-rouge">go build ./...</code>)</li>
+  <li>Tests with coverage (<code class="language-plaintext highlighter-rouge">go test -cover ./...</code>)</li>
+  <li>Linting (<code class="language-plaintext highlighter-rouge">golangci-lint run</code>)</li>
+  <li>Go vet (<code class="language-plaintext highlighter-rouge">go vet ./...</code>)</li>
+</ul><hr />
 
           
 

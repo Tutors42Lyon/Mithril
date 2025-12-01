@@ -1,0 +1,42 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.so.*
+*.dylib
+bin/
+dist/
+
+# Test binaries
+*.test
+
+# Coverage
+*.out
+*.html
+coverage.out
+coverage.html
+
+# Dependency directories
+vendor/
+
+# Go modules
+go.sum
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+.vscode/
+.DS_Store
+
+# Build
+*.o
+*.a
+
+# Misc
+*.log
+.env
+.env.local
+tmp/

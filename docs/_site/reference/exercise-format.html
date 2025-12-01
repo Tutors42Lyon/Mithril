@@ -176,7 +176,7 @@
   
     <ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/Mithril/getting-started.html" class="nav-list-link">Getting Started</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Architecture category" aria-pressed="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
-    </button><a href="/Mithril/architecture.html" class="nav-list-link">Architecture</a><ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/architecture/overview.html" class="nav-list-link">Overview</a></li><li class="nav-list-item"><a href="/Mithril/architecture/system-design.html" class="nav-list-link">System Design</a></li><li class="nav-list-item"><a href="/Mithril/architecture/data-model.html" class="nav-list-link">Data Model</a></li><li class="nav-list-item"><a href="/Mithril/architecture/tech-stack.html" class="nav-list-link">Technology Stack</a></li><li class="nav-list-item"><a href="/Mithril/architecture/database.html" class="nav-list-link">Database</a></li><li class="nav-list-item"><a href="/Mithril/architecture/api-specification.html" class="nav-list-link">Api Specification</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Development category" aria-pressed="false">
+    </button><a href="/Mithril/architecture.html" class="nav-list-link">Architecture</a><ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/architecture/overview.html" class="nav-list-link">Overview</a></li><li class="nav-list-item"><a href="/Mithril/architecture/system-design.html" class="nav-list-link">System Design</a></li><li class="nav-list-item"><a href="/Mithril/architecture/data-model.html" class="nav-list-link">Data Model</a></li><li class="nav-list-item"><a href="/Mithril/architecture/tech-stack.html" class="nav-list-link">Technology Stack</a></li><li class="nav-list-item"><a href="/Mithril/architecture/database.html" class="nav-list-link">Database</a></li><li class="nav-list-item"><a href="/Mithril/architecture/api-specification.html" class="nav-list-link">Api Specification</a></li><li class="nav-list-item"><a href="/Mithril/architecture/use-cases.html" class="nav-list-link">Use case</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Development category" aria-pressed="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
     </button><a href="/Mithril/development.html" class="nav-list-link">Development</a><ul class="nav-list"><li class="nav-list-item"><a href="/Mithril/development/setup.html" class="nav-list-link">Setup Guide</a></li><li class="nav-list-item"><a href="/Mithril/development/contributing.html" class="nav-list-link">Contributing</a></li><li class="nav-list-item"><a href="/Mithril/development/project-structure.html" class="nav-list-link">Project Structure</a></li><li class="nav-list-item"><a href="/Mithril/development/conventions.html" class="nav-list-link">Conventions</a></li></ul></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="toggle items in Planning category" aria-pressed="false">
       <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
@@ -281,6 +281,71 @@
   
   
 </h2>
+    
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">id</span><span class="pi">:</span> <span class="s2">"</span><span class="s">ex01_hello_world"</span>
+<span class="na">title</span><span class="pi">:</span> <span class="s2">"</span><span class="s">Hello</span><span class="nv"> </span><span class="s">World"</span>
+<span class="na">type</span><span class="pi">:</span> <span class="s2">"</span><span class="s">code"</span>  <span class="c1"># or "qcm", "text"</span>
+<span class="na">language</span><span class="pi">:</span> <span class="s2">"</span><span class="s">c"</span>
+
+<span class="c1"># Compilation (if needed)</span>
+<span class="na">build</span><span class="pi">:</span>
+  <span class="na">command</span><span class="pi">:</span> <span class="s2">"</span><span class="s">gcc</span><span class="nv"> </span><span class="s">-Wall</span><span class="nv"> </span><span class="s">-Wextra</span><span class="nv"> </span><span class="s">-Werror</span><span class="nv"> </span><span class="s">{submission}</span><span class="nv"> </span><span class="s">-o</span><span class="nv"> </span><span class="s">{output}"</span>
+  <span class="na">timeout</span><span class="pi">:</span> <span class="m">30</span>
+
+<span class="c1"># Test execution</span>
+<span class="na">tests</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">Basic</span><span class="nv"> </span><span class="s">test"</span>
+    <span class="na">run</span><span class="pi">:</span> <span class="s2">"</span><span class="s">./{output}"</span>
+    <span class="na">input</span><span class="pi">:</span> <span class="s2">"</span><span class="s">tests/test1_input.txt"</span>
+    <span class="na">expected_output</span><span class="pi">:</span> <span class="s2">"</span><span class="s">tests/test1_expected.txt"</span>
+    <span class="na">timeout</span><span class="pi">:</span> <span class="m">5</span>
+    
+  <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">Edge</span><span class="nv"> </span><span class="s">case"</span>
+    <span class="na">run</span><span class="pi">:</span> <span class="s2">"</span><span class="s">./{output}"</span>
+    <span class="na">input</span><span class="pi">:</span> <span class="s2">"</span><span class="s">tests/test2_input.txt"</span>
+    <span class="na">expected_output</span><span class="pi">:</span> <span class="s2">"</span><span class="s">tests/test2_expected.txt"</span>
+
+<span class="c1"># Validation rules</span>
+<span class="na">validation</span><span class="pi">:</span>
+  <span class="na">check_valgrind</span><span class="pi">:</span> <span class="kc">true</span>
+  <span class="na">allowed_functions</span><span class="pi">:</span> <span class="pi">[</span><span class="s2">"</span><span class="s">write"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">malloc"</span><span class="pi">,</span> <span class="s2">"</span><span class="s">free"</span><span class="pi">]</span>
+  <span class="na">forbidden_functions</span><span class="pi">:</span> <span class="pi">[</span><span class="s2">"</span><span class="s">printf"</span><span class="pi">]</span>  <span class="c1"># For 42 exercises</span>
+
+<span class="c1"># Scoring</span>
+<span class="na">scoring</span><span class="pi">:</span>
+  <span class="na">compilation</span><span class="pi">:</span> <span class="m">10</span>
+  <span class="na">per_test</span><span class="pi">:</span> <span class="m">15</span>
+  <span class="na">valgrind_clean</span><span class="pi">:</span> <span class="m">10</span>
+</code></pre></div></div>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">id</span><span class="pi">:</span> <span class="s2">"</span><span class="s">ex01_regex"</span>
+<span class="na">title</span><span class="pi">:</span> <span class="s2">"</span><span class="s">regex"</span>
+<span class="na">type</span><span class="pi">:</span> <span class="s2">"</span><span class="s">input"</span>  <span class="c1"># or "qcm", "text"</span>
+<span class="na">language</span><span class="pi">:</span> <span class="s2">"</span><span class="s">none"</span>
+
+<span class="c1"># Test execution</span>
+<span class="na">tests</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">Basic</span><span class="nv"> </span><span class="s">test"</span>
+    <span class="na">run</span><span class="pi">:</span> <span class="s2">"</span><span class="s">./{output}"</span>
+    <span class="na">input</span><span class="pi">:</span> <span class="s2">"</span><span class="s">tests/test1_input.txt"</span>
+    <span class="na">expected_output</span><span class="pi">:</span> <span class="s2">"</span><span class="s">tests/test1_expected.txt"</span>
+    <span class="na">timeout</span><span class="pi">:</span> <span class="m">5</span>
+    
+  <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">Edge</span><span class="nv"> </span><span class="s">case"</span>
+    <span class="na">run</span><span class="pi">:</span> <span class="s2">"</span><span class="s">./{output}"</span>
+    <span class="na">input</span><span class="pi">:</span> <span class="s2">"</span><span class="s">tests/test2_input.txt"</span>
+    <span class="na">expected_output</span><span class="pi">:</span> <span class="s2">"</span><span class="s">tests/test2_expected.txt"</span>
+
+<span class="c1"># Scoring</span>
+<span class="na">scoring</span><span class="pi">:</span>
+  <span class="na">compilation</span><span class="pi">:</span> <span class="m">10</span>
+  <span class="na">per_test</span><span class="pi">:</span> <span class="m">15</span>
+  <span class="na">valgrind_clean</span><span class="pi">:</span> <span class="m">10</span>
+</code></pre></div></div>
+<p>regex/
+    exo1.yaml
+    test/</p>
 
           
 
