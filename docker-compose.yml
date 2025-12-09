@@ -104,6 +104,30 @@ services:
       - mithril-network
     restart: unless-stopped
 
+  worker:
+    build:
+      context: .
+      dockerfile: docker/worker.Dockerfile
+    image: mithril-worker-image:latest
+    container_name: mithril-worker-${NODE_ID}
+    ulimits:
+      nproc:
+        soft: 50
+        hard: 100
+      fsize: 
+        soft: 1000000
+        hard: 1000000
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '1.0'
+      replicas: 9
+      restart_policy:
+        condition: always
+    networks:
+      - mithril-network
+
 volumes:
   postgres_data:
 
