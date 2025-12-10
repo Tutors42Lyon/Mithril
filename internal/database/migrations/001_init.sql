@@ -16,3 +16,26 @@ CREATE TABLE users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     is_active BOOLEAN DEFAULT true
 );
+
+CREATE TABLE exercise_pools (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    category VARCHAR(100) NOT NULL, 
+    description TEXT,
+    is_published BOOLEAN DEFAULT false,
+    created_by INT REFERENCES users(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE exercises (
+    id SERIAL PRIMARY KEY,
+    pool_id INT REFERENCES exercise_pools(id) ON DELETE CASCADE,
+    yaml_file_path VARCHAR(255) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    points INT DEFAULT 0,
+    order_index INT,
+    chapter TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
