@@ -125,7 +125,7 @@ docker-build:
 	docker-compose build
 
 ## docker-up: Start all services with Docker Compose
-docker-up:
+run:
 	@echo "$(YELLOW)Starting services with Docker Compose...$(NC)"
 	docker compose up -d
 	@echo "$(GREEN)Services started. Use 'make docker-logs' to view logs$(NC)"
