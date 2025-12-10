@@ -59,7 +59,7 @@ services:
     environment:
       DATABASE_URL: "postgres://mithril:dev_password@postgres:5432/mithril"
       REDIS_URL: "redis://redis:6379"
-      NATS_URL: "nats://127.0.0.1:4222"
+      NATS_URL: "nats://nats:4222"
       API_42_UID: $${42_CLIENT_ID}
       API_42_SEC: $${42_CLIENT_SECRET}
       CALL_BACK: "http://10.11.2.4:8080/callback"
@@ -86,7 +86,7 @@ services:
       dockerfile: docker/grading.Dockerfile
     container_name: mithril-grading
     environment:
-      NATS_URL: "nats://127.0.0.1:4222"
+      NATS_URL: "nats://nats:4222"
       LOG_LEVEL: "debug"
     depends_on:
       nats:
