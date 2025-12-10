@@ -2,7 +2,10 @@ module github.com/Tutors42Lyon/Mithril
 
 go 1.25.5
 
-require github.com/nats-io/nats.go v1.47.0
+require (
+	github.com/nats-io/nats.go v1.47.0
+	gopkg.in/yaml.v2 v2.4.0
+)
 
 require (
 	github.com/klauspost/compress v1.18.0 // indirect
@@ -10,5 +13,4 @@ require (
 	github.com/nats-io/nuid v1.0.1 // indirect
 	golang.org/x/crypto v0.37.0 // indirect
 	golang.org/x/sys v0.32.0 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

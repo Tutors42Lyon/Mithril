@@ -10,7 +10,7 @@ import (
 
 var nc *nats.Conn
 
-func main(){
+func main() {
 
 	nc, err := nats.Connect("nats://localhost:4222")
 	if err != nil {
@@ -19,7 +19,7 @@ func main(){
 	defer nc.Close()
 
 	_, err = nc.Subscribe("grading.*.*.submit", handleSubmission)
-	if err != nil{
+	if err != nil {
 		log.Fatal(err)
 	}
 
@@ -28,7 +28,7 @@ func main(){
 	select {}
 }
 
-func handleSubmission(m *nats.Msg){
+func handleSubmission(m *nats.Msg) {
 
 	subject := strings.Split(m.Subject, ".")
 	clientId := subject[1]
@@ -39,7 +39,7 @@ func handleSubmission(m *nats.Msg){
 
 func processGrading(data []byte, exerciseId string, clientId string) {
 
-	resp, err := nc.Request("worker."+ exerciseId + ".grade", data, 5*time.Second)
+	resp, err := nc.Request("worker."+exerciseId+".grade", data, 5*time.Second)
 
 	if err != nil {
 		log.Fatal(err)
@@ -47,5 +47,5 @@ func processGrading(data []byte, exerciseId string, clientId string) {
 
 	//edit resp.data
 
-	nc.Publish("grading." + clientId + "." + exerciseId + ".result", resp.Data)
+	nc.Publish("grading."+clientId+"."+exerciseId+".result", resp.Data)
 }

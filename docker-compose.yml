@@ -69,7 +69,7 @@ services:
       DATABASE_URL: "postgres://mithril:dev_password@postgres:5432/mithril"
       REDIS_URL: "redis://redis:6379"
       NATS_URL: "nats://nats:4222"
-      42_CLIENT_ID: ${42_CLIENT_ID:-your_client_id}
+      42_CLIENT_ID: ${42_CLIENT_ID:your_client_id}
       42_CLIENT_SECRET: ${42_CLIENT_SECRET:-your_client_secret}
       42_REDIRECT_URI: "http://localhost:3000/api/auth/callback"
       LOG_LEVEL: "debug"
