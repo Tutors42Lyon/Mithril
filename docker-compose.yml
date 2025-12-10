@@ -18,30 +18,23 @@ services:
     networks:
       - mithril-network
 
-  redis:
-    image: redis:7-alpine
-    container_name: mithril-redis
-    ports:
-      - "6379:6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - mithril-network
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: mithril-redis
+  #   ports:
+  #     - "6379:6379"
+  #   healthcheck:
+  #     test: ["CMD", "redis-cli", "ping"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   networks:
+  #     - mithril-network
 
   nats:
     image: nats:latest
-    container_name: mithril-nats
     ports:
       - "4222:4222"
-      - "8222:8222"
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8222/varz"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     networks:
       - mithril-network
 
@@ -66,10 +59,10 @@ services:
     environment:
       DATABASE_URL: "postgres://mithril:dev_password@postgres:5432/mithril"
       REDIS_URL: "redis://redis:6379"
-      NATS_URL: "nats://nats:4222"
-      42_CLIENT_ID: $${42_CLIENT_ID}
-      42_CLIENT_SECRET: $${42_CLIENT_SECRET}
-      42_REDIRECT_URI: "http://localhost:3000/api/auth/callback"
+      NATS_URL: "nats://127.0.0.1:4222"
+      API_42_UID: $${42_CLIENT_ID}
+      API_42_SEC: $${42_CLIENT_SECRET}
+      CALL_BACK: "http://10.11.2.4:8080/callback"
       LOG_LEVEL: "debug"
       PORT: "3000"
     ports:
@@ -77,10 +70,10 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      redis:
-        condition: service_healthy
       nats:
-        condition: service_healthy
+        condition: service_started
+      # redis:
+      #   condition: service_healthy
       # migrations:
       #   condition: service_completed_successfully
     networks:
@@ -93,11 +86,11 @@ services:
       dockerfile: docker/grading.Dockerfile
     container_name: mithril-grading
     environment:
-      NATS_URL: "nats://nats:4222"
+      NATS_URL: "nats://127.0.0.1:4222"
       LOG_LEVEL: "debug"
     depends_on:
       nats:
-        condition: service_healthy
+        condition: service_started
     networks:
       - mithril-network
     restart: unless-stopped
@@ -107,21 +100,24 @@ services:
       context: .
       dockerfile: docker/worker.Dockerfile
     image: mithril-worker-image:latest
-    ulimits:
-      nproc:
-        soft: 50
-        hard: 100
-      fsize: 
-        soft: 1000000
-        hard: 1000000
+    # ulimits:
+    #   nproc:
+    #     soft: 50
+    #     hard: 100
+    #   fsize: 
+    #     soft: 1000000
+    #     hard: 1000000
     deploy:
-      resources:
-        limits:
-          memory: 512M
-          cpus: '1.0'
+      # resources:
+      #   limits:
+      #     memory: 512M
+      #     cpus: '1.0'
       replicas: 9
       restart_policy:
         condition: always
+    depends_on:
+      nats:
+        condition: service_started
     networks:
       - mithril-network
 

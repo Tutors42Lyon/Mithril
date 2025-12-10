@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -13,9 +12,9 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-var nc *nats.Conn
+// var nc *nats.Conn
 
-func main(){
+func main() {
 
 	nc, err := nats.Connect("nats://localhost:4222")
 	if err != nil {
@@ -24,7 +23,7 @@ func main(){
 	defer nc.Close()
 
 	_, err = nc.QueueSubscribe("worker.*.grade", "worker.grade", handler)
-	if err != nil{
+	if err != nil {
 		log.Fatal(err)
 	}
 
@@ -36,19 +35,19 @@ func main(){
 }
 
 type Result struct {
-	Success bool 			`json:"success"`
-	Tests	[]TestResult	`json:"tests"`
+	Success bool         `json:"success"`
+	Tests   []TestResult `json:"tests"`
 }
 
 type TestResult struct {
-	Name	string	`json:"name"`
-	Success	bool	`json:"success"`
-	Logs	string	`json:"logs"`
+	Name    string `json:"name"`
+	Success bool   `json:"success"`
+	Logs    string `json:"logs"`
 }
 
 type Spec struct {
-	Id string `yaml:"id"`
-	Type string `yaml:type`
+	Id    string   `yaml:"id"`
+	Type  string   `yaml:type`
 	Tests []string `yaml:"tests"`
 }
 
@@ -78,7 +77,6 @@ func handler(m *nats.Msg) {
 	//test
 	testResults := testInput(spec.Type, inputs)
 
-
 	result := prepareResponse(testResults)
 	resultJSON, err := json.Marshal(result)
 	if err != nil {
@@ -88,12 +86,12 @@ func handler(m *nats.Msg) {
 	}
 
 	m.Respond(resultJSON)
-	if err != nil {
-		log.Printf("Error sending response to NATS: %v", err)
-	}
+	// if err != nil {
+	// 	log.Printf("Error sending response to NATS: %v", err)
+	// }
 }
 
-func searchExerciseTest(exerciseId string) (*Spec, error){
+func searchExerciseTest(exerciseId string) (*Spec, error) {
 
 	var foundSpec *Spec = nil
 	err := filepath.Walk("app/exercises", func(path string, info os.FileInfo, err error) error {
@@ -122,7 +120,7 @@ func searchExerciseTest(exerciseId string) (*Spec, error){
 		return nil
 	})
 
-	if (err != nil && err.Error() == "spec found") {
+	if err != nil && err.Error() == "spec found" {
 		return foundSpec, nil
 	}
 
@@ -134,61 +132,61 @@ func searchExerciseTest(exerciseId string) (*Spec, error){
 }
 
 func testInput(exercise_case string, inputs []string) []TestResult {
-	
-	switch {
-	case exercise_case == "program":
-		return codeHandler(inputs)
-	case exercise_case == "function":
-		return codeHandler(inputs)
-	case exercise_case == "text":
-		return textHandler(inputs)
-	case exercise_case == "mcq":
-		return mcqHandler(inputs)
-	}
+
+	// switch {
+	// case exercise_case == "program":
+	// 	return codeHandler(inputs)
+	// case exercise_case == "function":
+	// 	return codeHandler(inputs)
+	// case exercise_case == "text":
+	// 	return textHandler(inputs)
+	// case exercise_case == "mcq":
+	// 	return mcqHandler(inputs)
+	// }
+	var tab []TestResult
+	return tab
 }
 
-func codeHandler(inputs []string) []TestResult{
-	var testResult []TestResult
+// func codeHandler(inputs []string) []TestResult {
+// 	var testResult []TestResult
+//
+// 	path := "/"
+// 	for _, file := range inputs {
+//
+// 		split := strings.SplitN(file, "\n", 2)
+// 		file_name := strings.TrimSpace(split[0])
+// 		path += file_name
+// 		file_content := split[1]
+//
+// 		if file_name == "" {
+//
+// 		}
+//
+// 		if len(split) == 2 {
+// 			os.WriteFile(path, []byte(file_content), 0644)
+// 		}
+// 	}
+//
+// 	//compile and compare result
+//
+// 	return testResult
+// }
 
-	path := "/"
-	for _, file := range inputs {
-
-		split := strings.SplitN(file, "\n", 2)
-		file_name := strings.TrimSpace(split[0])
-		path += file_name
-		file_content := split[1]
-
-		if file_name == "" {
-
-		}
-
-		if len(split) == 2 {
-			os.WriteFile(path, []byte(file_content), 0644)
-		}
-	}
-
-	
-
-	//compile and compare result
-
-	return testResult
-}
-
-func textHandler(inputs []string) []TestResult{
-	var testResult []TestResult
-
-	//execute test with input and compare result
-
-	return testResult
-}
-
-func mcqHandler(inputs []string) []TestResult{
-	var testResult []TestResult
-
-	//compare input with test
-
-	return testResult
-}
+// func textHandler(inputs []string) []TestResult {
+// 	var testResult []TestResult
+//
+// 	//execute test with input and compare result
+//
+// 	return testResult
+// }
+//
+// func mcqHandler(inputs []string) []TestResult {
+// 	var testResult []TestResult
+//
+// 	//compare input with test
+//
+// 	return testResult
+// }
 
 func prepareResponse(testResults []TestResult) Result {
 
@@ -203,7 +201,7 @@ func prepareResponse(testResults []TestResult) Result {
 
 	responsePayload := Result{
 		Success: overallSuccess,
-		Tests: testResults,
+		Tests:   testResults,
 	}
 
 	return responsePayload

@@ -10,7 +10,7 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=1 GOOS=linux go build -a -installsuffix cgo -o mithril-grading cmd/grading/main.go
+RUN CGO_ENABLED=1 GOOS=linux go build -a -installsuffix cgo -o mithril-api cmd/api/main.go
 
 FROM alpine:3.18
 
@@ -18,7 +18,6 @@ WORKDIR /app
 
 RUN apk add --no-cache ca-certificates
 
-COPY --from=builder /app/mithril-grading .
+COPY --from=builder /app/mithril-api .
 
-CMD ["./mithril-grading"]
-
+CMD ["./mithril-api"]

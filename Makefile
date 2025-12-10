@@ -122,7 +122,7 @@ vet:
 ## docker-build: Build all Docker images
 docker-build:
 	@echo "$(YELLOW)Building Docker images...$(NC)"
-	docker-compose build
+	docker compose build
 
 ## docker-up: Start all services with Docker Compose
 run:
@@ -131,13 +131,13 @@ run:
 	@echo "$(GREEN)Services started. Use 'make docker-logs' to view logs$(NC)"
 
 ## docker-down: Stop all services
-docker-down:
+down:
 	@echo "$(YELLOW)Stopping services...$(NC)"
-	docker-compose down
+	docker compose down
 
 ## docker-logs: Show logs from all services
 docker-logs:
-	docker-compose logs -f
+	docker compose logs -f
 
 ## docker-restart: Restart all services
 docker-restart: docker-down docker-up
