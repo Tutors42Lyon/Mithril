@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -48,9 +49,11 @@ type TestResult struct {
 }
 
 type Spec struct {
-	Id    string `yaml:"id"`
-	Type  string `yaml:"type"`
-	Tests []Test `yaml:"tests"`
+	Id         string      `yaml:"id"`
+	Type       string      `yaml:"type"`
+	Build      *Build      `yaml:"build"`
+	Tests      []Test      `yaml:"tests"`
+	Validation *Validation `yaml:"validation"`
 }
 
 type Build struct {
@@ -61,8 +64,14 @@ type Build struct {
 type Test struct {
 	Name     string `yaml:"name"`
 	Run      string `yaml:"run"`
+	Input    string `yaml:"input"`
 	Expected string `yaml:"expected_output"`
 	Timeout  int    `yaml:"timeout"`
+}
+
+type Validation struct {
+	Valgrind bool     `yaml:"check_valgrind"`
+	Allowed  []string `yaml:"allowed_functions"`
 }
 
 func handler(m *nats.Msg) {
@@ -89,7 +98,10 @@ func handler(m *nats.Msg) {
 	}
 
 	//test
-	testResults := testInput(spec.Type, inputs)
+	testResults, err := testInput(*spec, inputs)
+	if err != nil {
+		log.Printf("Error test input: %v", err)
+	}
 
 	result := prepareResponse(testResults)
 	resultJSON, err := json.Marshal(result)
@@ -145,24 +157,24 @@ func searchExerciseTest(exerciseId string) (*Spec, error) {
 	return nil, fmt.Errorf("Can't find exercise with id: %s", exerciseId)
 }
 
-func testInput(exerciseCase string, inputs []string, build Build) []TestResult {
+func testInput(spec Spec, inputs []string) ([]TestResult, error) {
 
 	switch {
-	case exerciseCase == "program":
-		return programHandler(inputs, build)
-	case exerciseCase == "function":
-		return funcHandler(inputs, build)
-	case exerciseCase == "text":
-		return textHandler(inputs)
-	case exerciseCase == "mcq":
-		return mcqHandler(inputs)
+	case spec.Type == "program":
+		return programHandler(inputs, spec)
+	case spec.Type == "function":
+		return funcHandler(inputs, spec)
+	case spec.Type == "text":
+		return textHandler(inputs, spec)
+	case spec.Type == "mcq":
+		return mcqHandler(inputs, spec)
 	}
 	var tab []TestResult
-	return tab
+	return tab, nil
 }
 
-func programHandler(inputs []string, build Build) []TestResult {
-	var testResult []TestResult
+func programHandler(inputs []string, spec Spec) ([]TestResult, error) {
+	var testResults []TestResult
 
 	path := "exercises/"
 	for _, file := range inputs {
@@ -172,7 +184,8 @@ func programHandler(inputs []string, build Build) []TestResult {
 		fileContent := split[1]
 
 		if fileName == "" {
-			return nil
+			err := errors.New("File unnamed")
+			return nil, err
 		}
 
 		if len(split) == 2 {
@@ -180,75 +193,98 @@ func programHandler(inputs []string, build Build) []TestResult {
 		}
 	}
 
-	splitBuild := strings.SplitN(build.Cmd, "\n", 2)
-	args := strings.Split(splitBuild[1], "\n")
-	cmd := exec.Command(splitBuild[0], args...)
+	splitBuild := strings.SplitN(spec.Build.Cmd, " ", 2)
+	args := strings.Split(splitBuild[1], " ")
+	output := args[len(args)-1]
+	buildCmd := exec.Command(splitBuild[0], args...)
 
 	var stdout, stderr bytes.Buffer
-	cmd.Stdout = &stdout
-	cmd.Stderr = &stderr
+	buildCmd.Stdout = &stdout
+	buildCmd.Stderr = &stderr
 
-	err := cmd.Run()
+	err := buildCmd.Run()
 	if err != nil {
 		log.Fatalf("Build failed: %v\nstderr: %s\n", err, stderr.String())
+		return nil, err
 	}
-	
-	//check allowed/forbidden function
 
-	return testResult
+	for _, test := range spec.Tests {
+
+		inputContent, err := os.ReadFile(test.Input)
+		args := strings.Split(string(inputContent), " ")
+		execCmd := exec.Command(test.Run, args...)
+
+		stdout.Reset()
+		stderr.Reset()
+		execCmd.Stdout = &stdout
+		execCmd.Stderr = &stderr
+		err = execCmd.Run()
+
+		if err != nil {
+			log.Fatalf("Exec failed: %v\nstderr: %s\n", err, stderr.String())
+			return nil, err
+		}
+
+		currentOutput := strings.Split(stdout.String(), "\n")
+		var result TestResult
+		expectedContent, err := os.ReadFile("/exercises/" + test.Expected)
+		if err != nil {
+			log.Fatalf("Read file \"expected output\" failed: %v\n", err)
+			return nil, err
+		}
+		expectedOutput := strings.Split(string(expectedContent), "\n")
+		result.Name = test.Name
+		result.Success = true
+		if len(expectedOutput) != len(currentOutput) {
+			result.Success = false
+		} else {
+			for i := range expectedOutput {
+				if expectedOutput[i] != currentOutput[i] {
+					result.Success = false
+					break
+				}
+			}
+		}
+		testResults = append(testResults, result)
+	}
+
+	return testResults, err
 }
 
-func funcHandler(inputs []string, build Build) []TestResult {
+func funcHandler(inputs []string, spec Spec) ([]TestResult, error) {
 	var testResult []TestResult
-
-	path := "exercises/"
-	for _, file := range inputs {
-
-		split := strings.SplitN(file, "\n", 2)
-		fileName := path + strings.TrimSpace(split[0])
-		fileContent := split[1]
-
-		if fileName == "" {
-			return nil
-		}
-
-		if len(split) == 2 {
-			os.WriteFile(fileName, []byte(fileContent), 0644)
-		}
-	}
-
-	splitBuild := strings.SplitN(build.Cmd, "\n", 2)
-	args := strings.Split(splitBuild[1], "\n")
-	cmd := exec.Command(splitBuild[0], args...)
-
-	var stdout, stderr bytes.Buffer
-	cmd.Stdout = &stdout
-	cmd.Stderr = &stderr
-
-	err := cmd.Run()
-	if err != nil {
-		log.Fatalf("Build failed: %v\nstderr: %s\n", err, stderr.String())
-	}
 
 	//compile and compare result
 
-	return testResult
+	return testResult, nil
 }
 
-func textHandler(inputs []string) []TestResult {
-	var testResult []TestResult
+func textHandler(inputs []string, spec Spec) ([]TestResult, error) {
+	var result []TestResult
 
-	//execute test with input and compare result
-
-	return testResult
+	return result, nil
 }
 
-func mcqHandler(inputs []string) []TestResult {
-	var testResult []TestResult
+func mcqHandler(inputs []string, spec Spec) ([]TestResult, error) {
+	var result []TestResult
 
-	//compare input with test
+	expectedContent, err := os.ReadFile("/exercises/" + spec.Tests[0].Expected)
+	if err != nil {
+		log.Fatalf("Read file \"expected output\" failed: %v\n", err)
+		return nil, err
+	}
+	expectedOutput := strings.Split(string(expectedContent), "\n")
 
-	return testResult
+	result[0].Name = spec.Tests[0].Name
+	result[0].Success = true
+	for i := range expectedOutput {
+		if expectedOutput[i] != inputs[i] {
+			result[0].Success = false
+			break
+		}
+	}
+
+	return result, nil
 }
 
 func prepareResponse(testResults []TestResult) Result {
