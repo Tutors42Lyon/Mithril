@@ -25,7 +25,7 @@ func LoadEnv() (*Env, error) {
 		NatsUrl:      os.ExpandEnv("NATS_URL"),
 	}
 
-	if env.ClientID == "" || env.ClientSecret == "" || env.RedirectURL == "" {
+	if env.ClientID == "" || env.ClientSecret == "" || env.RedirectURL == "" || env.NatsUrl == "" {
 		return nil, fmt.Errorf("missing required environment variable(s): API_42_UID, API_42_SEC, CALL_BACK")
 	}
 	return env, nil

@@ -32,12 +32,12 @@ services:
   # #   networks:
   # #     - mithril-network
 
-  # nats:
-  #   image: nats:latest
-  #   ports:
-  #     - "4222:4222"
-  #   networks:
-  #     - mithril-network
+  nats:
+    image: nats:latest
+    ports:
+      - "4222:4222"
+    networks:
+      - mithril-network
 
   # # migrations:
   # #   build:
@@ -52,35 +52,6 @@ services:
   # #   networks:
   # #     - mithril-network
 
-  # api:
-  #   build:
-  #     context: .
-  #     dockerfile: docker/api.Dockerfile
-  #   container_name: mithril-api
-  #   environment:
-  #     DATABASE_URL: "postgres://mithril:dev_password@postgres:5432/mithril"
-  #     REDIS_URL: "redis://redis:6379"
-  #     NATS_URL: "nats://127.0.0.1:4222"
-  #     API_42_UID: $${42_CLIENT_ID}
-  #     API_42_SEC: $${42_CLIENT_SECRET}
-  #     CALL_BACK: "http://10.11.2.4:8080/callback"
-  #     LOG_LEVEL: "debug"
-  #     PORT: "3000"
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #     nats:
-  #       condition: service_started
-  #     # redis:
-  #     #   condition: service_healthy
-  #     # migrations:
-  #     #   condition: service_completed_successfully
-  #   networks:
-  #     - mithril-network
-  #   restart: unless-stopped
-
 
   api:
     build:
@@ -91,13 +62,19 @@ services:
       DATABASE_URL: "postgres://mithril:dev_password@postgres:5432/mithril"
       REDIS_URL: "redis://redis:6379"
       NATS_URL: "nats://nats:4222"
-      API_42_UID: $${42_CLIENT_ID}
-      API_42_SEC: $${42_CLIENT_SECRET}
-      CALL_BACK: "http://10.11.2.4:8080/callback"
+      API_42_UID: ${CLIENT_42_ID}
+      API_42_SEC: ${CLIENT_42_SECRET}
+      CALL_BACK: "http://10.11.2.2:8080/callback"
       LOG_LEVEL: "debug"
+      DB_HOST: "mithril-postgres"
+      DB_USER: "mithril"
+      DB_PASSWORD: "dev_password"
+      DB_NAME: "mithril"
+      DB_PORT: "5432"
       PORT: "3000"
     ports:
       - "3000:3000"
+      - "8080:8080"
     depends_on:
       postgres:
         condition: service_healthy
@@ -126,31 +103,31 @@ services:
       - mithril-network
     restart: unless-stopped
 
-  # worker:
-  #   build:
-  #     context: .
-  #     dockerfile: docker/worker.Dockerfile
-  #   image: mithril-worker-image:latest
-  #   # ulimits:
-  #   #   nproc:
-  #   #     soft: 50
-  #   #     hard: 100
-  #   #   fsize: 
-  #   #     soft: 1000000
-  #   #     hard: 1000000
-  #   deploy:
-  #     # resources:
-  #     #   limits:
-  #     #     memory: 512M
-  #     #     cpus: '1.0'
-  #     replicas: 9
-  #     restart_policy:
-  #       condition: always
-  #   depends_on:
-  #     nats:
-  #       condition: service_started
-  #   networks:
-  #     - mithril-network
+  worker:
+    build:
+      context: .
+      dockerfile: docker/worker.Dockerfile
+    image: mithril-worker-image:latest
+    # ulimits:
+    #   nproc:
+    #     soft: 50
+    #     hard: 100
+    #   fsize: 
+    #     soft: 1000000
+    #     hard: 1000000
+    deploy:
+      # resources:
+      #   limits:
+      #     memory: 512M
+      #     cpus: '1.0'
+      replicas: 9
+      restart_policy:
+        condition: always
+    depends_on:
+      nats:
+        condition: service_started
+    networks:
+      - mithril-network
 
 volumes:
   postgres_data:

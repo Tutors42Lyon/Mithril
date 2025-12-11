@@ -24,9 +24,9 @@ func main() {
 
 	userRepo := repository.NewUserRepository(db)
 
-	nc, err := nats.Connect(env.NatsUrl)
+	nc, err := nats.Connect("nats://nats:4222")
 	if err != nil {
-		log.Fatalf("Error connect to NATS: %v", err)
+		log.Fatalf("%v", err)
 	}
 	defer nc.Close()
 
