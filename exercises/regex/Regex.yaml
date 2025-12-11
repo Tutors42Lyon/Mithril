@@ -1,6 +1,6 @@
 id: "ex01_regex"
 title: "regex"
-type: "input"  # or "qcm", "text"
+type: "text"  # or "qcm", "program"
 language: "none"
 
 # Test execution

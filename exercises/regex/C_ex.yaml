@@ -1,6 +1,6 @@
 id: "ex01_hello_world"
 title: "Hello World"
-type: "code"  # or "qcm", "text"
+type: "program"  # "func", "qcm", "text"
 language: "c"
 
 # Compilation (if needed)
@@ -25,7 +25,6 @@ tests:
 validation:
   check_valgrind: true
   allowed_functions: ["write", "malloc", "free"]
-  forbidden_functions: ["printf"]  # For 42 exercises
 
 # Scoring
 scoring:
