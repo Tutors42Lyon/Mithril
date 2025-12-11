@@ -10,6 +10,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./internal/database/migrations:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U mithril"]
       interval: 10s
@@ -18,38 +19,68 @@ services:
     networks:
       - mithril-network
 
-  # redis:
-  #   image: redis:7-alpine
-  #   container_name: mithril-redis
+  # # redis:
+  # #   image: redis:7-alpine
+  # #   container_name: mithril-redis
+  # #   ports:
+  # #     - "6379:6379"
+  # #   healthcheck:
+  # #     test: ["CMD", "redis-cli", "ping"]
+  # #     interval: 10s
+  # #     timeout: 5s
+  # #     retries: 5
+  # #   networks:
+  # #     - mithril-network
+
+  # nats:
+  #   image: nats:latest
   #   ports:
-  #     - "6379:6379"
-  #   healthcheck:
-  #     test: ["CMD", "redis-cli", "ping"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
+  #     - "4222:4222"
   #   networks:
   #     - mithril-network
 
-  nats:
-    image: nats:latest
-    ports:
-      - "4222:4222"
-    networks:
-      - mithril-network
+  # # migrations:
+  # #   build:
+  # #     context: .
+  # #     dockerfile: docker/migrations.Dockerfile
+  # #   container_name: mithril-migrations
+  # #   environment:
+  # #     DATABASE_URL: "postgres://mithril:dev_password@postgres:5432/mithril"
+  # #   depends_on:
+  # #     postgres:
+  # #       condition: service_healthy
+  # #   networks:
+  # #     - mithril-network
 
-  # migrations:
+  # api:
   #   build:
   #     context: .
-  #     dockerfile: docker/migrations.Dockerfile
-  #   container_name: mithril-migrations
+  #     dockerfile: docker/api.Dockerfile
+  #   container_name: mithril-api
   #   environment:
   #     DATABASE_URL: "postgres://mithril:dev_password@postgres:5432/mithril"
+  #     REDIS_URL: "redis://redis:6379"
+  #     NATS_URL: "nats://127.0.0.1:4222"
+  #     API_42_UID: $${42_CLIENT_ID}
+  #     API_42_SEC: $${42_CLIENT_SECRET}
+  #     CALL_BACK: "http://10.11.2.4:8080/callback"
+  #     LOG_LEVEL: "debug"
+  #     PORT: "3000"
+  #   ports:
+  #     - "3000:3000"
   #   depends_on:
   #     postgres:
   #       condition: service_healthy
+  #     nats:
+  #       condition: service_started
+  #     # redis:
+  #     #   condition: service_healthy
+  #     # migrations:
+  #     #   condition: service_completed_successfully
   #   networks:
   #     - mithril-network
+  #   restart: unless-stopped
+
 
   api:
     build:
@@ -95,31 +126,31 @@ services:
       - mithril-network
     restart: unless-stopped
 
-  worker:
-    build:
-      context: .
-      dockerfile: docker/worker.Dockerfile
-    image: mithril-worker-image:latest
-    # ulimits:
-    #   nproc:
-    #     soft: 50
-    #     hard: 100
-    #   fsize: 
-    #     soft: 1000000
-    #     hard: 1000000
-    deploy:
-      # resources:
-      #   limits:
-      #     memory: 512M
-      #     cpus: '1.0'
-      replicas: 9
-      restart_policy:
-        condition: always
-    depends_on:
-      nats:
-        condition: service_started
-    networks:
-      - mithril-network
+  # worker:
+  #   build:
+  #     context: .
+  #     dockerfile: docker/worker.Dockerfile
+  #   image: mithril-worker-image:latest
+  #   # ulimits:
+  #   #   nproc:
+  #   #     soft: 50
+  #   #     hard: 100
+  #   #   fsize: 
+  #   #     soft: 1000000
+  #   #     hard: 1000000
+  #   deploy:
+  #     # resources:
+  #     #   limits:
+  #     #     memory: 512M
+  #     #     cpus: '1.0'
+  #     replicas: 9
+  #     restart_policy:
+  #       condition: always
+  #   depends_on:
+  #     nats:
+  #       condition: service_started
+  #   networks:
+  #     - mithril-network
 
 volumes:
   postgres_data:
