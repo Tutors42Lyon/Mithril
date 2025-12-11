@@ -17,6 +17,7 @@ type Env struct {
 	DBPassword   string
 	DBName       string
 	DBPort       string
+	JwtSecret    string
 }
 
 func LoadEnv() (*Env, error) {
@@ -33,6 +34,7 @@ func LoadEnv() (*Env, error) {
 		DBPassword:   os.Getenv("DB_PASSWORD"),
 		DBName:       os.Getenv("DB_NAME"),
 		DBPort:       os.Getenv("DB_PORT"),
+		JwtSecret:    os.Getenv("JWT_SECRET"),
 	}
 
 	if env.ClientID == "" || env.ClientSecret == "" || env.RedirectURL == "" || env.NatsUrl == "" {
@@ -40,7 +42,7 @@ func LoadEnv() (*Env, error) {
 	}
 
 	if env.DBHost == "" || env.DBUser == "" || env.DBPassword == "" || env.DBName == "" || env.DBPort == "" {
-        return nil, fmt.Errorf("missing required database environment variable(s): check DB_HOST, DB_USER, etc.")
-    }
+		return nil, fmt.Errorf("missing required database environment variable(s): check DB_HOST, DB_USER, etc.")
+	}
 	return env, nil
 }

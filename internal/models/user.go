@@ -13,12 +13,12 @@ type UserMessage struct {
 
 	Username   string `json:"username" gorm:"column:username"`
 	Email      string `json:"email" gorm:"column:email"`
-	Role       string `json:"role" gorm:"column:role"`
+	Role       string `json:"role" gorm:"column:role;default:student"`
 	IntraID    int    `json:"intra_id" gorm:"column:intra_id"`
 	SchoolYear string `json:"school_year" gorm:"column:school_year"`
 	IsActive   bool   `json:"is_active" gorm:"column:is_active"`
 }
 
 func (UserMessage) TableName() string {
-	return "users" // Replace "users" with your actual table name in Postgres
+	return "users"
 }

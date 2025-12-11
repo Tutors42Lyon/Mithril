@@ -125,5 +125,6 @@ func (h *AuthHandler) CallBack(c *gin.Context) {
 		"message": "Login successful",
 		"user":    workerUser.Username,
 		"token":   token,
+		"DB_ID":   workerUser.Db_id,
 	})
 }

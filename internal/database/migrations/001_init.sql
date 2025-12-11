@@ -9,7 +9,7 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(255) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
-    role VARCHAR(50) NOT NULL,
+    role VARCHAR(50) NOT NULL DEFAULT 'student',
     intra_id INT UNIQUE,
     school_year VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -20,7 +20,7 @@ CREATE TABLE users (
 CREATE TABLE exercise_pools (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    category VARCHAR(100) NOT NULL, 
+    category VARCHAR(100) NOT NULL,
     description TEXT,
     is_published BOOLEAN DEFAULT false,
     created_by INT REFERENCES users(id),
