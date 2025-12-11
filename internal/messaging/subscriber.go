@@ -3,6 +3,7 @@ package messaging
 import (
 	"encoding/json"
 	"log"
+
 	"github.com/Tutors42Lyon/Mithril/internal/models"
 	repository "github.com/Tutors42Lyon/Mithril/internal/repositories"
 
@@ -11,7 +12,6 @@ import (
 
 func LoadWorker(nc *nats.Conn, userRepo *repository.UserRepository) {
 
-
 	_, err := nc.Subscribe("user.login", HandleUserLogin(userRepo))
 
 	if err != nil {
@@ -19,29 +19,33 @@ func LoadWorker(nc *nats.Conn, userRepo *repository.UserRepository) {
 	}
 }
 
-
 func HandleUserLogin(userRepo *repository.UserRepository) nats.MsgHandler {
-    return func(m *nats.Msg) {
-        var user models.UserMessage
+	return func(m *nats.Msg) {
+		var user models.UserMessage
 
-        if err := json.Unmarshal(m.Data, &user); err != nil {
-            log.Printf("Error Subscribe Unmarshal %v", err)
-            return
-        }
+		if err := json.Unmarshal(m.Data, &user); err != nil {
+			log.Printf("Error Subscribe Unmarshal %v", err)
+			return
+		}
 
-        if err := userRepo.CreateUser(&user); err != nil {
-            log.Printf("Error saving to DB: %v", err)
-            return
-        }
+		if err := userRepo.CreateUser(&user); err != nil {
+			log.Printf("Error saving to DB: %v", err)
+			return
+		}
 
-        	resp := models.UserMessage{
-			Username:   "Test HandleUserLogin resp",
+		resp := models.UserMessage{
+			Username: "Test HandleUserLogin resp",
 		}
 
 		respBytes, err := json.Marshal(resp)
 		if err != nil {
-			log.Fatalf("Error marshal response: %v", err)
+			log.Printf("Error marshal response: %v", err)
+			return
 		}
-		m.Respond(respBytes)
-    }
+
+		if err := m.Respond(respBytes); err != nil {
+			log.Printf("Error responding to NATS message: %v", err)
+			return 
+		}
+	}
 }

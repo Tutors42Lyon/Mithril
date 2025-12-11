@@ -11,7 +11,6 @@ import (
 	"github.com/nats-io/nats.go"
 	"golang.org/x/oauth2"
 
-	//"natsApi/internal/models"
 	"github.com/Tutors42Lyon/Mithril/internal/config"
 	"github.com/Tutors42Lyon/Mithril/internal/models"
 	"github.com/Tutors42Lyon/Mithril/internal/utils"
