@@ -20,7 +20,7 @@ func main() {
 		log.Fatalf("cannot run the serv %v", err)
 	}
 
-	db := database.InitDB()
+	db := database.InitDB(env)
 
 	userRepo := repository.NewUserRepository(db)
 
