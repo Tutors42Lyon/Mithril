@@ -124,7 +124,6 @@ func (h *AuthHandler) CallBack(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Login successful",
 		"user":    workerUser.Username,
-		"role":    workerUser.Role,
 		"token":   token,
 	})
 }

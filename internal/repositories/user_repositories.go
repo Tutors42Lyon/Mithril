@@ -14,6 +14,7 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 }
 
 func (r *UserRepository) CreateUser(user *models.UserMessage) error {
-	result := r.DB.Create(user)
-	return result.Error
+    result := r.DB.Where(models.UserMessage{IntraID: user.IntraID}).FirstOrCreate(user)
+
+    return result.Error
 }

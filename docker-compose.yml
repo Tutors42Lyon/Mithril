@@ -64,7 +64,7 @@ services:
       NATS_URL: "nats://nats:4222"
       API_42_UID: ${CLIENT_42_ID}
       API_42_SEC: ${CLIENT_42_SECRET}
-      CALL_BACK: "http://10.11.2.2:8080/callback"
+      CALL_BACK: ${CALL_BACK}
       LOG_LEVEL: "debug"
       DB_HOST: "mithril-postgres"
       DB_USER: "mithril"
@@ -112,7 +112,7 @@ services:
     #   nproc:
     #     soft: 50
     #     hard: 100
-    #   fsize: 
+    #   fsize:
     #     soft: 1000000
     #     hard: 1000000
     deploy:
