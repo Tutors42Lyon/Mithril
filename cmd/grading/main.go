@@ -12,7 +12,7 @@ var nc *nats.Conn
 
 func main() {
 
-	nc, err := nats.Connect("nats://localhost:4222")
+	nc, err := nats.Connect("nats://nats:4222")
 	if err != nil {
 		log.Fatal(err)
 	}

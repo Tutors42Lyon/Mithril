@@ -81,20 +81,50 @@ services:
   #     - mithril-network
   #   restart: unless-stopped
 
-  # grading:
-  #   build:
-  #     context: .
-  #     dockerfile: docker/grading.Dockerfile
-  #   container_name: mithril-grading
-  #   environment:
-  #     NATS_URL: "nats://127.0.0.1:4222"
-  #     LOG_LEVEL: "debug"
-  #   depends_on:
-  #     nats:
-  #       condition: service_started
-  #   networks:
-  #     - mithril-network
-  #   restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    container_name: mithril-api
+    environment:
+      DATABASE_URL: "postgres://mithril:dev_password@postgres:5432/mithril"
+      REDIS_URL: "redis://redis:6379"
+      NATS_URL: "nats://nats:4222"
+      API_42_UID: $${42_CLIENT_ID}
+      API_42_SEC: $${42_CLIENT_SECRET}
+      CALL_BACK: "http://10.11.2.4:8080/callback"
+      LOG_LEVEL: "debug"
+      PORT: "3000"
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      nats:
+        condition: service_started
+      # redis:
+      #   condition: service_healthy
+      # migrations:
+      #   condition: service_completed_successfully
+    networks:
+      - mithril-network
+    restart: unless-stopped
+
+  grading:
+    build:
+      context: .
+      dockerfile: docker/grading.Dockerfile
+    container_name: mithril-grading
+    environment:
+      NATS_URL: "nats://nats:4222"
+      LOG_LEVEL: "debug"
+    depends_on:
+      nats:
+        condition: service_started
+    networks:
+      - mithril-network
+    restart: unless-stopped
 
   # worker:
   #   build:
