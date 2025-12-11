@@ -1,10 +1,12 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -46,9 +48,21 @@ type TestResult struct {
 }
 
 type Spec struct {
-	Id    string   `yaml:"id"`
-	Type  string   `yaml:type`
-	Tests []string `yaml:"tests"`
+	Id    string `yaml:"id"`
+	Type  string `yaml:"type"`
+	Tests []Test `yaml:"tests"`
+}
+
+type Build struct {
+	Cmd     string `yaml:"command"`
+	Timeout string `yaml:"timeout"`
+}
+
+type Test struct {
+	Name     string `yaml:"name"`
+	Run      string `yaml:"run"`
+	Expected string `yaml:"expected_output"`
+	Timeout  int    `yaml:"timeout"`
 }
 
 func handler(m *nats.Msg) {
@@ -131,62 +145,111 @@ func searchExerciseTest(exerciseId string) (*Spec, error) {
 	return nil, fmt.Errorf("Can't find exercise with id: %s", exerciseId)
 }
 
-func testInput(exercise_case string, inputs []string) []TestResult {
+func testInput(exerciseCase string, inputs []string, build Build) []TestResult {
 
-	// switch {
-	// case exercise_case == "program":
-	// 	return codeHandler(inputs)
-	// case exercise_case == "function":
-	// 	return codeHandler(inputs)
-	// case exercise_case == "text":
-	// 	return textHandler(inputs)
-	// case exercise_case == "mcq":
-	// 	return mcqHandler(inputs)
-	// }
+	switch {
+	case exerciseCase == "program":
+		return programHandler(inputs, build)
+	case exerciseCase == "function":
+		return funcHandler(inputs, build)
+	case exerciseCase == "text":
+		return textHandler(inputs)
+	case exerciseCase == "mcq":
+		return mcqHandler(inputs)
+	}
 	var tab []TestResult
 	return tab
 }
 
-// func codeHandler(inputs []string) []TestResult {
-// 	var testResult []TestResult
-//
-// 	path := "/"
-// 	for _, file := range inputs {
-//
-// 		split := strings.SplitN(file, "\n", 2)
-// 		file_name := strings.TrimSpace(split[0])
-// 		path += file_name
-// 		file_content := split[1]
-//
-// 		if file_name == "" {
-//
-// 		}
-//
-// 		if len(split) == 2 {
-// 			os.WriteFile(path, []byte(file_content), 0644)
-// 		}
-// 	}
-//
-// 	//compile and compare result
-//
-// 	return testResult
-// }
+func programHandler(inputs []string, build Build) []TestResult {
+	var testResult []TestResult
 
-// func textHandler(inputs []string) []TestResult {
-// 	var testResult []TestResult
-//
-// 	//execute test with input and compare result
-//
-// 	return testResult
-// }
-//
-// func mcqHandler(inputs []string) []TestResult {
-// 	var testResult []TestResult
-//
-// 	//compare input with test
-//
-// 	return testResult
-// }
+	path := "exercises/"
+	for _, file := range inputs {
+
+		split := strings.SplitN(file, "\n", 2)
+		fileName := path + strings.TrimSpace(split[0])
+		fileContent := split[1]
+
+		if fileName == "" {
+			return nil
+		}
+
+		if len(split) == 2 {
+			os.WriteFile(fileName, []byte(fileContent), 0644)
+		}
+	}
+
+	splitBuild := strings.SplitN(build.Cmd, "\n", 2)
+	args := strings.Split(splitBuild[1], "\n")
+	cmd := exec.Command(splitBuild[0], args...)
+
+	var stdout, stderr bytes.Buffer
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
+
+	err := cmd.Run()
+	if err != nil {
+		log.Fatalf("Build failed: %v\nstderr: %s\n", err, stderr.String())
+	}
+	
+	//check allowed/forbidden function
+
+	return testResult
+}
+
+func funcHandler(inputs []string, build Build) []TestResult {
+	var testResult []TestResult
+
+	path := "exercises/"
+	for _, file := range inputs {
+
+		split := strings.SplitN(file, "\n", 2)
+		fileName := path + strings.TrimSpace(split[0])
+		fileContent := split[1]
+
+		if fileName == "" {
+			return nil
+		}
+
+		if len(split) == 2 {
+			os.WriteFile(fileName, []byte(fileContent), 0644)
+		}
+	}
+
+	splitBuild := strings.SplitN(build.Cmd, "\n", 2)
+	args := strings.Split(splitBuild[1], "\n")
+	cmd := exec.Command(splitBuild[0], args...)
+
+	var stdout, stderr bytes.Buffer
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
+
+	err := cmd.Run()
+	if err != nil {
+		log.Fatalf("Build failed: %v\nstderr: %s\n", err, stderr.String())
+	}
+
+	//compile and compare result
+
+	return testResult
+}
+
+func textHandler(inputs []string) []TestResult {
+	var testResult []TestResult
+
+	//execute test with input and compare result
+
+	return testResult
+}
+
+func mcqHandler(inputs []string) []TestResult {
+	var testResult []TestResult
+
+	//compare input with test
+
+	return testResult
+}
 
 func prepareResponse(testResults []TestResult) Result {
 
