@@ -73,7 +73,7 @@ func (s *GradingService) handleSubmission(m *nats.Msg) {
 func (s *GradingService) processGrading(data []byte, exerciseId string, clientId string) {
 
 	workerSubject := "worker." + exerciseId + ".grade"
-	resp, err := s.NC.Request(workerSubject, data, 5*time.Second)
+	resp, err := s.NC.Request(workerSubject, data, requestTimeout)
 
 	if err != nil {
 		errorMessage := ""
