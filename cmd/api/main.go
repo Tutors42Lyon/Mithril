@@ -39,7 +39,9 @@ func main() {
 	r.GET("/login", authHandler.Login)
 	r.GET("/callback", authHandler.CallBack)
 
+	//ex: /users/pnaessen/admin || /users/pnaessen/instructor
 	r.PATCH("/users/:username/role", userHandler.UpdateRole)
+	//ex: /users/pnaessen/info || /users/cassie/info
 	r.GET("/users/:username/info", userHandler.GetUserInfo)
 
 	if err := r.Run(":8080"); err != nil {
