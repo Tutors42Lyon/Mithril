@@ -46,3 +46,19 @@ func (h *UserHandler) UpdateRole(c *gin.Context) {
 	c.Data(http.StatusOK, "application/json", msg.Data)
 
 }
+
+func (h *UserHandler) GetUserInfo(c *gin.Context) {
+
+	username := c.Param("username")
+
+	payload := map[string]string{"username": username}
+	reqBytes, _ := json.Marshal(payload)
+
+	msg, err := h.NatsConn.Request("user.get_info", reqBytes, 2*time.Second)
+	if err != nil {
+		c.JSON(http.StatusGatewayTimeout, gin.H{"Error": "Worker unavailable"})
+		return
+	}
+
+	c.Data(http.StatusOK, "application/json", msg.Data)
+}

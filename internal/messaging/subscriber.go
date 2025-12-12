@@ -23,6 +23,11 @@ func LoadWorker(nc *nats.Conn, userRepo *repository.UserRepository) {
 	if err != nil {
 		log.Fatalf("Error Subscribe to NATS: %v", err)
 	}
+
+	_, err = nc.Subscribe("user.get_info", HandleUserInfo(userRepo))
+	if err != nil {
+		log.Fatalf("Error Subscribe to NATS: %v", err)
+	}
 }
 
 func HandleUserLogin(userRepo *repository.UserRepository) nats.MsgHandler {
@@ -94,5 +99,42 @@ func HandleUserUpdateRole(userRepo *repository.UserRepository) nats.MsgHandler {
 			log.Printf("Error responding to NATS message: %v", err)
 			return
 		}
+	}
+}
+
+func HandleUserInfo(userRepo *repository.UserRepository) nats.MsgHandler {
+
+	return func(m *nats.Msg) {
+		var req struct {
+			Username string `json:"username"`
+		}
+
+		if err := json.Unmarshal(m.Data, &req); err != nil {
+			log.Printf("Error Subscribe Unmarshal %v", err)
+			return
+		}
+
+		if req.Username == "" {
+            log.Printf("Error: empty username in request")
+            return
+        }
+
+        userInfo, err := userRepo.GetByUsername(req.Username) // <-- renamed call
+        if err != nil {
+            log.Printf("Error fetching user info: %v", err)
+            return
+        }
+
+        respBytes, err := json.Marshal(userInfo)
+        if err != nil {
+            log.Printf("Error marshal response: %v", err)
+            return
+        }
+
+		if err := m.Respond(respBytes); err != nil {
+            log.Printf("Error responding to NATS message: %v", err)
+            return
+        }
+
 	}
 }

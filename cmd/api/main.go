@@ -40,6 +40,7 @@ func main() {
 	r.GET("/callback", authHandler.CallBack)
 
 	r.PATCH("/users/:username/role", userHandler.UpdateRole)
+	r.GET("/users/:username/info", userHandler.GetUserInfo)
 
 	if err := r.Run(":8080"); err != nil {
 		log.Fatalf("cannot run the serv %v", err)
