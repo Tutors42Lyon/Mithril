@@ -24,7 +24,7 @@ func main() {
 
 	userRepo := repository.NewUserRepository(db)
 
-	nc, err := nats.Connect("nats://nats:4222")
+	nc, err := nats.Connect(env.NatsUrl)
 	if err != nil {
 		log.Fatalf("%v", err)
 	}
@@ -37,6 +37,8 @@ func main() {
 	userHandler := handlers.NewUserHandler(nc)
 
 	r.GET("/auth/login/init", authHandler.LoginInit)
+
+	// ex: /auth/poll?session_id=xxxxx...
 	r.GET("/auth/poll", authHandler.PollLogin)
 	r.GET("/callback", authHandler.CallBack)
 

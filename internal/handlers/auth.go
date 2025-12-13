@@ -108,6 +108,8 @@ func (h *AuthHandler) syncWithWorker(user42 *models.User42) (*models.UserMessage
 		return nil, fmt.Errorf("nats request failed: %w", err)
 	}
 
+	//TODO read msg heck if error http 404 400 500
+
 	var respMsg models.UserMessage
 	if err := json.Unmarshal(msg.Data, &respMsg); err != nil {
 		return nil, fmt.Errorf("unmarshal worker response failed: %w", err)

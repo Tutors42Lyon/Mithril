@@ -10,6 +10,27 @@ import (
 	"github.com/nats-io/nats.go"
 )
 
+func respondError(m *nats.Msg, code string, message string, httpStatus int) {
+    resp := struct {
+        Code    string `json:"code"`
+        Message string `json:"message"`
+		HTTPStatus int    `json:"http_status,omitempty"`
+    }{
+        Code:    code,
+        Message: message,
+		HTTPStatus: httpStatus,
+    }
+
+    respBytes, err := json.Marshal(resp)
+    if err != nil {
+        log.Printf("Error marshal error response: %v", err)
+        return
+    }
+    if err := m.Respond(respBytes); err != nil {
+        log.Printf("Error responding to NATS message: %v", err)
+    }
+}
+
 func LoadWorker(nc *nats.Conn, userRepo *repository.UserRepository) {
 
 	_, err := nc.Subscribe("user.login", HandleUserLogin(userRepo))
@@ -36,11 +57,13 @@ func HandleUserLogin(userRepo *repository.UserRepository) nats.MsgHandler {
 
 		if err := json.Unmarshal(m.Data, &user); err != nil {
 			log.Printf("Error Subscribe Unmarshal %v", err)
+			respondError(m, "bad_request", "invalid payload", 400)
 			return
 		}
 
 		if err := userRepo.CreateUser(&user); err != nil {
 			log.Printf("Error saving to DB: %v", err)
+			respondError(m, "db_error", "unable to save user", 500)
 			return
 		}
 
@@ -51,6 +74,7 @@ func HandleUserLogin(userRepo *repository.UserRepository) nats.MsgHandler {
 		respBytes, err := json.Marshal(resp)
 		if err != nil {
 			log.Printf("Error marshal response: %v", err)
+			respondError(m, "internal_error", "marshal failed", 500)
 			return
 		}
 
@@ -71,16 +95,19 @@ func HandleUserUpdateRole(userRepo *repository.UserRepository) nats.MsgHandler {
 
 		if err := json.Unmarshal(m.Data, &req); err != nil {
 			log.Printf("Error Subscribe Unmarshal %v", err)
+			respondError(m, "bad_request", "invalid payload", 400)
 			return
 		}
 
 		if req.Role != "admin" && req.Role != "student" && req.Role != "instructor" {
 			log.Printf("Error: Invalid role provided")
+			respondError(m, "invalid_role", "role must be admin|student|instructor", 400)
 			return
 		}
 
 		if err := userRepo.UpdateUserRoleByUsername(req.Username, req.Role); err != nil {
 			log.Printf("Error update role")
+			respondError(m, "db_error", "unable to update role", 500)
 			return
 		}
 
@@ -92,6 +119,7 @@ func HandleUserUpdateRole(userRepo *repository.UserRepository) nats.MsgHandler {
 		respBytes, err := json.Marshal(resp)
 		if err != nil {
 			log.Printf("Error marshal response: %v", err)
+			 respondError(m, "internal_error", "marshal failed", 500)
 			return
 		}
 
@@ -111,23 +139,27 @@ func HandleUserInfo(userRepo *repository.UserRepository) nats.MsgHandler {
 
 		if err := json.Unmarshal(m.Data, &req); err != nil {
 			log.Printf("Error Subscribe Unmarshal %v", err)
+			respondError(m, "bad_request", "invalid payload", 400)
 			return
 		}
 
 		if req.Username == "" {
             log.Printf("Error: empty username in request")
+			respondError(m, "bad_request", "username required", 400)
             return
         }
 
-        userInfo, err := userRepo.GetByUsername(req.Username) // <-- renamed call
+        userInfo, err := userRepo.GetByUsername(req.Username)
         if err != nil {
             log.Printf("Error fetching user info: %v", err)
+			 respondError(m, "db_error", "user not found", 404)
             return
         }
 
         respBytes, err := json.Marshal(userInfo)
         if err != nil {
             log.Printf("Error marshal response: %v", err)
+			respondError(m, "internal_error", "marshal failed", 500)
             return
         }
 
