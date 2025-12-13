@@ -36,13 +36,14 @@ func main() {
 	authHandler := handlers.NewAuthHandler(nc, env)
 	userHandler := handlers.NewUserHandler(nc)
 
-	r.GET("/login", authHandler.Login)
+	r.GET("/auth/login/init", authHandler.LoginInit)
+	r.GET("/auth/poll", authHandler.PollLogin)
 	r.GET("/callback", authHandler.CallBack)
 
-	//ex: /users/pnaessen/admin || /users/pnaessen/instructor
-	r.PATCH("/users/:username/role", userHandler.UpdateRole)
-	//ex: /users/pnaessen/info || /users/cassie/info
-	r.GET("/users/:username/info", userHandler.GetUserInfo)
+	//ex: /users/role/pnaessen  body :  "role": "admin"
+	r.PATCH("/users/role/:username", userHandler.UpdateRole)
+	//ex: /users/info/pnaessen || /users/info/cassie
+	r.GET("/users/info/:username", userHandler.GetUserInfo)
 
 	if err := r.Run(":8080"); err != nil {
 		log.Fatalf("cannot run the serv %v", err)
