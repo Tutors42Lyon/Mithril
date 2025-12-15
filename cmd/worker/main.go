@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"slices"
 	"strings"
 
 	"github.com/nats-io/nats.go"
@@ -260,13 +261,53 @@ func funcHandler(inputs []string, spec Spec) ([]TestResult, error) {
 }
 
 func textHandler(inputs []string, spec Spec) ([]TestResult, error) {
-	var result []TestResult
+	var results []TestResult
 
+	var args []string
 	for index, test := range spec.Tests {
-		buildCmd := 
+		argTest := strings.Split(test.Input, " ")
+		args = append(args, inputs[index])
+		args = slices.Concat(args, argTest)
+		buildCmd := exec.Command(*spec.Executable, args...)
+
+		var stdout, stderr bytes.Buffer
+		buildCmd.Stdout = &stdout
+		buildCmd.Stderr = &stderr
+		stdout.Reset()
+		stderr.Reset()
+		buildCmd.Stdout = &stdout
+		buildCmd.Stderr = &stderr
+		err := buildCmd.Run()
+		if err != nil {
+			log.Fatalf("Exec failed: %v", err)
+			return nil, err
+		}
+
+		var result TestResult
+		result.Name = test.Name
+
+		currentOutput := strings.Split(stdout.String(), "\n")
+		expectedContent, err := os.ReadFile("/exercises/" + test.Expected)
+		if err != nil {
+			log.Fatalf("Read file \"expected output\" failed: %v\n", err)
+			return nil, err
+		}
+		expectedOutput := strings.Split(string(expectedContent), "\n")
+		result.Success = true
+		if len(expectedOutput) != len(currentOutput) {
+			result.Success = false
+		} else {
+			for i := range expectedOutput {
+				if expectedOutput[i] != currentOutput[i] {
+					result.Success = false
+					break
+				}
+			}
+		}
+		results = append(results, result)
 	}
 
-	return result, nil
+	return results, nil
 }
 
 func mcqHandler(inputs []string, spec Spec) ([]TestResult, error) {
