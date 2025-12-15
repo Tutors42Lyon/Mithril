@@ -3,6 +3,8 @@ title: "regex"
 type: "text"  # or "qcm", "program"
 language: "none"
 
+executable: "executable/regex"
+
 # Test execution
 tests:
   - name: "Basic test"
@@ -10,7 +12,7 @@ tests:
     input: "tests/test1_input.txt"
     expected_output: "tests/test1_expected.txt"
     timeout: 5
-    
+
   - name: "Edge case"
     run: "./{output}"
     input: "tests/test2_input.txt"

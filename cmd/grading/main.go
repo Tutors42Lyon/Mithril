@@ -100,7 +100,6 @@ func (s *GradingService) processGrading(data []byte, exerciseId string, clientId
 
 func waitForTermination() {
 	quit := make(chan os.Signal, 1)
-	// Écoute des signaux d'arrêt standard (Ctrl+C, kill)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 }

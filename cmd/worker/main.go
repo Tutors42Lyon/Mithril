@@ -15,8 +15,6 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// var nc *nats.Conn
-
 func main() {
 
 	nc, err := nats.Connect("nats://nats:4222")
@@ -29,8 +27,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	//pull exercices from DB
 
 	log.Println("Worker is running and listening...")
 
@@ -51,12 +47,14 @@ type TestResult struct {
 type Spec struct {
 	Id         string      `yaml:"id"`
 	Type       string      `yaml:"type"`
+	Executable *string     `yaml:"executable"`
 	Build      *Build      `yaml:"build"`
 	Tests      []Test      `yaml:"tests"`
 	Validation *Validation `yaml:"validation"`
 }
 
 type Build struct {
+	Output  string `yaml:"output"`
 	Cmd     string `yaml:"command"`
 	Timeout string `yaml:"timeout"`
 }
@@ -133,7 +131,7 @@ func searchExerciseTest(exerciseId string) (*Spec, error) {
 
 			var spec Spec
 
-			if unmarshalErr := yaml.Unmarshal(data, &spec); unmarshalErr == nil {
+			if unmarshalErr := yaml.Unmarshal(data, &spec); unmarshalErr != nil {
 				fmt.Printf("YAML unmarshal error in %s: %v", path, unmarshalErr)
 				return nil
 			}
@@ -151,10 +149,10 @@ func searchExerciseTest(exerciseId string) (*Spec, error) {
 	}
 
 	if err != nil {
-		return nil, fmt.Errorf("File parsing error: %w", err)
+		return nil, fmt.Errorf("file parsing error: %w", err)
 	}
 
-	return nil, fmt.Errorf("Can't find exercise with id: %s", exerciseId)
+	return nil, fmt.Errorf("can't exercise with id: %s", exerciseId)
 }
 
 func testInput(spec Spec, inputs []string) ([]TestResult, error) {
@@ -184,7 +182,7 @@ func programHandler(inputs []string, spec Spec) ([]TestResult, error) {
 		fileContent := split[1]
 
 		if fileName == "" {
-			err := errors.New("File unnamed")
+			err := errors.New("file unnamed")
 			return nil, err
 		}
 
@@ -195,8 +193,8 @@ func programHandler(inputs []string, spec Spec) ([]TestResult, error) {
 
 	splitBuild := strings.SplitN(spec.Build.Cmd, " ", 2)
 	args := strings.Split(splitBuild[1], " ")
-	output := args[len(args)-1]
-	buildCmd := exec.Command(splitBuild[0], args...)
+	cmd := strings.Replace(splitBuild[0], "{output}", spec.Build.Output, -1)
+	buildCmd := exec.Command(cmd, args...)
 
 	var stdout, stderr bytes.Buffer
 	buildCmd.Stdout = &stdout
@@ -211,6 +209,10 @@ func programHandler(inputs []string, spec Spec) ([]TestResult, error) {
 	for _, test := range spec.Tests {
 
 		inputContent, err := os.ReadFile(test.Input)
+		if err != nil {
+			log.Fatalf("ReadFile failed: %v", err)
+			return nil, err
+		}
 		args := strings.Split(string(inputContent), " ")
 		execCmd := exec.Command(test.Run, args...)
 
@@ -254,19 +256,22 @@ func programHandler(inputs []string, spec Spec) ([]TestResult, error) {
 func funcHandler(inputs []string, spec Spec) ([]TestResult, error) {
 	var testResult []TestResult
 
-	//compile and compare result
-
 	return testResult, nil
 }
 
 func textHandler(inputs []string, spec Spec) ([]TestResult, error) {
 	var result []TestResult
 
+	for index, test := range spec.Tests {
+		buildCmd := 
+	}
+
 	return result, nil
 }
 
 func mcqHandler(inputs []string, spec Spec) ([]TestResult, error) {
-	var result []TestResult
+	var results []TestResult
+	var result	TestResult
 
 	expectedContent, err := os.ReadFile("/exercises/" + spec.Tests[0].Expected)
 	if err != nil {
@@ -275,16 +280,17 @@ func mcqHandler(inputs []string, spec Spec) ([]TestResult, error) {
 	}
 	expectedOutput := strings.Split(string(expectedContent), "\n")
 
-	result[0].Name = spec.Tests[0].Name
-	result[0].Success = true
+	result.Name = spec.Tests[0].Name
+	result.Success = true
 	for i := range expectedOutput {
 		if expectedOutput[i] != inputs[i] {
-			result[0].Success = false
+			result.Success = false
 			break
 		}
 	}
 
-	return result, nil
+	results = append(results, result)
+	return results, nil
 }
 
 func prepareResponse(testResults []TestResult) Result {
