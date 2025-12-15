@@ -2,9 +2,12 @@ package handlers
 
 import (
 	"context"
+	"crypto/rand"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -17,8 +20,9 @@ import (
 )
 
 type AuthHandler struct {
-	Config   *oauth2.Config
-	NatsConn *nats.Conn
+	Config       *oauth2.Config
+	NatsConn     *nats.Conn
+	SessionStore sync.Map
 }
 
 func NewAuthHandler(nc *nats.Conn, env *config.Env) *AuthHandler {
@@ -38,10 +42,28 @@ func NewAuthHandler(nc *nats.Conn, env *config.Env) *AuthHandler {
 	}
 }
 
-func (h *AuthHandler) Login(c *gin.Context) {
+func generateSessionID() (string, error) {
+	bytes := make([]byte, 16)
+	if _, err := rand.Read(bytes); err != nil {
+		return "", err
+	}
+	return hex.EncodeToString(bytes), nil
+}
 
-	url := h.Config.AuthCodeURL("random") // need to change
-	c.Redirect(http.StatusTemporaryRedirect, url)
+func (h *AuthHandler) LoginInit(c *gin.Context) {
+
+	sessionID, err := generateSessionID()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate session"})
+		return
+	}
+
+	h.SessionStore.Store(sessionID, "")
+	url := h.Config.AuthCodeURL(sessionID)
+	c.JSON(http.StatusOK, gin.H{
+		"url":        url,
+		"session_id": sessionID,
+	})
 }
 
 func (h *AuthHandler) fetchUserFrom42(ctx context.Context, code string) (*models.User42, error) {
@@ -86,6 +108,8 @@ func (h *AuthHandler) syncWithWorker(user42 *models.User42) (*models.UserMessage
 		return nil, fmt.Errorf("nats request failed: %w", err)
 	}
 
+	//TODO read msg heck if error http 404 400 500
+
 	var respMsg models.UserMessage
 	if err := json.Unmarshal(msg.Data, &respMsg); err != nil {
 		return nil, fmt.Errorf("unmarshal worker response failed: %w", err)
@@ -96,34 +120,62 @@ func (h *AuthHandler) syncWithWorker(user42 *models.User42) (*models.UserMessage
 
 func (h *AuthHandler) CallBack(c *gin.Context) {
 
+	sessionID := c.Query("state")
 	code := c.Query("code")
-	if code == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Code not found"})
+
+	if code == "" || sessionID == "" {
+		c.String(http.StatusBadRequest, "Error: missing code or state!")
 		return
+	}
+
+	_, ok := h.SessionStore.Load(sessionID)
+	if !ok {
+		c.String(http.StatusBadRequest, "Error: Session invalide or expire")
 	}
 
 	user42, err := h.fetchUserFrom42(c.Request.Context(), code)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.String(http.StatusInternalServerError, "error: "+err.Error())
 		return
 	}
 
 	workerUser, err := h.syncWithWorker(user42)
 	if err != nil {
-		c.JSON(http.StatusGatewayTimeout, gin.H{"error": "Login service unavailable"})
+		c.String(http.StatusGatewayTimeout, "error: Login service unavailable")
 		return
 	}
 
 	token, err := utils.GenerateJWT(workerUser.Db_id, workerUser.Role)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Token generation failed"})
+		c.String(http.StatusInternalServerError, "error: Token generation failed")
 		return
 	}
 
+	h.SessionStore.Store(sessionID, token)
+}
+
+func (h *AuthHandler) PollLogin(c *gin.Context) {
+	sessionID := c.Query("session_id")
+	if sessionID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing session_id"})
+		return
+	}
+
+	val, ok := h.SessionStore.Load(sessionID)
+	if !ok {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Session can't be found"})
+		return
+	}
+
+	token := val.(string)
+
+	if token == "" {
+		c.JSON(http.StatusAccepted, gin.H{"status": "pending"})
+		return
+	}
+
+	h.SessionStore.Delete(sessionID)
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Login successful",
-		"user":    workerUser.Username,
-		"token":   token,
-		"DB_ID":   workerUser.Db_id,
+		"token": token,
 	})
 }

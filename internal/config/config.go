@@ -28,7 +28,7 @@ func LoadEnv() (*Env, error) {
 		ClientID:     os.Getenv("API_42_UID"),
 		ClientSecret: os.Getenv("API_42_SEC"),
 		RedirectURL:  os.Getenv("CALL_BACK"),
-		NatsUrl:      os.ExpandEnv("NATS_URL"),
+		NatsUrl:      os.Getenv("NATS_URL"),
 		DBHost:       os.Getenv("DB_HOST"),
 		DBUser:       os.Getenv("DB_USER"),
 		DBPassword:   os.Getenv("DB_PASSWORD"),
