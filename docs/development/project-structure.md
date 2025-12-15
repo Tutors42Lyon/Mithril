@@ -13,6 +13,25 @@ Overview of the Mithril project structure.
 
 ## Backend Structure
 
+```
+mithril_content/
+└── pools/                       # Root container for all content
+    └── rust-beginner/           # [POOL FOLDER] - The collection name (slug)
+        ├── pool.yaml            # [POOL CONFIG] - Meta info for the whole pool
+        ├── 01-forging-start/    # [EXERCISE FOLDER] - Specific exercise
+        │   ├── exercise.yaml    # [EXERCISE CONFIG] - Meta info for this task
+        │   ├── README.md        # The instructions for the user (optional but rec.)
+        │   ├── src/             # The starter code for the user
+        │   │   └── main.rs
+        │   └── tests/           # [TEST FOLDER] - Validation logic
+        │       └── test_case.rs
+        └── 02-mining-loops/
+            ├── exercise.yaml
+            ├── src/
+            └── tests/
+
+```
+
 ## Frontend Structure
 
 ## Documentation

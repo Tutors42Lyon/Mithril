@@ -18,6 +18,20 @@ Specification for exercise files and structure.
 ## Example Exercise
 
 ```yaml
+name: "Rust: The Basics"
+slug: "rust-beginner"      # Should match the folder name
+theme: "rust"
+description: "Learn the fundamentals of ownership and borrowing."
+difficulty: "beginner"     # beginner, intermediate, advanced
+tags:
+  - "syntax"
+  - "memory"
+maintainer: "Mithril Team"
+
+```
+
+
+```yaml
 id: "ex01_hello_world"
 title: "Hello World"
 type: "code"  # or "qcm", "text"
@@ -80,7 +94,3 @@ scoring:
   per_test: 15
   valgrind_clean: 10
 ```
-regex/
-    exo1.yaml
-    test/
-
