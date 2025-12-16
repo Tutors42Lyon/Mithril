@@ -1,10 +1,11 @@
 id: "ex01_hello_world"
 title: "Hello World"
-type: "code"  # or "qcm", "text"
+type: "program"  # "func", "qcm", "text"
 language: "c"
 
 # Compilation (if needed)
 build:
+  output: "out"
   command: "gcc -Wall -Wextra -Werror {submission} -o {output}"
   timeout: 30
 
@@ -20,12 +21,12 @@ tests:
     run: "./{output}"
     input: "tests/test2_input.txt"
     expected_output: "tests/test2_expected.txt"
+    timeout: 5
 
 # Validation rules
 validation:
   check_valgrind: true
   allowed_functions: ["write", "malloc", "free"]
-  forbidden_functions: ["printf"]  # For 42 exercises
 
 # Scoring
 scoring:

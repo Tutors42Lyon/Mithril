@@ -16,10 +16,10 @@ FROM alpine:3.18
 
 WORKDIR /app
 
-COPY exercises/ exercises/
-
 RUN apk add --no-cache ca-certificates
 
 COPY --from=builder /app/mithril-worker .
+
+COPY exercises/ ./exercises/
 
 CMD ["./mithril-worker"]
