@@ -1,0 +1,23 @@
+id: "ex01_regex"
+title: "regex"
+type: "input"  # or "qcm", "text"
+language: "none"
+
+# Test execution
+tests:
+  - name: "Basic test"
+    run: "./{output}"
+    input: "tests/test1_input.txt"
+    expected_output: "tests/test1_expected.txt"
+    timeout: 5
+    
+  - name: "Edge case"
+    run: "./{output}"
+    input: "tests/test2_input.txt"
+    expected_output: "tests/test2_expected.txt"
+
+# Scoring
+scoring:
+  compilation: 10
+  per_test: 15
+  valgrind_clean: 10
