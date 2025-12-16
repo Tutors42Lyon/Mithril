@@ -30,6 +30,8 @@ func main() {
 	}
 	defer nc.Close()
 
+	wsHandler := handlers.NewWebSocketHandler(nc)
+
 	messaging.LoadWorker(nc, userRepo)
 	r := gin.Default()
 
@@ -46,6 +48,8 @@ func main() {
 	r.PATCH("/users/role/:username", userHandler.UpdateRole)
 	//ex: /users/info/pnaessen || /users/info/cassie
 	r.GET("/users/info/:username", userHandler.GetUserInfo)
+
+	r.GET("/ws", wsHandler.HandleWebSocket)
 
 	if err := r.Run(":8080"); err != nil {
 		log.Fatalf("cannot run the serv %v", err)

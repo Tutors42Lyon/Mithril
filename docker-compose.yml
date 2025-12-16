@@ -19,18 +19,18 @@ services:
     networks:
       - mithril-network
 
-  # # redis:
-  # #   image: redis:7-alpine
-  # #   container_name: mithril-redis
-  # #   ports:
-  # #     - "6379:6379"
-  # #   healthcheck:
-  # #     test: ["CMD", "redis-cli", "ping"]
-  # #     interval: 10s
-  # #     timeout: 5s
-  # #     retries: 5
-  # #   networks:
-  # #     - mithril-network
+  redis:
+    image: redis:7-alpine
+    container_name: mithril-redis
+    ports:
+      - "6380:6379"  # External port 6380 to avoid conflict with local Redis on 6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mithril-network
 
   nats:
     image: nats:latest
@@ -80,13 +80,34 @@ services:
         condition: service_healthy
       nats:
         condition: service_started
-      # redis:
-      #   condition: service_healthy
+      redis:
+        condition: service_healthy
       # migrations:
       #   condition: service_completed_successfully
     networks:
       - mithril-network
     restart: unless-stopped
+
+  exercise:
+    build:
+      context: .
+      dockerfile: docker/exercise.Dockerfile
+    container_name: mithril-exercise
+    environment:
+      REDIS_URL: "redis://redis:6379"
+      NATS_URL: "nats://nats:4222"
+      LOG_LEVEL: "debug"
+    depends_on:
+      redis:
+        condition: service_healthy
+      nats:
+        condition: service_started
+    volumes:
+      - ./exercises:/app/exercises:ro  # Read-only mount for exercise files
+    networks:
+      - mithril-network
+    restart: unless-stopped
+
 
   grading:
     build:
