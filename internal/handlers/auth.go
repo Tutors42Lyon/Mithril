@@ -43,11 +43,11 @@ func NewAuthHandler(nc *nats.Conn, env *config.Env) *AuthHandler {
 }
 
 func generateSessionID() (string, error) {
-	bytes := make([]byte, 16)
-	if _, err := rand.Read(bytes); err != nil {
+	buffer := make([]byte, 16)
+	if _, err := rand.Read(buffer); err != nil {
 		return "", err
 	}
-	return hex.EncodeToString(bytes), nil
+	return hex.EncodeToString(buffer), nil
 }
 
 func (h *AuthHandler) LoginInit(c *gin.Context) {
@@ -107,8 +107,6 @@ func (h *AuthHandler) syncWithWorker(user42 *models.User42) (*models.UserMessage
 	if err != nil {
 		return nil, fmt.Errorf("nats request failed: %w", err)
 	}
-
-	//TODO read msg heck if error http 404 400 500
 
 	var respMsg models.UserMessage
 	if err := json.Unmarshal(msg.Data, &respMsg); err != nil {

@@ -11,24 +11,20 @@ import (
 )
 
 func respondError(m *nats.Msg, code string, message string, httpStatus int) {
-    resp := struct {
-        Code    string `json:"code"`
-        Message string `json:"message"`
-		HTTPStatus int    `json:"http_status,omitempty"`
-    }{
-        Code:    code,
-        Message: message,
+	resp := models.RespondMessage{
+		Code:       code,
+		Message:    message,
 		HTTPStatus: httpStatus,
-    }
+	}
 
-    respBytes, err := json.Marshal(resp)
-    if err != nil {
-        log.Printf("Error marshal error response: %v", err)
-        return
-    }
-    if err := m.Respond(respBytes); err != nil {
-        log.Printf("Error responding to NATS message: %v", err)
-    }
+	respBytes, err := json.Marshal(resp)
+	if err != nil {
+		log.Printf("Error marshal error response: %v", err)
+		return
+	}
+	if err := m.Respond(respBytes); err != nil {
+		log.Printf("Error responding to NATS message: %v", err)
+	}
 }
 
 func LoadWorker(nc *nats.Conn, userRepo *repository.UserRepository) {
@@ -119,7 +115,7 @@ func HandleUserUpdateRole(userRepo *repository.UserRepository) nats.MsgHandler {
 		respBytes, err := json.Marshal(resp)
 		if err != nil {
 			log.Printf("Error marshal response: %v", err)
-			 respondError(m, "internal_error", "marshal failed", 500)
+			respondError(m, "internal_error", "marshal failed", 500)
 			return
 		}
 
@@ -144,29 +140,29 @@ func HandleUserInfo(userRepo *repository.UserRepository) nats.MsgHandler {
 		}
 
 		if req.Username == "" {
-            log.Printf("Error: empty username in request")
+			log.Printf("Error: empty username in request")
 			respondError(m, "bad_request", "username required", 400)
-            return
-        }
+			return
+		}
 
-        userInfo, err := userRepo.GetByUsername(req.Username)
-        if err != nil {
-            log.Printf("Error fetching user info: %v", err)
-			 respondError(m, "db_error", "user not found", 404)
-            return
-        }
+		userInfo, err := userRepo.GetByUsername(req.Username)
+		if err != nil {
+			log.Printf("Error fetching user info: %v", err)
+			respondError(m, "db_error", "user not found", 404)
+			return
+		}
 
-        respBytes, err := json.Marshal(userInfo)
-        if err != nil {
-            log.Printf("Error marshal response: %v", err)
+		respBytes, err := json.Marshal(userInfo)
+		if err != nil {
+			log.Printf("Error marshal response: %v", err)
 			respondError(m, "internal_error", "marshal failed", 500)
-            return
-        }
+			return
+		}
 
 		if err := m.Respond(respBytes); err != nil {
-            log.Printf("Error responding to NATS message: %v", err)
-            return
-        }
+			log.Printf("Error responding to NATS message: %v", err)
+			return
+		}
 
 	}
 }

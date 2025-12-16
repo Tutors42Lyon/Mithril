@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/Tutors42Lyon/Mithril/internal/models"
 	"github.com/gin-gonic/gin"
 	"github.com/nats-io/nats.go"
 )
@@ -43,6 +44,17 @@ func (h *UserHandler) UpdateRole(c *gin.Context) {
 		return
 	}
 
+	var respMsg models.RespondMessage
+    if err := json.Unmarshal(msg.Data, &respMsg); err != nil {
+         c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid response from worker"})
+         return
+    }
+
+    if respMsg.HTTPStatus >= 400 {
+        c.Data(respMsg.HTTPStatus, "application/json", msg.Data)
+        return
+    }
+
 	c.Data(http.StatusOK, "application/json", msg.Data)
 
 }
@@ -60,5 +72,15 @@ func (h *UserHandler) GetUserInfo(c *gin.Context) {
 		return
 	}
 
+	var respMsg models.RespondMessage
+    if err := json.Unmarshal(msg.Data, &respMsg); err != nil {
+         c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid response from worker"})
+         return
+    }
+
+	if respMsg.HTTPStatus >= 400 {
+        c.Data(respMsg.HTTPStatus, "application/json", msg.Data)
+        return
+    }
 	c.Data(http.StatusOK, "application/json", msg.Data)
 }

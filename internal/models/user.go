@@ -19,6 +19,12 @@ type UserMessage struct {
 	IsActive   bool   `json:"is_active" gorm:"column:is_active"`
 }
 
+type RespondMessage  struct {
+	Code string `json:"code"`
+	Message string `json:"message"`
+	HTTPStatus int `json:"http_status,omitempty"`
+}
+
 func (UserMessage) TableName() string {
 	return "users"
 }
