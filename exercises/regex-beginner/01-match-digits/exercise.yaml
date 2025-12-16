@@ -1,0 +1,19 @@
+id: "regex_01_match_digits"
+title: "Match Digits"
+type: "text"
+language: "regex"
+
+tests:
+  - name: "Test 1 - Basic digit"
+    run: "regex_test"
+    input: "123"
+    expected_output: "match"
+    timeout: 5
+  - name: "Test 2 - No digits"
+    run: "regex_test"
+    input: "abc"
+    expected_output: "no_match"
+    timeout: 5
+
+scoring:
+  per_test: 50
