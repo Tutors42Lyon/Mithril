@@ -1,0 +1,9 @@
+slug: regex-beginner
+name: "Regex Basics"
+theme: "regex"
+description: "Learn the fundamentals of regular expressions"
+difficulty: "beginner"
+tags:
+  - "regex"
+  - "pattern-matching"
+maintainer: "Mithril Team"

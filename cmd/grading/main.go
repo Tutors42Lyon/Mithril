@@ -2,11 +2,11 @@ package main
 
 import (
 	"log"
-	"strings"
-	"time"
-	"os/signal"
 	"os"
+	"os/signal"
+	"strings"
 	"syscall"
+	"time"
 
 	"github.com/nats-io/nats.go"
 )
@@ -87,7 +87,7 @@ func (s *GradingService) processGrading(data []byte, exerciseId string, clientId
 			errorMessage = "NATS communication error"
 			log.Printf("Unexpected NATS error for %s (Client %s) : %v", exerciseId, clientId, err)
 		}
-	
+
 		errorResultSubject := "grading." + clientId + "." + exerciseId + ".error"
 		s.NC.Publish(errorResultSubject, []byte(errorMessage))
 		return
@@ -96,6 +96,8 @@ func (s *GradingService) processGrading(data []byte, exerciseId string, clientId
 	resultSubject := "grading." + clientId + "." + exerciseId + ".result"
 	s.NC.Publish(resultSubject, resp.Data)
 	log.Printf("Results published for Client %s, Exercise %s", clientId, exerciseId)
+
+	// add status update
 }
 
 func waitForTermination() {
