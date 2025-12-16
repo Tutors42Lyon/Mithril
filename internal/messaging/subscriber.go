@@ -54,6 +54,11 @@ func LoadWorker(nc *nats.Conn, userRepo *repository.UserRepository, poolRepo *re
 	if err != nil {
 		log.Fatalf("Error Subscribe to NATS: %v", err)
 	}
+
+	_, err = nc.Subscribe("pool.add", HandleAddPool(poolRepo))
+	if err != nil {
+		log.Fatalf("Error Subscribe to NATS: %v", err)
+	}
 }
 
 func HandleUserLogin(userRepo *repository.UserRepository) nats.MsgHandler {
@@ -187,5 +192,65 @@ func HandlePoolsInfo(poolRepo *repository.PoolRepository) nats.MsgHandler {
 
 		data, _ := json.Marshal(pools)
 		m.Respond(data)
+	}
+}
+
+func HandleAddPool(poolRepo *repository.PoolRepository) nats.MsgHandler {
+
+	return func(m *nats.Msg) {
+		
+		var req struct {
+			Name string `json:"name"`
+			Category     string `json:"category"`
+			Description     string `json:"description"`
+		}
+		if err := json.Unmarshal(m.Data, &req); err != nil {
+			log.Printf("Error Subscribe Unmarshal %v", err)
+			respondError(m, "bad_request", "invalid payload", 400)
+			return
+		}
+
+		if req.Name == "" {
+			log.Printf("Error: empty name in request")
+			respondError(m, "bad_request", "name required", 400)
+			return
+		}
+
+		if req.Category == "" {
+			log.Printf("Error: empty category in request")
+			respondError(m, "bad_request", "category required", 400)
+			return
+		}
+
+		if req.Description == "" {
+			log.Printf("Error: empty description in request")
+			respondError(m, "bad_request", "description required", 400)
+			return
+		}
+
+		err := poolRepo.AddNewPool(req.Name, req.Category, req.Description)
+		if err != nil {
+			log.Printf("Error creating pool")
+			respondError(m, "db_error", "unable to create pool", 500)
+			return
+		}
+
+		resp := models.PoolMessage{
+			Name: req.Name,
+			Category:     req.Category,
+			Description: req.Description,
+		}
+
+		respBytes, err := json.Marshal(resp)
+		if err != nil {
+			log.Printf("Error marshal response: %v", err)
+			respondError(m, "internal_error", "marshal failed", 500)
+			return
+		}
+
+		if err := m.Respond(respBytes); err != nil {
+			log.Printf("Error responding to NATS message: %v", err)
+			return
+		}
 	}
 }

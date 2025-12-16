@@ -23,3 +23,13 @@ func (r *PoolRepository) GetAll() (*[]models.PoolMessage, error) {
 	}
 	return &pools, nil
 }
+
+func (r *PoolRepository) AddNewPool(name string, category string, description string) error {
+	result := r.DB.Model(&models.PoolMessage{}).
+		Create(map[string]interface{}{
+		"name":     name,
+		"category": category,
+		"description":  description,
+	})
+	return result.Error
+}

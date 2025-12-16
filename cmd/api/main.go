@@ -50,6 +50,7 @@ func main() {
 	r.GET("/users/info/:username", userHandler.GetUserInfo)
 
 	r.GET("/exercises/pools", poolHandler.GetPoolsInfo)
+	r.PUT("/pool/add", poolHandler.AddPool)
 
 	if err := r.Run(":8080"); err != nil {
 		log.Fatalf("cannot run the serv %v", err)
