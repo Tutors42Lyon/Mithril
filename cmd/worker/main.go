@@ -80,8 +80,6 @@ func handler(m *nats.Msg) {
 	subject := strings.Split(m.Subject, ".")
 	exerciseId := subject[1]
 
-	//parse test
-
 	spec, err := searchExerciseTest(exerciseId)
 	if err != nil {
 		log.Println("Search exercise Error:", err)
@@ -96,10 +94,10 @@ func handler(m *nats.Msg) {
 		return
 	}
 
-	//test
 	testResults, err := testInput(*spec, inputs)
 	if err != nil {
 		log.Printf("Error test input: %v", err)
+		return
 	}
 
 	result := prepareResponse(testResults)
@@ -111,9 +109,6 @@ func handler(m *nats.Msg) {
 	}
 
 	m.Respond(resultJSON)
-	// if err != nil {
-	// 	log.Printf("Error sending response to NATS: %v", err)
-	// }
 }
 
 func searchExerciseTest(exerciseId string) (*Spec, error) {
@@ -175,7 +170,7 @@ func testInput(spec Spec, inputs []string) ([]TestResult, error) {
 func programHandler(inputs []string, spec Spec) ([]TestResult, error) {
 	var testResults []TestResult
 
-	path := "exercises/"
+	path := "app/exercises/"
 	for _, file := range inputs {
 
 		split := strings.SplitN(file, "\n", 2)
@@ -203,7 +198,7 @@ func programHandler(inputs []string, spec Spec) ([]TestResult, error) {
 
 	err := buildCmd.Run()
 	if err != nil {
-		log.Fatalf("Build failed: %v\nstderr: %s\n", err, stderr.String())
+		log.Printf("Build failed: %v\nstderr: %s\n", err, stderr.String())
 		return nil, err
 	}
 
@@ -211,7 +206,7 @@ func programHandler(inputs []string, spec Spec) ([]TestResult, error) {
 
 		inputContent, err := os.ReadFile(test.Input)
 		if err != nil {
-			log.Fatalf("ReadFile failed: %v", err)
+			log.Printf("ReadFile failed: %v", err)
 			return nil, err
 		}
 		args := strings.Split(string(inputContent), " ")
@@ -224,15 +219,15 @@ func programHandler(inputs []string, spec Spec) ([]TestResult, error) {
 		err = execCmd.Run()
 
 		if err != nil {
-			log.Fatalf("Exec failed: %v\nstderr: %s\n", err, stderr.String())
+			log.Printf("Exec failed: %v\nstderr: %s\n", err, stderr.String())
 			return nil, err
 		}
 
 		currentOutput := strings.Split(stdout.String(), "\n")
 		var result TestResult
-		expectedContent, err := os.ReadFile("/exercises/" + test.Expected)
+		expectedContent, err := os.ReadFile("/app/exercises/" + test.Expected)
 		if err != nil {
-			log.Fatalf("Read file \"expected output\" failed: %v\n", err)
+			log.Printf("Read file \"expected output\" failed: %v\n", err)
 			return nil, err
 		}
 		expectedOutput := strings.Split(string(expectedContent), "\n")
@@ -279,7 +274,7 @@ func textHandler(inputs []string, spec Spec) ([]TestResult, error) {
 		buildCmd.Stderr = &stderr
 		err := buildCmd.Run()
 		if err != nil {
-			log.Fatalf("Exec failed: %v", err)
+			log.Printf("Exec failed: %v", err)
 			return nil, err
 		}
 
@@ -287,9 +282,9 @@ func textHandler(inputs []string, spec Spec) ([]TestResult, error) {
 		result.Name = test.Name
 
 		currentOutput := strings.Split(stdout.String(), "\n")
-		expectedContent, err := os.ReadFile("/exercises/" + test.Expected)
+		expectedContent, err := os.ReadFile("/app/exercises/" + test.Expected)
 		if err != nil {
-			log.Fatalf("Read file \"expected output\" failed: %v\n", err)
+			log.Printf("Read file \"expected output\" failed: %v\n", err)
 			return nil, err
 		}
 		expectedOutput := strings.Split(string(expectedContent), "\n")
@@ -314,9 +309,9 @@ func mcqHandler(inputs []string, spec Spec) ([]TestResult, error) {
 	var results []TestResult
 	var result	TestResult
 
-	expectedContent, err := os.ReadFile("/exercises/" + spec.Tests[0].Expected)
+	expectedContent, err := os.ReadFile("/app/exercises/" + spec.Tests[0].Expected)
 	if err != nil {
-		log.Fatalf("Read file \"expected output\" failed: %v\n", err)
+		log.Printf("Read file \"expected output\" failed: %v\n", err)
 		return nil, err
 	}
 	expectedOutput := strings.Split(string(expectedContent), "\n")
