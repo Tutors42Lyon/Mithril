@@ -23,6 +23,7 @@ func main() {
 	db := database.InitDB(env)
 
 	userRepo := repository.NewUserRepository(db)
+	poolsRepo := repository.NewPoolRepository(db)
 
 	nc, err := nats.Connect(env.NatsUrl)
 	if err != nil {
@@ -30,11 +31,12 @@ func main() {
 	}
 	defer nc.Close()
 
-	messaging.LoadWorker(nc, userRepo)
+	messaging.LoadWorker(nc, userRepo, poolsRepo)
 	r := gin.Default()
 
 	authHandler := handlers.NewAuthHandler(nc, env)
 	userHandler := handlers.NewUserHandler(nc)
+	poolHandler := handlers.NewPoolHandler(nc)
 
 	r.GET("/auth/login/init", authHandler.LoginInit)
 
@@ -46,6 +48,8 @@ func main() {
 	r.PATCH("/users/role/:username", userHandler.UpdateRole)
 	//ex: /users/info/pnaessen || /users/info/cassie
 	r.GET("/users/info/:username", userHandler.GetUserInfo)
+
+	r.GET("/exercises/pools", poolHandler.GetPoolsInfo)
 
 	if err := r.Run(":8080"); err != nil {
 		log.Fatalf("cannot run the serv %v", err)

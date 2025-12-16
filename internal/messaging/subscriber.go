@@ -31,7 +31,7 @@ func respondError(m *nats.Msg, code string, message string, httpStatus int) {
 	}
 }
 
-func LoadWorker(nc *nats.Conn, userRepo *repository.UserRepository) {
+func LoadWorker(nc *nats.Conn, userRepo *repository.UserRepository, poolRepo *repository.PoolRepository) {
 
 	_, err := nc.Subscribe("user.login", HandleUserLogin(userRepo))
 
@@ -46,6 +46,11 @@ func LoadWorker(nc *nats.Conn, userRepo *repository.UserRepository) {
 	}
 
 	_, err = nc.Subscribe("user.get_info", HandleUserInfo(userRepo))
+	if err != nil {
+		log.Fatalf("Error Subscribe to NATS: %v", err)
+	}
+
+	_, err = nc.Subscribe("pools.get_info", HandlePoolsInfo(poolRepo))
 	if err != nil {
 		log.Fatalf("Error Subscribe to NATS: %v", err)
 	}
@@ -171,3 +176,16 @@ func HandleUserInfo(userRepo *repository.UserRepository) nats.MsgHandler {
 	}
 }
 
+func HandlePoolsInfo(poolRepo *repository.PoolRepository) nats.MsgHandler {
+
+	return func(m *nats.Msg) {
+		pools, err := poolRepo.GetAll()
+		if err != nil {
+			m.Respond([]byte(`{"error":"db error"}`))
+			return
+		}
+
+		data, _ := json.Marshal(pools)
+		m.Respond(data)
+	}
+}
