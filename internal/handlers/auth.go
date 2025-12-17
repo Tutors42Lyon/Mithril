@@ -88,7 +88,7 @@ func (h *AuthHandler) fetchUserFrom42(ctx context.Context, code string) (*models
 	return &user, nil
 }
 
-func (h *AuthHandler) syncWithWorker(user42 *models.User42) (*models.UserMessage, error) {
+func (h *AuthHandler) syncWithWorker(user42 *models.User42, sessionID string) (*models.RespondMessage, error) {
 
 	reqMsg := models.UserMessage{
 		Username:   user42.Username,
@@ -108,11 +108,26 @@ func (h *AuthHandler) syncWithWorker(user42 *models.User42) (*models.UserMessage
 		return nil, fmt.Errorf("nats request failed: %w", err)
 	}
 
-	var respMsg models.UserMessage
+	var respMsg models.RespondMessage
 	if err := json.Unmarshal(msg.Data, &respMsg); err != nil {
+		return nil, fmt.Errorf("Unmarshal RespondMessage fail")
+	}
+
+	if respMsg.HTTPStatus >= 400 {
+		return &respMsg, nil
+	}
+
+	var workerUser models.UserMessage
+	if err := json.Unmarshal(msg.Data, &workerUser); err != nil {
 		return nil, fmt.Errorf("unmarshal worker response failed: %w", err)
 	}
 
+	token, err := utils.GenerateJWT(workerUser.Db_id, workerUser.Role)
+	if err != nil {
+		return nil, fmt.Errorf("error: Token generation failed")
+	}
+
+	h.SessionStore.Store(sessionID, token)
 	return &respMsg, nil
 }
 
@@ -137,19 +152,16 @@ func (h *AuthHandler) CallBack(c *gin.Context) {
 		return
 	}
 
-	workerUser, err := h.syncWithWorker(user42)
+	respMsg, err := h.syncWithWorker(user42, sessionID)
 	if err != nil {
 		c.String(http.StatusGatewayTimeout, "error: Login service unavailable")
 		return
 	}
 
-	token, err := utils.GenerateJWT(workerUser.Db_id, workerUser.Role)
-	if err != nil {
-		c.String(http.StatusInternalServerError, "error: Token generation failed")
+	if respMsg.HTTPStatus >= 400 {
+		c.String(respMsg.HTTPStatus, respMsg.Message)
 		return
 	}
-
-	h.SessionStore.Store(sessionID, token)
 }
 
 func (h *AuthHandler) PollLogin(c *gin.Context) {
