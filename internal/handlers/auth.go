@@ -137,7 +137,7 @@ func (h *AuthHandler) CallBack(c *gin.Context) {
 	code := c.Query("code")
 
 	if code == "" || sessionID == "" {
-		c.String(http.StatusBadRequest, "Error: missing code or state!")
+		c.String(http.StatusBadRequest, "Error: missing code or state!")  // si la personne refuse arrive ici
 		return
 	}
 
