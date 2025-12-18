@@ -3,7 +3,6 @@ package repository
 import (
 	"github.com/Tutors42Lyon/Mithril/internal/models"
 	"gorm.io/gorm"
-
 )
 
 type PoolRepository struct {
@@ -15,7 +14,7 @@ func NewPoolRepository(db *gorm.DB) *PoolRepository {
 }
 
 func (r *PoolRepository) GetAll() (*[]models.PoolMessage, error) {
-    var pools []models.PoolMessage
+	var pools []models.PoolMessage
 
 	result := r.DB.Find(&pools)
 	if result.Error != nil {
@@ -27,9 +26,18 @@ func (r *PoolRepository) GetAll() (*[]models.PoolMessage, error) {
 func (r *PoolRepository) AddNewPool(name string, category string, description string) error {
 	result := r.DB.Model(&models.PoolMessage{}).
 		Create(map[string]interface{}{
-		"name":     name,
-		"category": category,
-		"description":  description,
-	})
+			"name":        name,
+			"category":    category,
+			"description": description,
+		})
 	return result.Error
+}
+
+func (r *PoolRepository) GetPoolId(name string) (*models.PoolId, error) {
+	var id models.PoolId
+	result := r.DB.
+		Where("name = ?", name).
+		First(&id)
+
+	return &id, result.Error
 }

@@ -31,7 +31,7 @@ func respondError(m *nats.Msg, code string, message string, httpStatus int) {
 	}
 }
 
-func LoadWorker(nc *nats.Conn, userRepo *repository.UserRepository, poolRepo *repository.PoolRepository) {
+func LoadWorker(nc *nats.Conn, userRepo *repository.UserRepository, poolRepo *repository.PoolRepository, exerciseRepo *repository.ExerciseRepository) {
 
 	_, err := nc.Subscribe("user.login", HandleUserLogin(userRepo))
 
@@ -56,6 +56,11 @@ func LoadWorker(nc *nats.Conn, userRepo *repository.UserRepository, poolRepo *re
 	}
 
 	_, err = nc.Subscribe("pool.add", HandleAddPool(poolRepo))
+	if err != nil {
+		log.Fatalf("Error Subscribe to NATS: %v", err)
+	}
+
+	_, err = nc.Subscribe("exercises.get_info", HandleExercisesInfo(exerciseRepo, poolRepo))
 	if err != nil {
 		log.Fatalf("Error Subscribe to NATS: %v", err)
 	}
@@ -198,11 +203,11 @@ func HandlePoolsInfo(poolRepo *repository.PoolRepository) nats.MsgHandler {
 func HandleAddPool(poolRepo *repository.PoolRepository) nats.MsgHandler {
 
 	return func(m *nats.Msg) {
-		
+
 		var req struct {
-			Name string `json:"name"`
-			Category     string `json:"category"`
-			Description     string `json:"description"`
+			Name        string `json:"name"`
+			Category    string `json:"category"`
+			Description string `json:"description"`
 		}
 		if err := json.Unmarshal(m.Data, &req); err != nil {
 			log.Printf("Error Subscribe Unmarshal %v", err)
@@ -236,8 +241,8 @@ func HandleAddPool(poolRepo *repository.PoolRepository) nats.MsgHandler {
 		}
 
 		resp := models.PoolMessage{
-			Name: req.Name,
-			Category:     req.Category,
+			Name:        req.Name,
+			Category:    req.Category,
 			Description: req.Description,
 		}
 
@@ -252,5 +257,38 @@ func HandleAddPool(poolRepo *repository.PoolRepository) nats.MsgHandler {
 			log.Printf("Error responding to NATS message: %v", err)
 			return
 		}
+	}
+}
+
+func HandleExercisesInfo(exerciseRepo *repository.ExerciseRepository, poolRepo *repository.PoolRepository) nats.MsgHandler {
+
+	return func(m *nats.Msg) {
+		var req struct {
+			PoolName string `json:"poolname"`
+		}
+
+		if err := json.Unmarshal(m.Data, &req); err != nil {
+			log.Printf("Error Subscribe Unmarshal %v", err)
+			respondError(m, "bad_request", "invalid payload", 400)
+			return
+		}
+
+		// check if name is empty
+
+		id, err := poolRepo.GetPoolId(req.PoolName)
+		if err != nil {
+			log.Printf("Error getting exercises info")
+			respondError(m, "db_error", "unable to get exercises info", 500)
+			return
+		}
+
+		exercises, err := exerciseRepo.GetExercises(int(id.Db_id))
+		if err != nil {
+			m.Respond([]byte(`{"error":"db error"}`))
+			return
+		}
+
+		data, _ := json.Marshal(exercises)
+		m.Respond(data)
 	}
 }

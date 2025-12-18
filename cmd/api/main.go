@@ -24,6 +24,7 @@ func main() {
 
 	userRepo := repository.NewUserRepository(db)
 	poolsRepo := repository.NewPoolRepository(db)
+	exerciseRepo := repository.NewExerciseRepository(db)
 
 	nc, err := nats.Connect(env.NatsUrl)
 	if err != nil {
@@ -31,12 +32,13 @@ func main() {
 	}
 	defer nc.Close()
 
-	messaging.LoadWorker(nc, userRepo, poolsRepo)
+	messaging.LoadWorker(nc, userRepo, poolsRepo, exerciseRepo)
 	r := gin.Default()
 
 	authHandler := handlers.NewAuthHandler(nc, env)
 	userHandler := handlers.NewUserHandler(nc)
 	poolHandler := handlers.NewPoolHandler(nc)
+	exerciceHandler := handlers.NewExerciseHandler(nc)
 
 	r.GET("/auth/login/init", authHandler.LoginInit)
 
@@ -51,6 +53,8 @@ func main() {
 
 	r.GET("/exercises/pools", poolHandler.GetPoolsInfo)
 	r.PUT("/pool/add", poolHandler.AddPool)
+	//get all exercises from a pool
+	r.GET("pool/:poolname", exerciceHandler.GetExercisesFromPool)
 
 	if err := r.Run(":8080"); err != nil {
 		log.Fatalf("cannot run the serv %v", err)
