@@ -162,6 +162,25 @@ func (h *AuthHandler) CallBack(c *gin.Context) {
 		c.String(respMsg.HTTPStatus, respMsg.Message)
 		return
 	}
+
+	c.Header("Content-Type", "text/html; charset=utf-8")
+    c.String(http.StatusOK, `
+        <!DOCTYPE html>
+        <html lang="fr">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        </head>
+        <body>
+            <div>
+                <h1>Connexion succes</h1>
+            </div>
+            <script>
+                setTimeout(() => { window.close(); }, 5000);
+            </script>
+        </body>
+        </html>
+    `)
 }
 
 func (h *AuthHandler) PollLogin(c *gin.Context) {

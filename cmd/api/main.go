@@ -2,41 +2,15 @@ package main
 
 import (
 	"log"
-	"strings"
 
 	"github.com/Tutors42Lyon/Mithril/internal/config"
 	"github.com/Tutors42Lyon/Mithril/internal/database"
 	"github.com/Tutors42Lyon/Mithril/internal/handlers"
 	"github.com/Tutors42Lyon/Mithril/internal/messaging"
 	repository "github.com/Tutors42Lyon/Mithril/internal/repositories"
-	"github.com/Tutors42Lyon/Mithril/internal/utils"
-
 	"github.com/gin-gonic/gin"
 	"github.com/nats-io/nats.go"
 )
-
-func authMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		authHeader := c.GetHeader("Authorization")
-		if authHeader == "" {
-			c.AbortWithStatusJSON(401, gin.H{"error": "Authorization header needed"})
-			return
-		}
-
-		tokenString := strings.TrimPrefix(authHeader, "Bearer ")
-
-		claims, err := utils.ValidateToken(tokenString)
-		if err != nil {
-			c.AbortWithStatusJSON(401, gin.H{"error": "Session invalide or expire"})
-			return
-		}
-
-		c.Set("user_id", claims["sub"])
-		c.Set("role", claims["role"])
-
-		c.Next()
-	}
-}
 
 func main() {
 
@@ -68,7 +42,7 @@ func main() {
 	r.GET("/callback", authHandler.CallBack)
 
 	usersGroups := r.Group("/")
-	usersGroups.Use(authMiddleware())
+	usersGroups.Use(handlers.AuthMiddleware())
 	//ex: /users/info/pnaessen || /users/info/cassie
 	usersGroups.GET("/users/info/:username", userHandler.GetUserInfo)
 	//ex: /users/role/pnaessen  body :  "role": "admin"
