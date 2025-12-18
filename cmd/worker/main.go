@@ -9,12 +9,13 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"slices"
 	"strings"
 
 	"github.com/nats-io/nats.go"
 	"gopkg.in/yaml.v2"
 )
+
+var path_ string
 
 func main() {
 
@@ -114,7 +115,7 @@ func handler(m *nats.Msg) {
 func searchExerciseTest(exerciseId string) (*Spec, error) {
 
 	var foundSpec *Spec = nil
-	err := filepath.Walk("app/exercises", func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk("exercises", func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
@@ -134,6 +135,7 @@ func searchExerciseTest(exerciseId string) (*Spec, error) {
 
 			if spec.Id == exerciseId {
 				foundSpec = &spec
+				path_ = filepath.Dir(path)
 				return fmt.Errorf("spec found")
 			}
 		}
@@ -219,7 +221,7 @@ func programHandler(inputs []string, spec Spec) ([]TestResult, error) {
 		err = execCmd.Run()
 
 		if err != nil {
-			log.Printf("Exec failed: %v\nstderr: %s\n", err, stderr.String())
+			log.Printf("1Exec failed: %v\nstderr: %s\n", err, stderr.String())
 			return nil, err
 		}
 
@@ -258,12 +260,28 @@ func funcHandler(inputs []string, spec Spec) ([]TestResult, error) {
 func textHandler(inputs []string, spec Spec) ([]TestResult, error) {
 	var results []TestResult
 
-	var args []string
-	for index, test := range spec.Tests {
-		argTest := strings.Split(test.Input, " ")
-		args = append(args, inputs[index])
-		args = slices.Concat(args, argTest)
-		buildCmd := exec.Command(*spec.Executable, args...)
+	for i, test := range spec.Tests {
+
+		/* Get test inputs and set them in a string by line */
+		inputContent, err := os.ReadFile(path_ + "/" + test.Input)
+		if err != nil {
+			log.Printf("ReadFile failed: %v", err)
+			return nil, err
+		}
+		argTest := strings.Split(string(inputContent), "\n")
+
+		/* Create args for command */
+		args := argTest
+		args = append(args, inputs[i])
+		cmd := path_ + "/" + test.Run
+		buildCmd := exec.Command(cmd, args...)
+
+		log.Printf("_____cmd : %v, args : %v", cmd, args)
+
+		for i, arg := range args {
+			log.Printf("arg[%v] : %v", i, arg)
+		}
+
 
 		var stdout, stderr bytes.Buffer
 		buildCmd.Stdout = &stdout
@@ -272,7 +290,7 @@ func textHandler(inputs []string, spec Spec) ([]TestResult, error) {
 		stderr.Reset()
 		buildCmd.Stdout = &stdout
 		buildCmd.Stderr = &stderr
-		err := buildCmd.Run()
+		err = buildCmd.Run()
 		if err != nil {
 			log.Printf("Exec failed: %v", err)
 			return nil, err
@@ -282,14 +300,17 @@ func textHandler(inputs []string, spec Spec) ([]TestResult, error) {
 		result.Name = test.Name
 
 		currentOutput := strings.Split(stdout.String(), "\n")
-		expectedContent, err := os.ReadFile("/app/exercises/" + test.Expected)
+		expectedContent, err := os.ReadFile(path_ + "/" + test.Expected)
 		if err != nil {
 			log.Printf("Read file \"expected output\" failed: %v\n", err)
 			return nil, err
 		}
 		expectedOutput := strings.Split(string(expectedContent), "\n")
+		log.Printf("output expected: %v", expectedOutput)
+		log.Printf("output current: %v", currentOutput)
 		result.Success = true
 		if len(expectedOutput) != len(currentOutput) {
+			log.Printf("len difference")
 			result.Success = false
 		} else {
 			for i := range expectedOutput {
@@ -307,7 +328,7 @@ func textHandler(inputs []string, spec Spec) ([]TestResult, error) {
 
 func mcqHandler(inputs []string, spec Spec) ([]TestResult, error) {
 	var results []TestResult
-	var result	TestResult
+	var result TestResult
 
 	expectedContent, err := os.ReadFile("/app/exercises/" + spec.Tests[0].Expected)
 	if err != nil {

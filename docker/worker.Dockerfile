@@ -16,7 +16,12 @@ FROM alpine:3.18
 
 WORKDIR /app
 
-RUN apk add --no-cache ca-certificates
+RUN apk add --no-cache \
+    ca-certificates \
+    libstdc++ \
+    gcompat \
+    python3 \
+    bash
 
 COPY --from=builder /app/mithril-worker .
 

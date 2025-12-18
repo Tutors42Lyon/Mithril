@@ -3,20 +3,22 @@ title: "regex"
 type: "text"  # or "qcm", "program"
 language: "none"
 
-executable: "executable/regex"
-
 # Test execution
 tests:
   - name: "Basic test"
-    run: "./{output}"
+    run: "regex.out"
     input: "tests/test1_input.txt"
     expected_output: "tests/test1_expected.txt"
-    timeout: 5
 
   - name: "Edge case"
-    run: "./{output}"
+    run: "regex.out"
     input: "tests/test2_input.txt"
     expected_output: "tests/test2_expected.txt"
+
+  - name: "Edge case"
+    run: "regex.out"
+    input: "tests/test3_input.txt"
+    expected_output: "tests/test3_expected.txt"
 
 # Scoring
 scoring:
