@@ -46,7 +46,9 @@ func main() {
 	//ex: /users/info/pnaessen || /users/info/cassie
 	usersGroups.GET("/users/info/:username", userHandler.GetUserInfo)
 	//ex: /users/role/pnaessen  body :  "role": "admin"
-	usersGroups.PATCH("/users/role/:username", userHandler.UpdateRole)
+	admin := usersGroups.Group("/")
+	admin.Use(handlers.IsAdmin())
+	admin.PATCH("/users/role/:username", userHandler.UpdateRole)
 
 	if err := r.Run(":8080"); err != nil {
 		log.Fatalf("cannot run the serv %v", err)

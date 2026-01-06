@@ -1,9 +1,11 @@
 package handlers
 
 import (
+	"log"
 	"strings"
-	"github.com/gin-gonic/gin"
+
 	"github.com/Tutors42Lyon/Mithril/internal/utils"
+	"github.com/gin-gonic/gin"
 )
 
 func AuthMiddleware() gin.HandlerFunc {
@@ -25,6 +27,21 @@ func AuthMiddleware() gin.HandlerFunc {
 		c.Set("user_id", claims["sub"])
 		c.Set("role", claims["role"])
 
+		log.Println(claims)
+		c.Next()
+	}
+}
+
+func IsAdmin() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		userRole, exists := c.Get("role")
+
+		log.Println("User role: " , userRole, "exists :", exists)
+		if !exists || userRole != "admin" {
+			c.JSON(403, gin.H{"error": "Access denied: reserved for administrators"})
+			c.Abort()
+			return
+		}
 		c.Next()
 	}
 }

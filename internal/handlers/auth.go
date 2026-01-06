@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"sync"
 	"time"
+	"log"
 
 	"github.com/gin-gonic/gin"
 	"github.com/nats-io/nats.go"
@@ -122,6 +123,7 @@ func (h *AuthHandler) syncWithWorker(user42 *models.User42, sessionID string) (*
 		return nil, fmt.Errorf("unmarshal worker response failed: %w", err)
 	}
 
+	log.Println("Génération token pour ID:", workerUser.Db_id,"avec Role:", workerUser.Role)
 	token, err := utils.GenerateJWT(workerUser.Db_id, workerUser.Role)
 	if err != nil {
 		return nil, fmt.Errorf("error: Token generation failed")

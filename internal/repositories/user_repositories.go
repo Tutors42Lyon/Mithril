@@ -37,3 +37,13 @@ func (r *UserRepository) GetByUsername(username string) (*models.UserMessage, er
 	}
 	return &user, nil
 }
+
+func (r *UserRepository) GetDbID(username string) (uint, error) {
+	var user models.UserMessage
+
+	result := r.DB.Where("username = ?", username).First(&user)
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	return user.Db_id, nil
+}
