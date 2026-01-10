@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/Tutors42Lyon/Mithril/internal/utils"
+	"github.com/Tutors42Lyon/Mithril/internal/repositories"
 	"github.com/gin-gonic/gin"
 )
 
@@ -32,16 +33,32 @@ func AuthMiddleware() gin.HandlerFunc {
 	}
 }
 
-func IsAdmin() gin.HandlerFunc {
+func IsAdmin(userRepo *repository.UserRepository) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		userRole, exists := c.Get("role")
-
-		log.Println("User role: " , userRole, "exists :", exists)
-		if !exists || userRole != "admin" {
-			c.JSON(403, gin.H{"error": "Access denied: reserved for administrators"})
-			c.Abort()
+		userIDValue, exists := c.Get("user_id")
+		if !exists {
+			c.AbortWithStatusJSON(401, gin.H{"error": "Authentication required"})
 			return
 		}
+
+		var userID uint
+		switch v := userIDValue.(type) {
+		case float64:
+			userID = uint(v)
+		case uint:
+			userID = v
+		default:
+			c.AbortWithStatusJSON(500, gin.H{"error": "Invalid user identification format"})
+			return
+		}
+
+		user, err := userRepo.GetByID(userID)
+		if err != nil || user.Role != "admin" {
+			log.Printf("Access denied: User %d is not admin", userID)
+			c.AbortWithStatusJSON(403, gin.H{"error": "Access denied: reserved for administrators"})
+			return
+		}
+
 		c.Next()
 	}
 }

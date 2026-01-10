@@ -47,7 +47,7 @@ func main() {
 	usersGroups.GET("/users/info/:username", userHandler.GetUserInfo)
 	//ex: /users/role/pnaessen  body :  "role": "admin"
 	admin := usersGroups.Group("/")
-	admin.Use(handlers.IsAdmin())
+	admin.Use(handlers.IsAdmin(userRepo))
 	admin.PATCH("/users/role/:username", userHandler.UpdateRole)
 
 	if err := r.Run(":8080"); err != nil {
