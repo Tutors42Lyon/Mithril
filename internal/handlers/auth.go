@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"sync"
 	"time"
-	"log"
 
 	"github.com/gin-gonic/gin"
 	"github.com/nats-io/nats.go"
@@ -123,8 +122,7 @@ func (h *AuthHandler) syncWithWorker(user42 *models.User42, sessionID string) (*
 		return nil, fmt.Errorf("unmarshal worker response failed: %w", err)
 	}
 
-	log.Println("Génération token pour ID:", workerUser.Db_id,"avec Role:", workerUser.Role)
-	token, err := utils.GenerateJWT(workerUser.Db_id, workerUser.Role)
+	token, err := utils.GenerateJWT(workerUser.Db_id)
 	if err != nil {
 		return nil, fmt.Errorf("error: Token generation failed")
 	}
@@ -139,7 +137,7 @@ func (h *AuthHandler) CallBack(c *gin.Context) {
 	code := c.Query("code")
 
 	if code == "" || sessionID == "" {
-		c.String(http.StatusBadRequest, "Error: missing code or state!")  // si la personne refuse arrive ici
+		c.String(http.StatusBadRequest, "Error: missing code or state!") // si la personne refuse arrive ici
 		return
 	}
 
@@ -166,7 +164,7 @@ func (h *AuthHandler) CallBack(c *gin.Context) {
 	}
 
 	c.Header("Content-Type", "text/html; charset=utf-8")
-    c.String(http.StatusOK, `
+	c.String(http.StatusOK, `
         <!DOCTYPE html>
         <html lang="fr">
         <head>

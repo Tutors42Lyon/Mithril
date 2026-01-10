@@ -47,3 +47,12 @@ func (r *UserRepository) GetDbID(username string) (uint, error) {
 	}
 	return user.Db_id, nil
 }
+
+func (r *UserRepository) GetByID(id uint) (*models.UserMessage, error) {
+	var user models.UserMessage
+	result := r.DB.First(&user, id)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &user, nil
+}

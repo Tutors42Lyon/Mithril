@@ -8,11 +8,10 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func GenerateJWT(db_ID uint, role string) (string, error) {
+func GenerateJWT(db_ID uint) (string, error) {
 
 	claims := jwt.MapClaims{
 		"sub":  db_ID,
-		"role": role,
 		"exp":  time.Now().Add(time.Hour * 24).Unix(),
 		"iat":  time.Now().Unix(),
 	}
