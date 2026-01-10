@@ -63,13 +63,7 @@ func HandleUserLogin(userRepo *repository.UserRepository) nats.MsgHandler {
 			return
 		}
 
-		//TODO: get db_id with username and  add to resp for generate jwt
-		resp := models.UserMessage{
-			Username: user.Username, // need to change get db id and role
-			Role: user.Role,
-		}
-
-		respBytes, err := json.Marshal(resp)
+		respBytes, err := json.Marshal(user)
 		if err != nil {
 			log.Printf("Error marshal response: %v", err)
 			respondError(m, "internal_error", "marshal failed", 500)
