@@ -45,6 +45,7 @@ func main() {
 	usersGroups.Use(handlers.AuthMiddleware())
 	//ex: /users/info/pnaessen || /users/info/cassie
 	usersGroups.GET("/users/info/:username", userHandler.GetUserInfo)
+	usersGroups.GET("/users/me", userHandler.GetMe)
 	//ex: /users/role/pnaessen  body :  "role": "admin"
 	admin := usersGroups.Group("/")
 	admin.Use(handlers.IsAdmin(userRepo))

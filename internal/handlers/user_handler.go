@@ -84,3 +84,34 @@ func (h *UserHandler) GetUserInfo(c *gin.Context) {
     }
 	c.Data(http.StatusOK, "application/json", msg.Data)
 }
+
+
+func (h *UserHandler) GetMe(c *gin.Context) {
+	userIDValue, exists := c.Get("user_id")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	var userID uint
+	switch v := userIDValue.(type) {
+	case float64:
+		userID = uint(v)
+	case uint:
+		userID = v
+	default:
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid user ID format"})
+		return
+	}
+
+	payload := map[string]uint{"id": userID}
+	reqBytes, _ := json.Marshal(payload)
+
+	msg, err := h.NatsConn.Request("user.get_by_id", reqBytes, 2*time.Second)
+	if err != nil {
+		c.JSON(http.StatusGatewayTimeout, gin.H{"error": "Worker unavailable"})
+		return
+	}
+
+	c.Data(http.StatusOK, "application/json", msg.Data)
+}

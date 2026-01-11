@@ -45,6 +45,12 @@ func LoadWorker(nc *nats.Conn, userRepo *repository.UserRepository) {
 	if err != nil {
 		log.Fatalf("Error Subscribe to NATS: %v", err)
 	}
+
+	_, err = nc.Subscribe("user.get_by_id", HandleGetUserInfoByID(userRepo))
+
+	if err != nil {
+		log.Fatalf("Error Subscribe to NATS: %v",err)
+	}
 }
 
 func HandleUserLogin(userRepo *repository.UserRepository) nats.MsgHandler {
@@ -160,5 +166,33 @@ func HandleUserInfo(userRepo *repository.UserRepository) nats.MsgHandler {
 			return
 		}
 
+	}
+}
+
+func HandleGetUserInfoByID(userRepo *repository.UserRepository) nats.MsgHandler {
+	return func(m *nats.Msg) {
+		var req struct {
+			ID uint `json:"id"`
+		}
+
+		if err := json.Unmarshal(m.Data, &req); err != nil {
+			respondError(m, "bad_request", "invalid payload", 400)
+			return
+		}
+
+		userInfo, err := userRepo.GetByID(req.ID)
+		if err != nil {
+			log.Printf("Error fetching user by ID: %v", err)
+			respondError(m, "db_error", "user not found", 404)
+			return
+		}
+
+		respBytes, err := json.Marshal(userInfo)
+		if err != nil {
+			respondError(m, "internal_error", "marshal failed", 500)
+			return
+		}
+
+		m.Respond(respBytes)
 	}
 }
