@@ -122,22 +122,22 @@ vet:
 ## docker-build: Build all Docker images
 docker-build:
 	@echo "$(YELLOW)Building Docker images...$(NC)"
-	docker-compose build
+	docker compose build
 
 ## docker-up: Start all services with Docker Compose
-docker-up:
+run: tidy down
 	@echo "$(YELLOW)Starting services with Docker Compose...$(NC)"
-	docker compose up -d
+	docker compose up -d --build
 	@echo "$(GREEN)Services started. Use 'make docker-logs' to view logs$(NC)"
 
 ## docker-down: Stop all services
-docker-down:
+down:
 	@echo "$(YELLOW)Stopping services...$(NC)"
-	docker-compose down
+	docker compose down
 
 ## docker-logs: Show logs from all services
-docker-logs:
-	docker-compose logs -f
+logs:
+	docker compose logs -f
 
 ## docker-restart: Restart all services
 docker-restart: docker-down docker-up
@@ -153,8 +153,13 @@ tidy:
 	@echo "$(YELLOW)Tidying go.mod...$(NC)"
 	$(GOMOD) tidy
 
+clean-db:
+	@echo "$(YELLOW)Clean db volumeNC)"
+	docker volume rm mithril_postgres_data 
+
+
 ## clean: Remove binaries and clean build cache
-clean:
+clean: clean-db
 	@echo "$(YELLOW)Cleaning...$(NC)"
 	$(GOCLEAN)
 	rm -rf $(BINARY_DIR)

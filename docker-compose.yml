@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:15-alpine
@@ -12,6 +10,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./internal/database/migrations:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U mithril"]
       interval: 10s
@@ -20,45 +19,39 @@ services:
     networks:
       - mithril-network
 
-  redis:
-    image: redis:7-alpine
-    container_name: mithril-redis
-    ports:
-      - "6379:6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - mithril-network
+  # # redis:
+  # #   image: redis:7-alpine
+  # #   container_name: mithril-redis
+  # #   ports:
+  # #     - "6379:6379"
+  # #   healthcheck:
+  # #     test: ["CMD", "redis-cli", "ping"]
+  # #     interval: 10s
+  # #     timeout: 5s
+  # #     retries: 5
+  # #   networks:
+  # #     - mithril-network
 
   nats:
     image: nats:latest
-    container_name: mithril-nats
     ports:
       - "4222:4222"
-      - "8222:8222"
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8222/varz"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     networks:
       - mithril-network
 
-  migrations:
-    build:
-      context: .
-      dockerfile: docker/migrations.Dockerfile
-    container_name: mithril-migrations
-    environment:
-      DATABASE_URL: "postgres://mithril:dev_password@postgres:5432/mithril"
-    depends_on:
-      postgres:
-        condition: service_healthy
-    networks:
-      - mithril-network
+  # # migrations:
+  # #   build:
+  # #     context: .
+  # #     dockerfile: docker/migrations.Dockerfile
+  # #   container_name: mithril-migrations
+  # #   environment:
+  # #     DATABASE_URL: "postgres://mithril:dev_password@postgres:5432/mithril"
+  # #   depends_on:
+  # #     postgres:
+  # #       condition: service_healthy
+  # #   networks:
+  # #     - mithril-network
+
 
   api:
     build:
@@ -69,22 +62,28 @@ services:
       DATABASE_URL: "postgres://mithril:dev_password@postgres:5432/mithril"
       REDIS_URL: "redis://redis:6379"
       NATS_URL: "nats://nats:4222"
-      42_CLIENT_ID: ${42_CLIENT_ID:your_client_id}
-      42_CLIENT_SECRET: ${42_CLIENT_SECRET:-your_client_secret}
-      42_REDIRECT_URI: "http://localhost:3000/api/auth/callback"
+      API_42_UID: ${CLIENT_42_ID}
+      API_42_SEC: ${CLIENT_42_SECRET}
+      CALL_BACK: ${CALL_BACK}
       LOG_LEVEL: "debug"
+      DB_HOST: "mithril-postgres"
+      DB_USER: "mithril"
+      DB_PASSWORD: "dev_password"
+      DB_NAME: "mithril"
+      DB_PORT: "5432"
       PORT: "3000"
     ports:
       - "3000:3000"
+      - "8080:8080"
     depends_on:
       postgres:
         condition: service_healthy
-      redis:
-        condition: service_healthy
       nats:
-        condition: service_healthy
-      migrations:
-        condition: service_completed_successfully
+        condition: service_started
+      # redis:
+      #   condition: service_healthy
+      # migrations:
+      #   condition: service_completed_successfully
     networks:
       - mithril-network
     restart: unless-stopped
@@ -99,7 +98,7 @@ services:
       LOG_LEVEL: "debug"
     depends_on:
       nats:
-        condition: service_healthy
+        condition: service_started
     networks:
       - mithril-network
     restart: unless-stopped
@@ -109,22 +108,24 @@ services:
       context: .
       dockerfile: docker/worker.Dockerfile
     image: mithril-worker-image:latest
-    container_name: mithril-worker-${NODE_ID}
-    ulimits:
-      nproc:
-        soft: 50
-        hard: 100
-      fsize: 
-        soft: 1000000
-        hard: 1000000
+    # ulimits:
+    #   nproc:
+    #     soft: 50
+    #     hard: 100
+    #   fsize:
+    #     soft: 1000000
+    #     hard: 1000000
     deploy:
-      resources:
-        limits:
-          memory: 512M
-          cpus: '1.0'
+      # resources:
+      #   limits:
+      #     memory: 512M
+      #     cpus: '1.0'
       replicas: 9
       restart_policy:
         condition: always
+    depends_on:
+      nats:
+        condition: service_started
     networks:
       - mithril-network
 
